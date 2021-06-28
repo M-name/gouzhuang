@@ -234,9 +234,6 @@ export default {
             this.$message.error(res.data.msg);
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
 
     // 修改条数的监听
