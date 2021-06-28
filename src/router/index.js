@@ -203,14 +203,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           component: FloatingPopulation,
           children: []
         },
-        {
-          path: "/personTurnover",
-          iconCls: "el-icon-tickets", //人员进出记录
-          name: routeName.personTurnover,
-          menuCode:'M2-5',
-          component: PersonTurnover,
-          children: []
-        },
+        // {
+        //   path: "/personTurnover",
+        //   iconCls: "el-icon-tickets", //人员进出记录
+        //   name: routeName.personTurnover,
+        //   menuCode:'M2-5',
+        //   component: PersonTurnover,
+        //   children: []
+        // },
         
         {
           path: "/tenantDetail",

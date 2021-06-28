@@ -60,7 +60,7 @@ export default {
     // 上传图片，返回结果，将图片插入到编辑器中
     
 }
-    editor.config.uploadImgServer = 'http://8.136.21.110:8080/api/cos/upload'
+    editor.config.uploadImgServer = 'http://47.118.43.170:8080/api/cos/upload'
     // editor.config.uploadVideoServer = 'http://47.118.43.170:8080/api/cos/upload'
     editor.config.onchange = (html) => {
       this.editorContent = html

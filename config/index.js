@@ -23,7 +23,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable:  devEnv.PROXY_REQUEST === false ? {} :{
       '/api': {
-        target: 'http://8.136.21.110:8080/api',
+        target: 'http://47.118.43.170:8080/api',
         //  target: 'http://47.118.43.170:8080/api',
         changeOrigin: true,
         pathRewrite: {

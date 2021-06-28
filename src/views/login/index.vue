@@ -83,8 +83,8 @@ export default {
       smdl: true,
       loginForm: {
         loginType: 0,
-        mobile: "17354628459",
-        password: "123456",
+        mobile: "",
+        password: "",
       },
     };
   },
