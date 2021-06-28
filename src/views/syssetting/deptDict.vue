@@ -212,7 +212,7 @@ export default {
       };
     },
 
-    // 新增
+    // 新增部门
     addList() {
       this.reset();
       this.open = true;
