@@ -185,6 +185,7 @@ export default {
           },
         ],
       },
+      // 非多个禁用
       multiple: true,
       // 查询或请求参数
       params: {
