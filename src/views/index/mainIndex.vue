@@ -5,7 +5,7 @@
         <p class="title">小区人口信息</p>
         <div class="pie">
           <div style="width: 49%; display: inline-block">
-            <pie :datas="pieData" v-if="flag" />
+            <pie :datas="pieData" ids="indexPie" v-if="flag" />
           </div>
           <div class="pie-info" style="width: 49%; display: inline-block">
             <p class="num-title">总人口数</p>
@@ -79,7 +79,9 @@
             <el-radio-button label="3">本月</el-radio-button>
           </el-radio-group>
         </div>
-        <bar v-if="lineShow" :data="data" title="" ids="group" />
+        <div style="height:">
+          <bar v-if="lineShow" :height="450" :data="data" title="" ids="group" />
+        </div>
       </div>
     </div>
     <div class="both right">

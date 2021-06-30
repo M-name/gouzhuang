@@ -107,6 +107,7 @@ const cn = {
     tenantRecord:"租客登记管理",
     tenantDetail:"租客信息详情",
     payRecordDetail:"费用支付记录统计",
+    commerViews:"驾驶舱",
 
   },
   rightMenu: {

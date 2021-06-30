@@ -1,11 +1,25 @@
 <template>
-  <div id="main" style="height: 120px"></div>
+  <div :id="ids" style="height: 120px"></div>
 </template>
 <script>
 /* eslint-disable no-undef */
 import echarts from "echarts";
 export default {
   props: {
+    ids: {
+      // 饼状图数据
+      type: String,
+      default: () => {
+        return "";
+      },
+    },
+    titleColor: {
+      // 饼状图数据
+      type: String,
+      default: () => {
+        return "#000";
+      },
+    },
     datas: {
       // 饼状图数据
       type: Array,
@@ -20,7 +34,7 @@ export default {
   methods: {},
   mounted() {
     // 饼状图
-    const myChart = echarts.init(document.getElementById("main"));
+    const myChart = echarts.init(document.getElementById(this.ids));
     myChart.setOption({
       tooltip: {
         trigger: "item",
@@ -51,14 +65,14 @@ export default {
         icon: "circle",
         show: false,
       },
-      color: ["#39A0FC", "#FEAD3F"],
+      color: ["#39A0FC", "#FBD437","#4ECB73","#A53FF5"],
       series: [
         {
           type: "pie",
           radius: ["50%", "65%"],
           center: ["50%", "50%"],
           itemStyle: {
-            borderColor: "#fff",
+            // borderColor: "#fff",
           },
           // emphasis: {
           //   label: {
@@ -94,13 +108,13 @@ export default {
             ].join("\n"),
             rich: {
               a: {
-                color: "#000",
-                fontSize: 15,
+                color: this.titleColor,
+                fontSize: 13,
                 lineHeight: 30,
               },
               b: {
-                color: "#000",
-                fontSize: 15,
+                color: this.titleColor,
+                fontSize: 13,
               },
             },
           },

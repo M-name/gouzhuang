@@ -101,7 +101,7 @@ Vue.use(Router)
 let routeName = en.routeName;
 let addRouter = [];
 let router = [];
-if(JSON.parse(localStorage.getItem("userInfo"))){
+if (JSON.parse(localStorage.getItem("userInfo"))) {
   let role = JSON.parse(localStorage.getItem("userInfo")).roleDTO.list;
   router = [
     // 房屋管理
@@ -109,14 +109,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       path: "/",
       iconCls: "iconfont icon-fangwuguanli",
       name: routeName.article,
-      menuCode:'M1',
+      menuCode: 'M1',
       component: Layout,
       children: [
         {
           path: "/houseRecord",
           iconCls: "el-icon-tickets", // 一房一档
           name: routeName.houseRecord,
-          menuCode:'M1-1',
+          menuCode: 'M1-1',
           component: HouseRecord,
           children: []
         },
@@ -124,7 +124,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           path: "/housedata",
           iconCls: "el-icon-tickets", // 楼幢数据管理
           name: routeName.housedata,
-          menuCode:'M1-2',
+          menuCode: 'M1-2',
           component: Housedata,
           children: []
         },
@@ -138,20 +138,20 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
         }
       ]
     },
-  
+
     //实口治理
     {
       path: "/",
       iconCls: "iconfont icon-shikouzhili",
       name: routeName.icon,
       component: Layout,
-      menuCode:'M2',
+      menuCode: 'M2',
       children: [
         {
           path: "/populace",
           iconCls: "el-icon-tickets", // 一人一档
           name: routeName.builtInIcon,
-          menuCode:'M2-1',
+          menuCode: 'M2-1',
           component: Populace,
           children: []
         },
@@ -175,7 +175,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           path: "/visitorThrough",
           iconCls: "el-icon-tickets", // 访客放行管理
           name: routeName.visitorThrough,
-          menuCode:'M2-2',
+          menuCode: 'M2-2',
           component: VisitorThrough,
           children: []
         },
@@ -183,7 +183,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           path: "/visitorEcord",
           iconCls: "el-icon-tickets", // 访客放行记录
           name: routeName.visitorEcord,
-          menuCode:'M2-3',
+          menuCode: 'M2-3',
           component: VisitorEcord,
           children: []
         },
@@ -191,7 +191,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           path: "/tenantRecord",
           iconCls: "el-icon-tickets", // 租客信息管理
           name: routeName.tenantRecord,
-          menuCode:'M2-6',
+          menuCode: 'M2-6',
           component: TenantRecord,
           children: []
         },
@@ -199,7 +199,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           path: "/floatingPopulation",
           iconCls: "el-icon-tickets", // 流动人口管理
           name: routeName.floatingPopulation,
-          menuCode:'M2-4',
+          menuCode: 'M2-4',
           component: FloatingPopulation,
           children: []
         },
@@ -211,7 +211,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
         //   component: PersonTurnover,
         //   children: []
         // },
-        
+
         {
           path: "/tenantDetail",
           iconCls: "el-icon-tickets", // 租客信息详情
@@ -235,14 +235,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       path: "/",
       iconCls: "iconfont icon-cheliangguanli",
       name: routeName.carManagement,
-      menuCode:'M3',
+      menuCode: 'M3',
       component: Layout,
       children: [
         {
           path: "/carRecord",
           iconCls: "el-icon-tickets", //一车一档
           name: routeName.carRecord,
-          menuCode:'M3-1',
+          menuCode: 'M3-1',
           component: CarRecord,
           children: []
         },
@@ -257,7 +257,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
         {
           path: "/userParking",
           iconCls: "el-icon-tickets", //用户车位管理
-          menuCode:'M3-2',
+          menuCode: 'M3-2',
           name: routeName.userParking,
           component: UserParking,
           children: []
@@ -266,7 +266,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           path: "/carFiles",
           iconCls: "el-icon-tickets", //区域车位管理
           name: routeName.carFiles,
-          menuCode:'M3-3',
+          menuCode: 'M3-3',
           component: carFiles,
           children: []
         },
@@ -274,7 +274,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           path: "/carTurnover",
           iconCls: "el-icon-tickets", //车辆进出记录
           name: routeName.carTurnover,
-          menuCode:'M3-4',
+          menuCode: 'M3-4',
           component: CarTurnover,
           children: []
         },
@@ -293,7 +293,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       path: "/",
       iconCls: "iconfont icon-shebeiguanli",
       name: routeName.deviceManagement,
-      menuCode:'M4',
+      menuCode: 'M4',
       component: Layout,
       children: [
         {
@@ -301,7 +301,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 智能垃圾箱
           name: routeName.intelligentDustbin,
           component: IntelligentDustbin,
-          menuCode:'M4-1',
+          menuCode: 'M4-1',
           children: []
         },
         {
@@ -309,7 +309,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 智能井盖
           name: routeName.intelligentWelllid,
           component: IntelligentWelllid,
-          menuCode:'M4-2',
+          menuCode: 'M4-2',
           children: []
         },
       ]
@@ -319,7 +319,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       path: "/",
       iconCls: "iconfont icon-gaojingzhongxin",
       name: routeName.emergencyCenter,
-      menuCode:'M5',
+      menuCode: 'M5',
       component: Layout,
       children: [
         {
@@ -327,7 +327,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 告警记录管理
           name: routeName.emergencyRecord,
           component: EmergencyRecord,
-          menuCode:'M5-1',
+          menuCode: 'M5-1',
           children: []
         },
         {
@@ -335,7 +335,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 告警订阅
           name: routeName.emergencySubscription,
           component: EmergencySubscription,
-          menuCode:'M5-2',
+          menuCode: 'M5-2',
           children: []
         },
         {
@@ -343,7 +343,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 告警中心字典
           name: routeName.emergencyDict,
           component: EmergencyDict,
-          menuCode:'M5-3',
+          menuCode: 'M5-3',
           children: []
         },
         {
@@ -362,9 +362,9 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       iconCls: "iconfont icon-wuyejiaofei",
       name: routeName.propertyCost,
       component: Layout,
-      menuCode:'M6',
+      menuCode: 'M6',
       children: [
-  
+
         {
           path: "/expenseDetail",
           iconCls: "el-icon-tickets", // 费用类别二级
@@ -378,7 +378,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 创建账单
           name: routeName.billRecord,
           component: BillRecord,
-          menuCode:'M6-1',
+          menuCode: 'M6-1',
           children: []
         },
         {
@@ -386,7 +386,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", //  账单生成记录
           name: routeName.billCheck,
           component: BillCheck,
-          menuCode:'M6-2',
+          menuCode: 'M6-2',
           children: []
         },
         {
@@ -394,7 +394,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 财务复核
           name: routeName.financeCheck,
           component: FinanceCheck,
-          menuCode:'M6-3',
+          menuCode: 'M6-3',
           children: []
         },
         {
@@ -402,7 +402,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 住户缴费
           name: routeName.usersFees,
           component: UsersFees,
-          menuCode:'M6-4',
+          menuCode: 'M6-4',
           children: []
         },
         {
@@ -410,7 +410,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 费用支付记录
           name: routeName.payRecord,
           component: PayRecord,
-          menuCode:'M6-5',
+          menuCode: 'M6-5',
           children: []
         },
         {
@@ -419,33 +419,33 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           name: routeName.payRecordDetail,
           component: PayRecordDetail,
           children: [],
-          hidden:true,
+          hidden: true,
         },
         {
           path: "/expenseCategory",
           iconCls: "el-icon-tickets", // 费用类别
           name: routeName.expenseCategory,
           component: ExpenseCategory,
-          menuCode:'M6-6',
+          menuCode: 'M6-6',
           children: []
         },
       ]
     },
-  
+
     // 报修派单
     {
       path: "/",
       iconCls: "iconfont icon-baoxiupaidan", // 图标样式class
       name: routeName.table,
       component: Layout,
-      menuCode:'M7',
+      menuCode: 'M7',
       children: [
         {
           path: "/ownerRepairs",
           iconCls: "el-icon-tickets", // 业主报修管理
           name: routeName.ownerRepairs,
           component: OwnerRepairs,
-          menuCode:'M7-1',
+          menuCode: 'M7-1',
           children: []
         },
         {
@@ -461,7 +461,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 报修受理
           name: routeName.multiDataTable,
           component: DataTable,
-          menuCode:'M7-2',
+          menuCode: 'M7-2',
           children: []
         },
         {
@@ -469,7 +469,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 报修处理列表
           name: routeName.filterTable,
           component: FilterTable,
-          menuCode:'M7-3',
+          menuCode: 'M7-3',
           children: []
         },
         {
@@ -477,7 +477,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 我的工单
           name: routeName.dragSort,
           component: DragTable,
-          menuCode:'M7-4',
+          menuCode: 'M7-4',
           children: []
         },
         {
@@ -485,7 +485,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 报修完成记录
           name: routeName.completeRecords,
           component: completeRecords,
-          menuCode:'M7-5',
+          menuCode: 'M7-5',
           children: []
         },
         {
@@ -504,14 +504,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       iconCls: "iconfont icon-shoujufapiao",
       name: routeName.receipt,
       component: Layout,
-      menuCode:'M8',
+      menuCode: 'M8',
       children: [
         {
           path: "/receiptManagement",
           iconCls: "el-icon-tickets", // 收据管理
           name: routeName.receiptManagement,
           component: ReceiptManagement,
-          menuCode:'M8-1',
+          menuCode: 'M8-1',
           children: []
         },
         {
@@ -519,7 +519,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 发票管理
           name: routeName.invoiceManagement,
           component: InvoiceManagement,
-          menuCode:'M8-2',
+          menuCode: 'M8-2',
           children: []
         }
       ]
@@ -530,14 +530,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       iconCls: "iconfont icon-gongzhigaoshi",
       name: routeName.uploads,
       component: Layout,
-      menuCode:'M9',
+      menuCode: 'M9',
       children: [
         {
           path: "/inform",
           iconCls: "el-icon-tickets", // 物业通知管理
           name: routeName.fileUpload,
           component: Inform,
-          menuCode:'M9-1',
+          menuCode: 'M9-1',
           children: []
         },
         {
@@ -545,7 +545,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 小区告示管理
           name: routeName.billboard,
           component: billboard,
-          menuCode:'M9-2',
+          menuCode: 'M9-2',
           children: []
         },
         {
@@ -553,7 +553,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 社区生活管理
           name: routeName.news,
           component: news,
-          menuCode:'M9-3',
+          menuCode: 'M9-3',
           children: []
         },
         {
@@ -561,7 +561,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 便民活动管理
           name: routeName.activity,
           component: activity,
-          menuCode:'M9-4',
+          menuCode: 'M9-4',
           children: []
         },
         {
@@ -569,7 +569,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 垃圾分类宣传
           name: routeName.garbageSorting,
           component: garbageSorting,
-          menuCode:'M9-5',
+          menuCode: 'M9-5',
           children: []
         },
         {
@@ -588,7 +588,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           hidden: true,
           children: []
         }
-  
+
       ]
     },
     // 消息管理
@@ -597,14 +597,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       iconCls: "iconfont icon-xiaoxiguanli",
       name: routeName.information,
       component: Layout,
-      menuCode:'M10',
+      menuCode: 'M10',
       children: [
         {
           path: "/messageTemplate",
           iconCls: "el-icon-tickets",  //消息模板管理
           name: routeName.messageTemplate,
           component: MessageTemplate,
-          menuCode:'M10-1',
+          menuCode: 'M10-1',
           children: []
         },
         {
@@ -612,7 +612,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 消息发送记录
           name: routeName.messageManage,
           component: MessageManage,
-          menuCode:'M10-2',
+          menuCode: 'M10-2',
           children: []
         },
         {
@@ -620,7 +620,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 消息批次管理
           name: routeName.messageDetail,
           component: MessageDetail,
-          menuCode:'M10-3',
+          menuCode: 'M10-3',
           children: []
         },
         {
@@ -628,7 +628,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 消息类型字典
           name: routeName.messageDict,
           component: MessageDict,
-          menuCode:'M10-4',
+          menuCode: 'M10-4',
           children: []
         },
         {
@@ -655,14 +655,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       iconCls: "iconfont icon-minshengfuwu",
       name: routeName.servicePeople,
       component: Layout,
-      menuCode:'M11',
+      menuCode: 'M11',
       children: [
         {
           path: "/advice",
           iconCls: "el-icon-tickets",  //投诉建议
           name: routeName.complaintAdvice,
           component: Advice,
-          menuCode:'M11-1',
+          menuCode: 'M11-1',
           children: []
         },
         {
@@ -670,7 +670,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 问卷调查管理
           name: routeName.demoShuttle,
           component: Transfer,
-          menuCode:'M11-2',
+          menuCode: 'M11-2',
           children: []
         },
         {
@@ -678,7 +678,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 小区投票
           name: routeName.housingVote,
           component: HousingVote,
-          menuCode:'M11-3',
+          menuCode: 'M11-3',
           children: []
         },
         {
@@ -686,7 +686,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 疫情防控
           name: routeName.epidemicPrevention,
           component: EpidemicPrevention,
-          menuCode:'M11-4',
+          menuCode: 'M11-4',
           children: []
         },
         {
@@ -736,15 +736,15 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       iconCls: "iconfont icon-yonghuguanli",
       name: routeName.multiDirectory,
       component: Layout,
-      menuCode:'M12',
+      menuCode: 'M12',
       children: [
-  
+
         {
           path: "/userControl",
           iconCls: "el-icon-tickets", // 注册用户管理
           name: routeName.userControl,
           component: userControl,
-          menuCode:'M12-1',
+          menuCode: 'M12-1',
           children: []
         },
         {
@@ -752,7 +752,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets",
           name: routeName["menu2-2"],
           component: propertyAdd,// 物业人员管理
-          menuCode:'M12-2',
+          menuCode: 'M12-2',
           children: []
         },
         {
@@ -760,12 +760,12 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets",
           name: routeName.userIntegralRecord,
           component: UserIntegralRecord,// 用户积分记录
-          menuCode:'M12-3',
+          menuCode: 'M12-3',
           children: []
         }
       ]
     },
-  
+
     // 统计报表
     // {
     //   path: "/",
@@ -796,14 +796,14 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       iconCls: "iconfont icon-xitongshezhi",
       name: routeName.systemSettings,
       component: Layout,
-      menuCode:'M13',
+      menuCode: 'M13',
       children: [
         {
           path: "/navClassifies",
           iconCls: "el-icon-tickets", // 通用数据字典
           name: routeName.navMenu,
           component: NavClassify,
-          menuCode:'M13-1',
+          menuCode: 'M13-1',
           children: []
         },
         {
@@ -811,7 +811,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 区域数据字典
           name: routeName.placeMenu,
           component: placeDict,
-          menuCode:'M13-2',
+          menuCode: 'M13-2',
           children: []
         },
         {
@@ -819,7 +819,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 部门数据字典
           name: routeName.deptMenu,
           component: deptDict,
-          menuCode:'M13-3',
+          menuCode: 'M13-3',
           children: []
         },
         {
@@ -827,7 +827,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 系统角色管理
           name: routeName.roleMenu,
           component: roleDict,
-          menuCode:'M13-4',
+          menuCode: 'M13-4',
           children: []
         },
         {
@@ -835,7 +835,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 系统菜单管理
           name: routeName.menuManagement,
           component: MenuManagement,
-          menuCode:'M13-5',
+          menuCode: 'M13-5',
           children: []
         },
         {
@@ -843,7 +843,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
           iconCls: "el-icon-tickets", // 帮助中心
           name: routeName.helpCenter,
           component: HelpCenter,
-          menuCode:'M13-6',
+          menuCode: 'M13-6',
           children: []
         },
         {
@@ -892,13 +892,13 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
       children: []
     },
   ]
-  for(var i = 0;i < router.length; i++) {
+  for (var i = 0; i < router.length; i++) {
     role.forEach(item => {
-      if(router[i].menuCode == item.menuCode){
+      if (router[i].menuCode == item.menuCode) {
         let arr = [];
-        for(var j = 0; j < router[i].children.length;j++) {
-          item.list.forEach(res =>{
-            if(router[i].children[j].menuCode == res.menuCode || router[i].children[j].hidden) {
+        for (var j = 0; j < router[i].children.length; j++) {
+          item.list.forEach(res => {
+            if (router[i].children[j].menuCode == res.menuCode || router[i].children[j].hidden) {
               arr.push(router[i].children[j])
             }
           })
@@ -909,7 +909,7 @@ if(JSON.parse(localStorage.getItem("userInfo"))){
     });
   }
   console.log(addRouter)
-}else{
+} else {
   console.log('null')
 }
 
@@ -942,8 +942,17 @@ let defaultRouter = [
         name: routeName.home,
         component: HomeMain,
         children: []
-      }
+      },
+
     ]
+  },
+  {
+    path: "/commerViews",
+    iconCls: "iconfont icon-kongzhitai", // 图标样式class
+    name: routeName.commerViews,
+    component: CommerViews,
+    alone: true,
+    children: []
   },
   {
     path: "/404",

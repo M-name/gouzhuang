@@ -389,6 +389,34 @@
       "font_class": "backout",
       "unicode": "e65a",
       "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "80791886",
+      "name": "more",
+      "font_class": "more",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "80892587",
+      "name": "guokexiang-yellow",
+      "font_class": "guokexiang-yellow",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "80892588",
+      "name": "jinggai-red",
+      "font_class": "jinggai-red",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "80892589",
+      "name": "shexiangtou-blue",
+      "font_class": "shexiangtou-blue",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
     }
   ]
 }

@@ -114,6 +114,7 @@ const en = {
     tenantRecord:"tenantRecord",
     tenantDetail:"tenantDetail",
     payRecordDetail:"payRecordDetail",
+    commerViews:"commerViews",
   },
   rightMenu: {
     close: "close",
