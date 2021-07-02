@@ -7,7 +7,7 @@
 import zhLocale from "element-ui/lib/locale/lang/zh-CN"
 const cn = {
   routeName: {
-    home: "控制台",
+    home: "客服控制台",
     article: "房屋管理",
     housedata: "楼幢数据管理",
     houseRecord: "一房一档",
@@ -107,7 +107,7 @@ const cn = {
     tenantRecord:"租客登记管理",
     tenantDetail:"租客信息详情",
     payRecordDetail:"费用支付记录统计",
-    commerViews:"驾驶舱",
+    commerViews:"安防驾驶舱",
 
   },
   rightMenu: {

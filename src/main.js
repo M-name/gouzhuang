@@ -24,7 +24,7 @@ Vue.use(AMap);
   // 初始化vue-amap
 AMap.initAMapApiLoader({
   // 高德key
-  key:'5542bbb2974e71e96e08b7726627101a',
+  key:'39e4dcd382e625f84c7d7367534a51a7',
   // 插件集合 （插件按需引入）
   plugin: [ "AMap.Geolocation",'AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
 });

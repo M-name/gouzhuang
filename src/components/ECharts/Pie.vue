@@ -66,6 +66,20 @@ export default {
         show: false,
       },
       color: ["#39A0FC", "#FBD437","#4ECB73","#A53FF5"],
+      graphic: [{ //环形图中间添加文字
+            type: 'text', //通过不同top值可以设置上下显示
+            left: 'center',
+            top: '45%',
+            style: {
+                text: '设备种类'+'\n'+'4',
+                textAlign: 'center',
+                fill: '#fff', //文字的颜色
+                width: 30,
+                height: 30,
+                fontSize: 12,
+                fontFamily: "Microsoft YaHei"
+            }
+        }],
       series: [
         {
           type: "pie",
@@ -74,6 +88,7 @@ export default {
           itemStyle: {
             // borderColor: "#fff",
           },
+           
           // emphasis: {
           //   label: {
           //     show: true,
@@ -95,35 +110,35 @@ export default {
         myChart.resize();
       });
     }, 50);
-    myChart.on("mouseover", (params) => {
-      let op = myChart.getOption();
-      if (params.seriesIndex === 0) {
-        let _label = {
-          normal: {
-            show: true,
-            position: "center",
-            formatter: [
-              `{a|${params.name}}`,
-              `{b|${params.percent + "%"}}`,
-            ].join("\n"),
-            rich: {
-              a: {
-                color: this.titleColor,
-                fontSize: 13,
-                lineHeight: 30,
-              },
-              b: {
-                color: this.titleColor,
-                fontSize: 13,
-              },
-            },
-          },
-        };
+    // myChart.on("mouseover", (params) => {
+    //   let op = myChart.getOption();
+    //   if (params.seriesIndex === 0) {
+    //     let _label = {
+    //       normal: {
+    //         show: true,
+    //         position: "center",
+    //         formatter: [
+    //           `{a|${params.name}}`,
+    //           `{b|${params.percent + "%"}}`,
+    //         ].join("\n"),
+    //         rich: {
+    //           a: {
+    //             color: this.titleColor,
+    //             fontSize: 13,
+    //             lineHeight: 30,
+    //           },
+    //           b: {
+    //             color: this.titleColor,
+    //             fontSize: 13,
+    //           },
+    //         },
+    //       },
+    //     };
 
-        op.series[0].label = _label;
-        myChart.setOption(op, true);
-      }
-    });
+    //     op.series[0].label = _label;
+    //     myChart.setOption(op, true);
+    //   }
+    // });
   },
 };
 </script>

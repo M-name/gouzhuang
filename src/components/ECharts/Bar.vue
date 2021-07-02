@@ -1,5 +1,5 @@
 <template>
-  <div :id="ids" :style="{ height: height + 'px' }"></div>
+  <div ref="bar" :id="ids" :style="{ height: height + 'px' }"></div>
 </template>
 <script>
 /* eslint-disable no-undef */
@@ -54,7 +54,7 @@ export default {
   },
   mounted() {
     // 曲线图
-    let myChart = echarts.init(document.getElementById(this.ids));
+    let myChart = echarts.init(this.$refs.bar);
     myChart.setOption({
       title: {
         text: this.title,

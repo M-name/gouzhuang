@@ -3,6 +3,10 @@
     <div class="header">
       <span class="name">勾庄佳苑安防大数据分析平台</span>
       <div class="head-date">
+       <div style="display:inline-block;margin-right:10px" @click="fullScreen">
+          <el-tooltip  class="item" effect="dark" content="全屏" placement="bottom"><i
+            class="fa fa-arrows-alt fa-lg" style="color:#2f98fe"></i></el-tooltip>
+       </div>
         <div class="head-time">
           <p>{{ nowDate }}</p>
           <p>{{ nowWeek }}</p>
@@ -12,10 +16,10 @@
     </div>
     <div class="body">
       <div class="left">
-        <!-- 果壳箱 -->
+        <!-- 智能垃圾分类箱 -->
         <div class="shuck baimg">
           <div class="title">
-            <span>果壳箱</span>
+            <span>智能垃圾分类箱</span>
             <i class="iconfont icon-more"></i>
           </div>
           <div class="shuk-num">
@@ -34,21 +38,58 @@
               </div>
             </div>
             <div class="num-item">
-              <i style="color: #ecf529" class="iconfont icon-guokexiang-yellow"></i>
+              <i
+                style="color: #ecf529"
+                class="iconfont icon-guokexiang-yellow"
+              ></i>
               <div>
                 <p class="classily">待检修</p>
                 <p style="color: #ecf529">43</p>
               </div>
             </div>
             <div class="num-item">
-              <i style="color: #ff0e00" class="iconfont icon-guokexiang-yellow"></i>
+              <i
+                style="color: #ff0e00"
+                class="iconfont icon-guokexiang-yellow"
+              ></i>
               <div>
                 <p class="classily">告警</p>
                 <p style="color: #ff0e00">43</p>
               </div>
             </div>
           </div>
-          <div class="shuk-static"><Calendar ids="shukStatic" /></div>
+          <div class="shuk-static">
+            <!-- <Calendar :data="shukData" ids="shukStatic" /> -->
+            <div class="static-mounth"><span>{{nowYear}}</span></div>
+            <div class="static-day">
+              <p class="static-week">
+                <span>周日</span><span>周一</span><span>周二</span><span>周三</span
+                ><span>周四</span><span>周五</span><span>周六</span
+                >
+              </p>
+              <div class="day-box">
+                <div
+                  class="day-items"
+                  v-for="item of blocknum"
+                  :key="item"
+                ></div>
+                <div class="day-item" v-for="(item,index) in dayList" :key="index+ '^-^'">
+                  <span
+                    :style="{
+                      background:
+                        item.type == '1'
+                          ? '#56E4FF'
+                          : item.type == '2'
+                          ? '#ECF529'
+                          : item.type == '3'
+                          ? '#FF0E00'
+                          : '',
+                    }"
+                  ></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- 智慧井盖 -->
         <div class="shuck baimg">
@@ -86,62 +127,18 @@
               </div>
             </div>
           </div>
-          <div class="shuk-static">
+          <div class="shuk-statics">
             <manholeBar :data="data" title="警情趋势" ids="manhole" />
           </div>
         </div>
-        <!-- 人员进出 -->
+        <!-- 设备统计 -->
         <div class="people baimg">
           <div class="title">
-            <span>人员进出</span>
+            <span>设备统计</span>
             <i class="iconfont icon-more"></i>
           </div>
-          <div
-            style="width: 45%; padding: 15px 15px 0 0; display: inline-block"
-          >
-            <div
-              class="pedestrian-peoples"
-              style="background: #fff6e9; padding: 3px 1px"
-            >
-              <div style="width: 22%; text-align: center">姓名</div>
-              <div style="width: 22%; text-align: center">位置</div>
-              <div style="width: 30%; text-align: center">时间</div>
-              <div style="width: 22%; text-align: center">进/出</div>
-            </div>
-            <vue-seamless-scroll
-              :class-option="optionSingleHeight"
-              :data="list"
-              class="seamless-warp"
-            >
-              <ul class="item">
-                <li v-for="(item, index) in list" :key="index">
-                  <div class="pedestrian-people">
-                    <div style="width: 22%; text-align: center">
-                      {{ item.plateNo }}
-                    </div>
-                    <div style="width: 22%; text-align: center">
-                      {{ item.entranceName }}
-                    </div>
-                    <div style="width: 30%; text-align: center">
-                      {{ item.crossTimeStr }}
-                    </div>
-                    <div style="width: 22%; text-align: center; color: red">
-                      {{ item.vehicleOutValue }}
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </vue-seamless-scroll>
-          </div>
-          <div class="people-static">
-            <bar
-              :data="peopleData"
-              :isCommer="true"
-              titleColor="#fff"
-              :height="200"
-              title=""
-              ids="people"
-            />
+          <div style="margin:20px 20px 20px 50px;padding-bottom:20px">
+            <Thebar :height="200" :axis="['设备','数量','统计']" :data="objectData" ids="carBar" />
           </div>
         </div>
       </div>
@@ -189,80 +186,154 @@
           </div>
         </div>
         <!-- 地图 -->
-        <div class="map" style="text-align:center"><img style="height:100%" src="../../src/assets/7.png" alt=""></div>
-        <!-- 车辆进出 -->
+        <Map class="map" lng="120.077561" lat="30.34998" @drag="dragMap"></Map>
+        <!-- </div> -->
+        <!-- 车辆/人员进出 -->
         <div class="people baimg">
-          <div class="title">
-            <span>车辆进出</span>
+          <div class="titles">
             <i class="iconfont icon-more"></i>
-          </div>
-          <div
-            style="width: 45%; padding: 15px 15px 0 0; display: inline-block"
-          >
-            <div
-              class="pedestrian-peoples"
-              style="background: #fff6e9; padding: 3px 1px"
-            >
-              <div style="width: 22%; text-align: center">车辆</div>
-              <div style="width: 22%; text-align: center">位置</div>
-              <div style="width: 30%; text-align: center">时间</div>
-              <div style="width: 22%; text-align: center">进/出</div>
-            </div>
-            <vue-seamless-scroll
-              :class-option="optionSingleHeight"
-              :data="list"
-              class="seamless-warp"
-            >
-              <ul class="item">
-                <li v-for="(item, index) in list" :key="index">
-                  <div class="pedestrian-people">
-                    <div style="width: 22%; text-align: center">
-                      {{ item.plateNo }}
-                    </div>
-                    <div style="width: 22%; text-align: center">
-                      {{ item.entranceName }}
-                    </div>
-                    <div style="width: 30%; text-align: center">
-                      {{ item.crossTimeStr }}
-                    </div>
-                    <div style="width: 22%; text-align: center; color: red">
-                      {{ item.vehicleOutValue }}
-                    </div>
+            <el-tabs v-model="activeName">
+              <!-- 车辆进出 -->
+              <el-tab-pane label="车辆进出" name="first">
+                <div
+                  style="
+                    width: 45%;
+                    padding: 5px 15px 0 0;
+                    display: inline-block;
+                  "
+                >
+                  <div
+                    class="pedestrian-peoples"
+                    style="background: #fff6e9; padding: 3px 1px"
+                  >
+                    <div style="width: 20%; text-align: center">序号</div>
+                    <div style="width: 18%; text-align: center">进/出</div>
+                    <div style="width: 34%; text-align: center">车牌号</div>
+                    <div style="width: 24%; text-align: center">时间</div>
                   </div>
-                </li>
-              </ul>
-            </vue-seamless-scroll>
-          </div>
-          <div class="people-static">
-            <bar
-              :data="peopleData"
-              :isCommer="true"
-              titleColor="#fff"
-              :height="200"
-              title=""
-              ids="car"
-            />
+                  <vue-seamless-scroll
+                    :class-option="optionSingleHeight"
+                    :data="carList"
+                    class="seamless-warp"
+                  >
+                    <ul class="item">
+                      <li v-for="(item, index) in carList" :key="index">
+                        <div class="pedestrian-people">
+                          <div style="width: 20%; text-align: center">
+                            {{ item.carIndex }}
+                          </div>
+                          <div :style="{'width': '18%','text-align': 'center',color:item.inOrOut?'#56E4FF':'#56FF56'}">
+                            {{ item.inOrOut?'出':'入' }}
+                          </div>
+                          <div style="width: 34%; text-align: center">
+                            {{ item.plateNo }}
+                          </div>
+                          <div
+                            style="width: 24%; text-align: center;"
+                          >
+                            {{ item.crossTimeStr }}
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </vue-seamless-scroll>
+                </div>
+                <div class="people-static">
+                  <bar
+                    v-if="activeName == 'first'"
+                    :data="carData"
+                    :isCommer="true"
+                    titleColor="#fff"
+                    :height="200"
+                    title=""
+                    ids="car"
+                  />
+                </div>
+              </el-tab-pane>
+              <!-- 人员进出 -->
+              <el-tab-pane label="人员进出" name="second"> </el-tab-pane>
+              <div v-if="activeName == 'second'">
+                <div
+                  style="
+                    width: 45%;
+                    padding: 5px 15px 0 0;
+                    display: inline-block;
+                  "
+                >
+                  <div
+                    class="pedestrian-peoples"
+                    style="background: #fff6e9; padding: 3px 1px"
+                  >
+                    <div style="width: 22%; text-align: center">姓名</div>
+                    <div style="width: 22%; text-align: center">位置</div>
+                    <div style="width: 30%; text-align: center">时间</div>
+                    <div style="width: 22%; text-align: center">进/出</div>
+                  </div>
+                  <vue-seamless-scroll
+                    :class-option="optionSingleHeight"
+                    :data="peopleList"
+                    class="seamless-warp"
+                  >
+                    <ul class="item">
+                      <li v-for="(item, index) in peopleList" :key="index">
+                        <div class="pedestrian-people">
+                          <div style="width: 22%; text-align: center">
+                            {{ item.plateNo }}
+                          </div>
+                          <div style="width: 22%; text-align: center">
+                            {{ item.entranceName }}
+                          </div>
+                          <div style="width: 30%; text-align: center">
+                            {{ item.crossTimeStr }}
+                          </div>
+                          <div
+                            style="width: 22%; text-align: center; color: red"
+                          >
+                            {{ item.vehicleOutValue }}
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </vue-seamless-scroll>
+                </div>
+                <div class="people-static">
+                  <bar
+                    v-if="activeName == 'second'"
+                    :data="peopleData"
+                    :isCommer="true"
+                    titleColor="#fff"
+                    :height="200"
+                    title=""
+                    ids="peoples"
+                  />
+                </div>
+              </div>
+            </el-tabs>
           </div>
         </div>
       </div>
 
       <div class="right">
-        <!-- 摄像头 -->
+        <!-- 周界监控 -->
         <div class="camera baimg">
           <div class="title">
-            <span>摄像头</span>
+            <span>周界监控</span>
             <i class="iconfont icon-more"></i>
           </div>
           <div class="camera-static">
             <div class="camera-info">
               <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
-              <div class="camera-img"><img src="../../src/assets/1.png" alt=""></div>
+              <div class="camera-img">
+                <img src="../../src/assets/1.png" alt="" />
+              </div>
               <p class="discrip-info">地址：勾庄佳苑北门口告警</p>
               <p class="discrip-info">描述：人员聚集</p>
             </div>
             <div class="camera-info">
               <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
-              <div class="camera-img"><img src="../../src/assets/2.png" alt=""></div>
+              <div class="camera-img">
+                <img src="../../src/assets/2.png" alt="" />
+              </div>
               <p class="discrip-info">地址：勾庄佳苑13幢摄像头待检修</p>
               <p class="discrip-info">描述：摄像头故障</p>
             </div>
@@ -283,14 +354,20 @@
               </div>
             </div>
             <div class="num-item">
-              <i style="color: #ecf529" class="iconfont icon-shexiangtou-blue"></i>
+              <i
+                style="color: #ecf529"
+                class="iconfont icon-shexiangtou-blue"
+              ></i>
               <div>
                 <p class="classily">待检修</p>
                 <p style="color: #ecf529">43</p>
               </div>
             </div>
             <div class="num-item">
-              <i style="color: #ff0e00" class="iconfont icon-shexiangtou-blue"></i>
+              <i
+                style="color: #ff0e00"
+                class="iconfont icon-shexiangtou-blue"
+              ></i>
               <div>
                 <p class="classily">告警</p>
                 <p style="color: #ff0e00">43</p>
@@ -299,7 +376,67 @@
           </div>
         </div>
         <!-- 高空抛物 -->
-        <div class="camera baimg">
+         <div class="camera baimg">
+          <div class="title">
+            <span>高空抛物</span>
+            <i class="iconfont icon-more"></i>
+          </div>
+          <div class="camera-static">
+            <div class="camera-info">
+              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <div class="camera-img">
+                <img src="../../src/assets/1.png" alt="" />
+              </div>
+              <p class="discrip-info">地址：勾庄佳苑北门口告警</p>
+              <p class="discrip-info">描述：人员聚集</p>
+            </div>
+            <div class="camera-info">
+              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <div class="camera-img">
+                <img src="../../src/assets/2.png" alt="" />
+              </div>
+              <p class="discrip-info">地址：勾庄佳苑13幢摄像头待检修</p>
+              <p class="discrip-info">描述：摄像头故障</p>
+            </div>
+          </div>
+          <div class="camera-num">
+            <div class="num-item">
+              <i class="iconfont icon-shexiangtou-blue"></i>
+              <div>
+                <p class="classily">布控</p>
+                <p style="color: #56e4ff">43</p>
+              </div>
+            </div>
+            <div class="num-item">
+              <i class="iconfont icon-shexiangtou-blue"></i>
+              <div>
+                <p class="classily">正常</p>
+                <p style="color: #56e4ff">43</p>
+              </div>
+            </div>
+            <div class="num-item">
+              <i
+                style="color: #ecf529"
+                class="iconfont icon-shexiangtou-blue"
+              ></i>
+              <div>
+                <p class="classily">待检修</p>
+                <p style="color: #ecf529">43</p>
+              </div>
+            </div>
+            <div class="num-item">
+              <i
+                style="color: #ff0e00"
+                class="iconfont icon-shexiangtou-blue"
+              ></i>
+              <div>
+                <p class="classily">告警</p>
+                <p style="color: #ff0e00">43</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="camera baimg">
           <div class="title">
             <span>高空抛物</span>
             <i class="iconfont icon-more"></i>
@@ -307,18 +444,82 @@
           <div class="camera-statics">
             <div class="camera-info">
               <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
-              <div class="camera-img"><img src="../../src/assets/2.png" alt=""></div>
+              <div class="camera-img">
+                <img src="../../src/assets/2.png" alt="" />
+              </div>
               <p class="discrip-info">地址：勾庄佳苑12幢二单元</p>
             </div>
             <div class="camera-info">
               <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
-              <div class="camera-img"><img src="../../src/assets/3.png" alt=""></div>
+              <div class="camera-img">
+                <img src="../../src/assets/3.png" alt="" />
+              </div>
               <p class="discrip-info">地址：勾庄佳苑12幢二单元</p>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- 电梯电瓶车 -->
         <div class="camera baimg">
+          <div class="title">
+            <span>电梯电瓶车</span>
+            <i class="iconfont icon-more"></i>
+          </div>
+          <div class="camera-static">
+            <div class="camera-info">
+              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <div class="camera-img">
+                <img src="../../src/assets/1.png" alt="" />
+              </div>
+              <p class="discrip-info">地址：勾庄佳苑北门口告警</p>
+              <p class="discrip-info">描述：人员聚集</p>
+            </div>
+            <div class="camera-info">
+              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <div class="camera-img">
+                <img src="../../src/assets/2.png" alt="" />
+              </div>
+              <p class="discrip-info">地址：勾庄佳苑13幢摄像头待检修</p>
+              <p class="discrip-info">描述：摄像头故障</p>
+            </div>
+          </div>
+          <div class="camera-num">
+            <div class="num-item">
+              <i class="iconfont icon-shexiangtou-blue"></i>
+              <div>
+                <p class="classily">布控</p>
+                <p style="color: #56e4ff">43</p>
+              </div>
+            </div>
+            <div class="num-item">
+              <i class="iconfont icon-shexiangtou-blue"></i>
+              <div>
+                <p class="classily">正常</p>
+                <p style="color: #56e4ff">43</p>
+              </div>
+            </div>
+            <div class="num-item">
+              <i
+                style="color: #ecf529"
+                class="iconfont icon-shexiangtou-blue"
+              ></i>
+              <div>
+                <p class="classily">待检修</p>
+                <p style="color: #ecf529">43</p>
+              </div>
+            </div>
+            <div class="num-item">
+              <i
+                style="color: #ff0e00"
+                class="iconfont icon-shexiangtou-blue"
+              ></i>
+              <div>
+                <p class="classily">告警</p>
+                <p style="color: #ff0e00">43</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="camera baimg">
           <div class="title">
             <span>电梯电瓶车</span>
             <i class="iconfont icon-more"></i>
@@ -326,27 +527,33 @@
           <div class="camera-statics">
             <div class="camera-info">
               <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
-              <div class="camera-img"><img src="../../src/assets/4.png" alt=""></div>
+              <div class="camera-img">
+                <img src="../../src/assets/4.png" alt="" />
+              </div>
               <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
             </div>
             <div class="camera-info">
               <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
-              <div class="camera-img"><img src="../../src/assets/5.png" alt=""></div>
+              <div class="camera-img">
+                <img src="../../src/assets/5.png" alt="" />
+              </div>
               <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Thebar from "@/components/ECharts/Thebar";
 import vueSeamlessScroll from "vue-seamless-scroll";
 import manholeBar from "@/components/ECharts/manholeBar";
 import Calendar from "@/components/ECharts/calendar";
 import Bar from "@/components/ECharts/Bar";
 import Pie from "@/components/ECharts/Pie";
+import Map from "@/components/Map/comMap";
 export default {
   name: "commerViews",
   components: {
@@ -355,154 +562,347 @@ export default {
     vueSeamlessScroll,
     Bar,
     Pie,
+    Map,
+    Thebar,
+    
   },
   data() {
     return {
+      // 设备状态统计数据
+      objectData: {
+        item: ['2323','223','767','2323','223','767'],
+        list: ['2323','223','767','2323','223','767'],
+      },
+      // 新的日历数据
+      dayList: [
+        { type: '1' },
+        { type: '1' },
+        { type: '1' },
+        { type: '2' },
+        { type: '1' },
+        { type: '2' },
+        { type: '1' },
+        { type: '2' },
+        { type: '3' },
+        { type: '1' },
+        { type: '1' },
+        { type: '1' },
+        { type: '2' },
+        { type: '1' },
+        { type: '2' },
+        { type: '1' },
+        { type: '2' },
+        { type: '3' },
+        { type: '1' },
+        { type: '1' },
+        { type: '1' },
+        { type: '2' },
+        { type: '1' },
+        { type: '2' },
+        { type: '1' },
+        { type: '2' },
+        { type: '3' },
+        { type: '2' },
+        { type: '1' },
+        { type: '2' },
+        { type: '3' },
+        
+      ],
+      // 旧的日历数据（可删除）
+      shukData: [
+        ["2021-07-01", 1],
+        ["2021-07-02", 1],
+        ["2021-07-03", 2],
+        ["2021-07-04", 1],
+        ["2021-07-05", 1],
+        ["2021-07-06", 1],
+        ["2021-07-07", 3],
+        ["2021-07-08", 2],
+        ["2021-07-09", 1],
+        ["2021-07-10", 3],
+      ],
+      // 日历前的填充数量（保证日期对应星期）
+      blocknum: 0,
+      // 车辆统计图的显示
+      carShow: false,
+      // 人员统计图的显示
+      peopleShow: false,
+      //人员或车辆tab切换
+      activeName: "first",
+      // 地图数据
+      dragData: {},
+      // 设备建设圆环图数据
       pieData: [
         { value: 34, name: "摄像头" },
         { value: 56, name: "果壳箱" },
         { value: 11, name: "智慧烟感" },
         { value: 23, name: "智慧井盖" },
       ],
-      list: [
+       // 车辆进出数据（滚动显示）
+      carList: [
         {
-          plateNo: "232",
+          carIndex: "01",
+          inOrOut:true,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:false,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:true,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:true,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:false,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:true,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:true,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:false,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+        {
+          carIndex: "01",
+          inOrOut:false,
+          plateNo: "浙A FBH05",
+          crossTimeStr: "17:12:42",
+        },
+      ],
+       // 人员进出数据（滚动显示）
+      peopleList: [
+        {
+          plateNo: "asdad",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "asd",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "adsd",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "adsad",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "asdad",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "adsad",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "adsa",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "sdasd",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "qweqw",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "wqeqw",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "qwqwe",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "qweqwe",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "qweqwe",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "qwsd",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "wewe",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
         {
-          plateNo: "232",
+          plateNo: "erwer2",
           entranceName: "34343",
           crossTimeStr: "q3242",
           vehicleOutValue: "232323",
         },
       ],
+      // 智慧井盖数据
       data: {
         time: ["2:00", "3:00", "4:00", "5:00", "6:00"],
         list: [23, 23, 14, 23, 67],
       },
+      // 人员进出数据（统计图）
       peopleData: {
         line: ["2:00", "3:00", "4:00", "5:00", "6:00"],
         in: [23, 23, 14, 23, 67],
         out: [11, 34, 21, 23, 56],
       },
+      // 车辆进出数据（统计图）
+      carData: {
+        line: ["2:00", "3:00", "4:00", "5:00", "6:00"],
+        in: [34, 11, 23, 16, 27],
+        out: [23, 16, 27, 34, 56],
+      },
+      // 顶部日期显示
       nowDate: "",
       nowTime: "",
       nowWeek: "",
+      nowYear:"",
+      // 是否为全屏模式
+      isfullScreen: true,
     };
   },
+  watch: {
+    // 监听车辆或人员的切换
+    activeName: {
+      handler(newValue, oldValue) {
+        if (newValue == "first") {
+          this.carShow = true;
+          this.peopleShow = false;
+        } else {
+          this.carShow = false;
+          this.peopleShow = true;
+        }
+      },
+      //,deep: true
+    },
+  },
   mounted() {
+    // 调用获取日期方法，显示顶部日期
     this.nowTimes();
+    
   },
   methods: {
+    // 全屏模式
+    fullScreen () {
+      if (this.isfullScreen) {
+        var docElm = document.documentElement
+        if (docElm.requestFullscreen) {
+          docElm.requestFullscreen()
+        } else if (docElm.mozRequestFullScreen) {
+          docElm.mozRequestFullScreen()
+        } else if (docElm.webkitRequestFullScreen) {
+          docElm.webkitRequestFullScreen()
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen()
+        }
+        this.isfullScreen = false
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen()
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen()
+        }
+        this.isfullScreen = true
+      }
+    },
+    // 地图获取的信息
+    dragMap(data) {
+      this.dragData = {
+        lng: data.position.lng,
+        lat: data.position.lat,
+        address: data.address,
+        nearestJunction: data.nearestJunction,
+        nearestRoad: data.nearestRoad,
+        nearestPOI: data.nearestPOI,
+      };
+    },
+    // 时间显示
     timeFormate(timeStamp) {
-      let wk = timeStamp.getDay();
-      let year = new Date(timeStamp).getFullYear();
+      let wk = new Date().getDay();
+      let year = new Date().getFullYear();
       let month =
-        new Date(timeStamp).getMonth() + 1 < 10
-          ? "0" + (new Date(timeStamp).getMonth() + 1)
-          : new Date(timeStamp).getMonth() + 1;
+        new Date().getMonth() + 1 < 10
+          ? "0" + (new Date().getMonth() + 1)
+          : new Date().getMonth() + 1;
       let date =
-        new Date(timeStamp).getDate() < 10
-          ? "0" + new Date(timeStamp).getDate()
-          : new Date(timeStamp).getDate();
+        new Date().getDate() < 10
+          ? "0" + new Date().getDate()
+          : new Date().getDate();
       let hh =
-        new Date(timeStamp).getHours() < 10
-          ? "0" + new Date(timeStamp).getHours()
-          : new Date(timeStamp).getHours();
+        new Date().getHours() < 10
+          ? "0" + new Date().getHours()
+          : new Date().getHours();
       let mm =
-        new Date(timeStamp).getMinutes() < 10
-          ? "0" + new Date(timeStamp).getMinutes()
-          : new Date(timeStamp).getMinutes();
+        new Date().getMinutes() < 10
+          ? "0" + new Date().getMinutes()
+          : new Date().getMinutes();
       let ss =
-        new Date(timeStamp).getSeconds() < 10
-          ? "0" + new Date(timeStamp).getSeconds()
-          : new Date(timeStamp).getSeconds();
+        new Date().getSeconds() < 10
+          ? "0" + new Date().getSeconds()
+          : new Date().getSeconds();
       let weeks = [
         "星期日",
         "星期一",
@@ -512,22 +912,28 @@ export default {
         "星期五",
         "星期六",
       ];
+    var mouths = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
+     this.blocknum = new Date(year+','+month+','+'01').getDay();
       let week = weeks[wk];
       this.nowTime = hh + ":" + mm + ":" + ss;
       this.nowDate = month + "-" + date;
+      this.nowYear = mouths[parseInt(month,10)-1]+'月';
       this.nowWeek = week;
     },
+    // 顶部时间 （实时刷新）
     nowTimes() {
-      this.timeFormate(new Date());
+      this.timeFormate();
       setInterval(this.nowTimes, 1000);
       this.clear();
     },
+    // 清除定时器
     clear() {
       clearInterval(this.nowTimes);
       this.nowTimes = null;
     },
   },
   computed: {
+    // 文字滚动组件滚动速度
     optionSingleHeight() {
       return {
         step: 0.3,
@@ -538,10 +944,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+  /*清除页面中标签自带的外间距和内填充*/
+  margin: 0;
+  padding: 0;
+}
+.fa-lg{
+  vertical-align: 45%;
+}
+/deep/.el-tabs__item {
+  color: #fff;
+}
+/deep/.el-tabs__nav-wrap::after {
+  background: none;
+}
 .content {
   background: #000836;
 }
 .header {
+  
   background: url("../../src/assets/head.png") no-repeat;
   // width: 100%;
   height: 74px;
@@ -617,12 +1038,73 @@ export default {
           }
         }
       }
-      .shuk-static {
+      .shuk-statics{
         vertical-align: top;
         display: inline-block;
         height: 245px;
         width: 77%;
+      }
+      .shuk-static {
+        vertical-align: top;
+        display: inline-flex;
+        justify-content: space-around;
+        height: 245px;
+        width: 77%;
         // background: #fff;
+        .static-mounth {
+          width: 8%;
+          height: 185px;
+          // line-height: 185px;
+          background: #113364;
+          text-align: center;
+          margin-top: 60px;
+          span {
+            writing-mode: vertical-lr; /*从左向右 从右向左是 writing-mode: vertical-rl;*/
+            writing-mode: tb-lr;
+            font-size: 20px;
+            display: inline-block;
+            height: 100%;
+            color: #fff;
+          }
+        }
+        .static-day {
+          width: 82%;
+          height: 245px;
+          // background: #fff;
+          .static-week {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0 20px 0;
+          }
+          .day-box {
+            width: 100%;
+            .day-item {
+              width: 13.5%;
+              height: 28px;
+              line-height: 27px;
+              display: inline-block;
+              border: 1px solid #1e5380;
+              background: #113364;
+              float: left;
+              text-align: center;
+              span {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                // background: #fff;
+              }
+            }
+            .day-items {
+              width: 13.5%;
+              height: 28px;
+              line-height: 27px;
+              display: inline-block;
+              float: left;
+              border: 1px solid #00063d;
+            }
+          }
+        }
       }
     }
   }
@@ -693,7 +1175,7 @@ export default {
         font-size: 20px;
       }
       .alarm-info {
-        width: 86%;
+        width: 89%;
         height: 100px;
         opacity: 1;
         background: rgba(254, 199, 33, 0.3);
@@ -706,7 +1188,8 @@ export default {
     }
     .map {
       width: 100%;
-      height: 361px;
+      margin: 25px 0 25px 0;
+      height: 310px;
       // background: #fff;
     }
   }
@@ -735,7 +1218,7 @@ export default {
           }
         }
       }
-      .camera-statics{
+      .camera-statics {
         vertical-align: top;
         height: 245px;
         width: 94%;
@@ -748,24 +1231,24 @@ export default {
           .discrip {
             font-size: 12px;
             color: #56e4ff;
-            span{
+            span {
               float: right;
               color: #fff;
             }
           }
-          .camera-img{
+          .camera-img {
             padding: 7px;
             width: 94%;
             border: 1px solid #56e4ff;
             height: 130px;
             margin-top: 10px;
             margin-bottom: 15px;
-            img{
+            img {
               width: 100%;
               height: 100%;
             }
           }
-          .discrip-info{
+          .discrip-info {
             font-size: 12px;
             color: #fff;
             margin-top: 8px;
@@ -785,23 +1268,23 @@ export default {
           .discrip {
             font-size: 12px;
             color: #56e4ff;
-            span{
+            span {
               float: right;
               color: #fff;
             }
           }
-          .camera-img{
+          .camera-img {
             padding: 7px;
             width: 90%;
             border: 1px solid #56e4ff;
             height: 120px;
             margin-top: 10px;
-            img{
+            img {
               width: 100%;
               height: 100%;
             }
           }
-          .discrip-info{
+          .discrip-info {
             font-size: 12px;
             color: #fff;
             margin-top: 8px;
@@ -829,6 +1312,19 @@ export default {
     border: 1px;
     i {
       float: right;
+    }
+  }
+  .titles {
+    background: rgba(86, 228, 255, 0.1);
+    height: 40px;
+    // padding: 0 16px;
+    line-height: 20px;
+    margin: 3px 4px 0 4px;
+    border: 1px;
+    i {
+      float: right;
+      line-height: 40px;
+      margin-right: 13px;
     }
   }
 }

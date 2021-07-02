@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="amap-wrapper">
+    <div :style="{height:height+'px'}" class="amap-wrapper">
       <el-amap
         class="amap-box"
         :plugin="plugin"
@@ -20,6 +20,15 @@
 
 <script>
 export default {
+  props: {
+    height: {
+      // id
+      type: String,
+      default: () => {
+        return "460";
+      },
+    },
+  },
   data() {
     let self = this;
     return {
@@ -82,7 +91,7 @@ export default {
  * { touch-action: pan-y; } 
 .amap-wrapper {
   /* width: 500px; */
-  height: 460px;
+  /* height: 460px; */
 }
  .amap-logo,.amap-copyright { display:none !important; }
 </style>

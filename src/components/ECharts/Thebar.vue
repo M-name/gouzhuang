@@ -1,5 +1,5 @@
 <template>
-  <div :id="ids" style="height: 150px"></div>
+  <div :id="ids" :style="{ height: height + 'px' }"></div>
 </template>
 <script>
 /* eslint-disable no-undef */
@@ -11,6 +11,27 @@ export default {
       type: String,
       default: () => {
         return "";
+      },
+    },
+    height: {
+      // 饼状图数据
+      type: Number,
+      default: () => {
+        return 150;
+      },
+    },
+    axis: {
+      // 饼状图数据
+      type: Array,
+      default: () => {
+        return ["地区","数量","人数"];
+      },
+    },
+    titleColor: {
+      // 饼状图数据
+      type: String,
+      default: () => {
+        return "#fff";
       },
     },
     title: {
@@ -49,23 +70,41 @@ export default {
         containLabel: true,
       },
       xAxis: {
+        nameTextStyle: {
+          color: this.titleColor,
+        },
         type: "category",
-        name: "地区",
+        name: this.axis[0],
         data: this.data.item,
         axisTick: {
           show: false,
+        },
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: this.titleColor,
+          },
         },
         axisLine: {
           show: true,
         },
       },
       yAxis: {
+        nameTextStyle: {
+          color: this.titleColor,
+        },
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: this.titleColor, 
+          },
+        },
         type: "value",
-        name: "数量",
+        name:  this.axis[1],
       },
       series: [
         {
-          name: "人数",
+          name:  this.axis[2],
           type: "bar",
           barWidth: "60%",
           data: this.data.list,
@@ -82,14 +121,14 @@ export default {
                   "#749f83",
                   "#ca8622",
                 ];
-                 return colorList[params.dataIndex % colorList.length];
+                return colorList[params.dataIndex % colorList.length];
               },
               label: {
                 show: true, //开启显示
                 position: "top", //在上方显示
                 textStyle: {
                   //数值样式
-                  color: "black",
+                  color: this.titleColor,
                 },
               },
             },
