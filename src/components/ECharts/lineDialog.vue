@@ -41,6 +41,13 @@ export default {
         return "#000";
       },
     },
+    colorList: {
+      // 饼状图数据
+      type: Array,
+      default: () => {
+        return ["#00C4F5","#F8D618","#FF5A00","#FF5A00"];
+      },
+    },
     data: {
       // 饼状图数据
       type: Object,
@@ -53,6 +60,29 @@ export default {
     return {};
   },
   mounted() {
+     // const colorArr = ["#00C4F5","#F8D618","#FF5A00","#FF5A00"]
+    let legendData = [];
+    let seriesData = [];
+//     if (this.data) {
+      for (var i = 0; i < this.data.list.length; i++) {
+        legendData.push(this.data.list[i].name);
+        seriesData.push({
+          name: this.data.list[i].name,
+          type: "line",
+          smooth: true,
+          symbol: "none",
+          itemStyle: {
+            normal: {
+              color: this.colorList[i], // 改变折线点的颜色
+              ineStyle: {
+                color: this.colorList[i], // 改变折线颜色
+              },
+            },
+          },
+          data: this.data.list[i].num,
+        });
+      }
+//     }
     // 曲线图
     let myChart = echarts.init(this.$refs.bar);
     myChart.setOption({
@@ -69,7 +99,7 @@ export default {
         trigger: "axis",
       },
       legend: {
-        data: ["进入", "外出"],
+        data: legendData,
         orient: "horizontal",
         x: "right",
         y: " center",
@@ -98,67 +128,34 @@ export default {
       yAxis: [
         {
           type: "value",
-          axisLine:this.isCommer?{
-          show: false, //y轴线消失
-          lineStyle: {
-            color: this.titleColor,
-          },
-        }:{
-            lineStyle: {
-              color: this.titleColor,
-            },
-          },
-          splitLine: this.isCommer?{
-            show: true,
-            lineStyle: {
-              type: "dashed",
-            },
-          }:{
-            show: true,
-            lineStyle: {
-              type: "solid",
-            },
-          },
+          axisLine: this.isCommer
+            ? {
+                show: false, //y轴线消失
+                lineStyle: {
+                  color: this.titleColor,
+                },
+              }
+            : {
+                lineStyle: {
+                  color: this.titleColor,
+                },
+              },
+          splitLine: this.isCommer
+            ? {
+                show: true,
+                lineStyle: {
+                  type: "dashed",
+                },
+              }
+            : {
+                show: true,
+                lineStyle: {
+                  type: "solid",
+                },
+              },
         },
       ],
-      series: [
-        {
-          symbol: "none",
-          name: "进入",
-          type: "line",
-          smooth: true,
-          areaStyle: {
-            color: "#39A0FC",
-          },
-          itemStyle: {
-            normal: {
-              color: "#39A0FC", // 改变折线点的颜色
-              ineStyle: {
-                color: "#39A0FC", // 改变折线颜色
-              },
-            },
-          },
-          data: this.data.in,
-        },
-        {
-          symbol: "none",
-          name: "外出",
-          type: "line",
-          smooth: true,
-          areaStyle: {
-            color: "#8cd5c2",
-          },
-          itemStyle: {
-            normal: {
-              color: "#8cd5c2", // 改变折线点的颜色
-              ineStyle: {
-                color: "#8cd5c2", // 改变折线颜色
-              },
-            },
-          },
-          data: this.data.out,
-        },
-      ],
+      series:seriesData,
     });
     setTimeout(function () {
       window.addEventListener("resize", function () {
