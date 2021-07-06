@@ -1453,7 +1453,7 @@ export default {
     margin: auto;
     width: 80%;
     height: 828px;
-    background: url("../../src/assets/bg.png") no-repeat;
+    background: url("https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210706122534.png") no-repeat;
     background-size: 100% 100%;
     .dialog-title {
       text-align: center;
@@ -1682,7 +1682,7 @@ export default {
   background: #000836;
 }
 .header {
-  background: url("../../src/assets/head.png") no-repeat;
+  background: url("https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210706125830.png") no-repeat;
   // width: 100%;
   height: 74px;
   // text-align: center;
@@ -1920,8 +1920,8 @@ export default {
       .camera-num {
         height: 245px;
         display: inline-block;
-        margin: 16px 5px 16px 30px;
-        width: 13%;
+        margin: 10px 5px 16px 0;
+        width: 14%;
         .num-item {
           margin-bottom: 22px;
           i {

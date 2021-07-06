@@ -929,6 +929,7 @@ let defaultRouter = [
     children: []
   },
   // 首页
+  
   {
     path: "/index",
     iconCls: "iconfont icon-kongzhitai", // 图标样式class
@@ -954,6 +955,7 @@ let defaultRouter = [
     alone: true,
     children: []
   },
+  
   {
     path: "/404",
     component: NotFound,
