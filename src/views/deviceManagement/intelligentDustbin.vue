@@ -5,28 +5,28 @@
         <img src="@/assets/zhengzaiyunxing.png" alt="" />
         <div>
           <p>正在运行</p>
-          <span class="num">5<span style="font-size: 18px">台</span></span>
+          <span class="num">{{statics.deviceCount}}<span style="font-size: 18px">台</span></span>
         </div>
       </div>
       <div class="static-item lixian">
         <img src="@/assets/lixianshebei.png" alt="" />
         <div>
           <p>离线设备</p>
-          <span class="num">5<span style="font-size: 18px">台</span></span>
+          <span class="num">{{statics.offLineCount}}<span style="font-size: 18px">台</span></span>
         </div>
       </div>
       <div class="static-item daichuli">
         <img src="@/assets/gaojingdaichuli.png" alt="" />
         <div>
           <p>告警待处理</p>
-          <span class="num">5<span style="font-size: 18px">条</span></span>
+          <span class="num">{{statics.pendingCount}}<span style="font-size: 18px">条</span></span>
         </div>
       </div>
       <div class="static-item yichang">
         <img src="@/assets/yichanggaojing.png" alt="" />
         <div>
           <p>异常告警</p>
-          <span class="num">5<span style="font-size: 18px">条</span></span>
+          <span class="num">{{statics.alarmCount}}<span style="font-size: 18px">条</span></span>
         </div>
       </div>
     </div>

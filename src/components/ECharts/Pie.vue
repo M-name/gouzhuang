@@ -38,23 +38,16 @@ export default {
     myChart.setOption({
       tooltip: {
         trigger: "item",
-        show:false
-        // formatter: function (param) {
-        //   return (
-        //     param.marker +
-        //     param.data.name +
-        //     ": " +
-        //     '<span style="font-size:14px;color:' +
-        //     param.color +
-        //     ';">' +
-        //     param.data.value +
-        //     "</span>" +
-        //     "&nbsp" +
-        //     param.percent +
-        //     "%"
-        //   );
-        // },
+        backgroundColor: "rgba(255,255,255,0.8)", //设置背景图片 rgba格式
+        color: "black",
+        borderWidth: "1", //边框宽度设置1
+        borderColor: "gray", //设置边框颜色
+        textStyle: {
+          color: "black", //设置文字颜色
+        },
+        formatter: "{b} : {c} ({d}%)",
       },
+
       grid: {
         width: "50%",
         height: "70%",
@@ -65,13 +58,13 @@ export default {
         icon: "circle",
         show: false,
       },
-      color: ["#39A0FC", "#FBD437","#4ECB73","#A53FF5"],
+      color: ["#2ec7c9", "#b6a2de", "#5ab1ef", "#ffb980", "#d87a80", "#8d98b3", "#e5cf0d", "#588dd5", "#f5994e"],
       graphic: [{ //环形图中间添加文字
             type: 'text', //通过不同top值可以设置上下显示
             left: 'center',
             top: '45%',
             style: {
-                text: '设备种类'+'\n'+'4',
+                text: '设备种类'+'\n'+'9',
                 textAlign: 'center',
                 fill: '#fff', //文字的颜色
                 width: 30,
@@ -85,22 +78,19 @@ export default {
           type: "pie",
           radius: ["50%", "65%"],
           center: ["50%", "50%"],
-          itemStyle: {
-            // borderColor: "#fff",
-          },
-           
-          // emphasis: {
-          //   label: {
-          //     show: true,
-          //     fontSize: "20",
-          //   },
-          // },
           data: this.datas,
+          avoidLabelOverlap: false,
           label: {
-            normal: {
-              position: "center",
-              show: false,
-            },
+            show: false,
+            position: "center",
+          },
+          emphasis: {
+            // label: {
+            //   show: true,
+            // },
+          },
+          labelLine: {
+            show: false,
           },
         },
       ],

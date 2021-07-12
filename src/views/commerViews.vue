@@ -35,14 +35,14 @@
               <i class="iconfont icon-guokexiang-yellow"></i>
               <div>
                 <p class="classily">布控</p>
-                <p style="color: #56e4ff">43</p>
+                <p style="color: #56e4ff">{{ newDayList.cover }}</p>
               </div>
             </div>
             <div class="num-item">
               <i class="iconfont icon-guokexiang-yellow"></i>
               <div>
                 <p class="classily">正常</p>
-                <p style="color: #56e4ff">43</p>
+                <p style="color: #56e4ff">{{ newDayList.normal }}</p>
               </div>
             </div>
             <div class="num-item">
@@ -52,7 +52,7 @@
               ></i>
               <div>
                 <p class="classily">待检修</p>
-                <p style="color: #ecf529">43</p>
+                <p style="color: #ecf529">{{ newDayList.repair }}</p>
               </div>
             </div>
             <div class="num-item">
@@ -62,7 +62,7 @@
               ></i>
               <div>
                 <p class="classily">告警</p>
-                <p style="color: #ff0e00">43</p>
+                <p style="color: #ff0e00">{{ newDayList.countAlarm }}</p>
               </div>
             </div>
           </div>
@@ -116,28 +116,28 @@
               <i class="iconfont icon-jinggai-red"></i>
               <div>
                 <p class="classily">布控</p>
-                <p style="color: #56e4ff">43</p>
+                <p style="color: #56e4ff">{{ newCoverList.cover }}</p>
               </div>
             </div>
             <div class="num-item">
               <i class="iconfont icon-jinggai-red"></i>
               <div>
                 <p class="classily">正常</p>
-                <p style="color: #56e4ff">43</p>
+                <p style="color: #56e4ff">{{ newCoverList.normal }}</p>
               </div>
             </div>
             <div class="num-item">
               <i style="color: #ecf529" class="iconfont icon-jinggai-red"></i>
               <div>
                 <p class="classily">待检修</p>
-                <p style="color: #ecf529">43</p>
+                <p style="color: #ecf529">{{ newCoverList.repair }}</p>
               </div>
             </div>
             <div class="num-item">
               <i style="color: #ff0e00" class="iconfont icon-jinggai-red"></i>
               <div>
                 <p class="classily">告警</p>
-                <p style="color: #ff0e00">43</p>
+                <p style="color: #ff0e00">{{ newCoverList.countAlarm }}</p>
               </div>
             </div>
           </div>
@@ -149,12 +149,13 @@
         <div class="people baimg">
           <div class="title">
             <span>设备统计</span>
-            <i class="iconfont icon-more"></i>
+            <!-- <i class="iconfont icon-more"></i> -->
           </div>
           <div style="margin: 20px 20px 20px 50px; padding-bottom: 20px">
             <Thebar
+              v-if="objectDataStatic"
               :height="200"
-              :axis="['设备', '数量', '统计']"
+              :axis="['设备', '数量', '数量']"
               :data="objectData"
               ids="carBar"
             />
@@ -170,26 +171,23 @@
             <Pie :datas="pieData" titleColor="#fff" ids="equipmentPie" />
           </div>
           <div class="pie-info" style="width: 69%; display: inline-block">
-            <div class="info-item">
-              <span style="background: #39a0fc" class="block"></span
-              ><span class="text">摄像头</span><span class="text">61%</span
-              ><span class="text">122</span>
+            <div
+              v-for="(item, index) in pieData"
+              :key="index"
+              class="info-item"
+            >
+              <span style="background: #39a0fc" class="block"></span>
+              <span class="text">{{ item.name }}</span>
+              <span class="text">{{ item.value }}</span>
             </div>
-            <div class="info-item">
+            <!-- <div class="info-item">
               <span style="background: #fbd437" class="block"></span
-              ><span class="text">果壳箱</span><span class="text">61%</span
-              ><span class="text">122</span>
-            </div>
-            <div class="info-item">
-              <span style="background: #4ecb73" class="block"></span
-              ><span class="text">智慧烟感</span><span class="text">61%</span
-              ><span class="text">122</span>
+              ><span class="text">果壳箱</span><span class="text">121</span>
             </div>
             <div class="info-item">
               <span style="background: #a53ff5" class="block"></span
-              ><span class="text">智慧井盖</span><span class="text">61%</span
-              ><span class="text">122</span>
-            </div>
+              ><span class="text">智慧井盖</span><span class="text">20</span>
+            </div> -->
           </div>
         </div>
         <!-- 警报 -->
@@ -245,16 +243,17 @@
                             :style="{
                               width: '18%',
                               'text-align': 'center',
-                              color: item.inOrOut ? '#56E4FF' : '#56FF56',
+                              color:
+                                item.vehicleOut == 0 ? '#56E4FF' : '#56FF56',
                             }"
                           >
-                            {{ item.inOrOut ? "出" : "入" }}
+                            {{ item.vehicleOut == 0 ? "出" : "入" }}
                           </div>
                           <div style="width: 34%; text-align: center">
                             {{ item.plateNo }}
                           </div>
                           <div style="width: 24%; text-align: center">
-                            {{ item.crossTimeStr }}
+                            {{ item.crossTime }}
                           </div>
                         </div>
                       </li>
@@ -301,18 +300,23 @@
                       <li v-for="(item, index) in peopleList" :key="index">
                         <div class="pedestrian-people">
                           <div style="width: 22%; text-align: center">
-                            {{ item.plateNo }}
+                            {{ item.personName }}
                           </div>
                           <div style="width: 22%; text-align: center">
-                            {{ item.entranceName }}
+                            {{ item.doorName }}
                           </div>
                           <div style="width: 30%; text-align: center">
-                            {{ item.crossTimeStr }}
+                            {{ item.receiveTime }}
                           </div>
                           <div
-                            style="width: 22%; text-align: center; color: red"
+                            :style="{
+                              width: '18%',
+                              'text-align': 'center',
+                              color:
+                                item.inAndOutType == 0 ? '#56E4FF' : '#56FF56',
+                            }"
                           >
-                            {{ item.vehicleOutValue }}
+                            {{ item.inAndOutType == 0 ? "出" : "入" }}
                           </div>
                         </div>
                       </li>
@@ -341,21 +345,25 @@
         <div class="camera baimg">
           <div class="title">
             <span>周界监控</span>
-            <i class="iconfont icon-more"></i>
+            <!-- <i class="iconfont icon-more"></i> -->
           </div>
           <div class="camera-static">
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">
+                摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+              </p>
               <div class="camera-img">
-                <img src="../../src/assets/1.png" alt="" />
+                <img src="../../src/assets/side1.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑北门口告警</p>
               <p class="discrip-info">描述：人员聚集</p>
             </div>
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">
+                摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+              </p>
               <div class="camera-img">
-                <img src="../../src/assets/2.png" alt="" />
+                <img src="../../src/assets/side2.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑13幢摄像头待检修</p>
               <p class="discrip-info">描述：摄像头故障</p>
@@ -406,17 +414,21 @@
           </div>
           <div class="camera-static">
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">
+                摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+              </p>
               <div class="camera-img">
-                <img src="../../src/assets/1.png" alt="" />
+                <img src="../../src/assets/high1.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑北门口告警</p>
               <p class="discrip-info">描述：人员聚集</p>
             </div>
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">
+                摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+              </p>
               <div class="camera-img">
-                <img src="../../src/assets/2.png" alt="" />
+                <img src="../../src/assets/high2.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑13幢摄像头待检修</p>
               <p class="discrip-info">描述：摄像头故障</p>
@@ -466,14 +478,14 @@
           </div>
           <div class="camera-statics">
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">摄像头001 <span>{{ nowDate }} {{camreaTime}}</span></p>
               <div class="camera-img">
                 <img src="../../src/assets/2.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑12幢二单元</p>
             </div>
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">摄像头001 <span>{{ nowDate }} {{camreaTime}}</span></p>
               <div class="camera-img">
                 <img src="../../src/assets/3.png" alt="" />
               </div>
@@ -492,17 +504,21 @@
           </div>
           <div class="camera-static">
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">
+                摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+              </p>
               <div class="camera-img">
-                <img src="../../src/assets/1.png" alt="" />
+                <img src="../../src/assets/elevator1.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑北门口告警</p>
               <p class="discrip-info">描述：人员聚集</p>
             </div>
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">
+                摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+              </p>
               <div class="camera-img">
-                <img src="../../src/assets/2.png" alt="" />
+                <img src="../../src/assets/elevator2.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑13幢摄像头待检修</p>
               <p class="discrip-info">描述：摄像头故障</p>
@@ -552,14 +568,14 @@
           </div>
           <div class="camera-statics">
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">摄像头001 <span>{{ nowDate }} {{camreaTime}}</span></p>
               <div class="camera-img">
                 <img src="../../src/assets/4.png" alt="" />
               </div>
               <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
             </div>
             <div class="camera-info">
-              <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+              <p class="discrip">摄像头001 <span>{{ nowDate }} {{camreaTime}}</span></p>
               <div class="camera-img">
                 <img src="../../src/assets/5.png" alt="" />
               </div>
@@ -583,13 +599,13 @@
         >
           <div v-if="dialogStyle == 'shuck'" class="body-top">
             <div class="top-static">
-              今日累计清运次数<span></span><span>1</span><span>3</span>次
+              今日累计清运次数<span></span><span></span><span>0</span>次
             </div>
             <div class="top-static">
-              今日累计减少清运次数<span></span><span>1</span><span>3</span>次
+              今日累计减少清运次数<span></span><span></span><span>0</span>次
             </div>
             <div class="top-static">
-              今日开箱次数<span></span><span>1</span><span>3</span>次
+              今日开箱次数<span></span><span></span><span>0</span>次
             </div>
             <div class="top-static">
               当前满溢率<span></span><span>1</span><span>3</span>%
@@ -597,13 +613,13 @@
           </div>
           <div v-else class="body-top">
             <div class="top-static">
-              设备在线数<span></span><span>1</span><span>3</span>个
+              设备在线数<span></span><span>2</span><span>1</span>个
             </div>
             <div class="top-static">
-              设备告警次数<span></span><span>1</span><span>3</span>次
+              设备告警次数<span></span><span></span><span>0</span>次
             </div>
             <div class="top-static">
-              设备消警次数<span></span><span>1</span><span>3</span>次
+              设备消警次数<span></span><span></span><span>0</span>次
             </div>
           </div>
           <div class="body-bottom">
@@ -656,24 +672,55 @@
                   </div>
                 </div>
                 <ul class="item">
-                  <li v-for="(item, index) in equipmentList" :key="index">
+                  <li
+                    v-for="(item, index) in dialogStyle == 'shuck'
+                      ? equipmentList
+                      : mentList"
+                    :key="index"
+                  >
                     <div class="pedestrian-people">
-                      <div style="width: 20%">
-                        {{ item.carIndex }}
-                      </div>
+                      <el-tooltip
+                        class="items"
+                        effect="dark"
+                        :content="item.deviceCode"
+                        placement="top-start"
+                      >
+                        <div class="peopel-code">
+                          {{ item.deviceCode }}
+                        </div>
+                      </el-tooltip>
                       <div style="width: 44%">
-                        {{ item.address }}
+                        {{ item.installAddr }}
                       </div>
                       <div
                         :style="{
                           width: '18%',
-                          color: item.inOrOut ? '#56E4FF' : '#FF003D',
+                          color:
+                            item.deviceUseStatus == 1
+                              ? '#56E4FF'
+                              : item.deviceUseStatus == 2
+                              ? '#909399'
+                              : item.deviceUseStatus == 3
+                              ? '#E6A23C'
+                              : item.deviceUseStatus == 4
+                              ? '#F56C6C'
+                              : '#56E4FF',
                         }"
                       >
-                        {{ item.inOrOut ? "正常" : "告警" }}
+                        {{
+                          item.deviceUseStatus == 1
+                            ? "正常"
+                            : item.deviceUseStatus == 2
+                            ? "离线"
+                            : item.deviceUseStatus == 3
+                            ? "故障"
+                            : item.deviceUseStatus == 3
+                            ? "报废"
+                            : "其他"
+                        }}
                       </div>
                       <div style="width: 14%">
-                        {{ item.people }}
+                        {{ item.contactPerson ? item.contactPerson : "无" }}
                       </div>
                     </div>
                   </li>
@@ -770,44 +817,86 @@
               </p>
               <div class="camera-statics">
                 <div class="camera-info">
-                  <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+                  <p class="discrip">
+                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+                  </p>
                   <div class="camera-img">
-                    <img src="../../src/assets/4.png" alt="" />
+                    <img
+                      v-if="dialogStyle == 'hightoss'"
+                      src="../../src/assets/high1.png"
+                      alt=""
+                    />
+                    <img v-else src="../../src/assets/elevator1.png" alt="" />
                   </div>
                   <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
                 </div>
                 <div class="camera-info">
-                  <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+                  <p class="discrip">
+                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+                  </p>
                   <div class="camera-img">
-                    <img src="../../src/assets/5.png" alt="" />
+                    <img
+                      v-if="dialogStyle == 'hightoss'"
+                      src="../../src/assets/high2.png"
+                      alt=""
+                    />
+                    <img v-else src="../../src/assets/elevator2.png" alt="" />
                   </div>
                   <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
                 </div>
                 <div class="camera-info">
-                  <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+                  <p class="discrip">
+                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+                  </p>
                   <div class="camera-img">
-                    <img src="../../src/assets/5.png" alt="" />
+                    <img
+                      v-if="dialogStyle == 'hightoss'"
+                      src="../../src/assets/high3.png"
+                      alt=""
+                    />
+                    <img v-else src="../../src/assets/elevator3.png" alt="" />
                   </div>
                   <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
                 </div>
                 <div class="camera-info">
-                  <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+                  <p class="discrip">
+                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+                  </p>
                   <div class="camera-img">
-                    <img src="../../src/assets/4.png" alt="" />
+                    <img
+                      v-if="dialogStyle == 'hightoss'"
+                      src="../../src/assets/high4.png"
+                      alt=""
+                    />
+                    <img v-else src="../../src/assets/elevator4.png" alt="" />
                   </div>
                   <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
                 </div>
                 <div class="camera-info">
-                  <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+                  <p class="discrip">
+                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+                  </p>
                   <div class="camera-img">
-                    <img src="../../src/assets/5.png" alt="" />
+                    <img
+                      v-if="dialogStyle == 'hightoss'"
+                      src="../../src/assets/high5.png"
+                      alt=""
+                    />
+                    <img v-else src="../../src/assets/elevator5.png" alt="" />
                   </div>
                   <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
                 </div>
                 <div class="camera-info">
-                  <p class="discrip">摄像头001 <span>01/18 15:23</span></p>
+                  <p class="discrip">
+                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+                  </p>
                   <div class="camera-img">
-                    <img src="../../src/assets/5.png" alt="" />
+                    <img
+                      v-if="dialogStyle == 'hightoss'"
+                      src="../../src/assets/high6.png"
+                      alt=""
+                    />
+                    <img v-else src="../../src/assets/elevator6.png" alt="" />
                   </div>
                   <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
                 </div>
@@ -843,7 +932,7 @@
           </div>
           <div class="body-bottom">
             <div style="width: 55%" class="body-lefthightoss">
-              <p class="thightoss-title">电梯电瓶车案卷处理</p>
+              <p class="thightoss-title">车辆出行记录</p>
               <div class="equipment-lists">
                 <div class="pedestrian-otherpeoples" style="padding: 3px 1px">
                   <div style="width: 15%">车牌号</div>
@@ -888,29 +977,29 @@
               <div class="body-alarm" style="margin-bottom: 32px">
                 <p class="alarm-title">车辆进入趋势</p>
                 <div class="car-static">
-                <LineDialog
-                  :data="carLineData"
-                  :isCommer="true"
-                  titleColor="#fff"
-                  :height="200"
-                  title=""
-                  ids="carIn"
-                />
-              </div>
+                  <LineDialog
+                    :data="carLineData"
+                    :isCommer="true"
+                    titleColor="#fff"
+                    :height="200"
+                    title=""
+                    ids="carIn"
+                  />
+                </div>
               </div>
               <div class="body-alarm">
                 <p class="alarm-title">车辆外出趋势</p>
                 <div class="car-static">
-                <LineDialog
-                  :data="carLineData"
-                  :colorList="['#ECF529']"
-                  :isCommer="true"
-                  titleColor="#fff"
-                  :height="200"
-                  title=""
-                  ids="carOut"
-                />
-              </div>
+                  <LineDialog
+                    :data="carLineData"
+                    :colorList="['#ECF529']"
+                    :isCommer="true"
+                    titleColor="#fff"
+                    :height="200"
+                    title=""
+                    ids="carOut"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -946,6 +1035,7 @@ export default {
   },
   data() {
     return {
+      objectDataStatic: false,
       dialogTitle: "",
       dialogStyle: "",
       // 车辆弹窗数据（表格）
@@ -1004,6 +1094,27 @@ export default {
           people: "杨淑芬",
         },
       ],
+      // 智能井盖数据
+      mentList: [
+        {
+          carIndex: "LJT101",
+          inOrOut: true,
+          address: "勾庄3幢1单元",
+          people: "杨",
+        },
+        {
+          carIndex: "LJT101",
+          inOrOut: false,
+          address: "勾庄佳苑13幢1单元",
+          people: "杨淑芬",
+        },
+        {
+          carIndex: "LJT101",
+          inOrOut: false,
+          address: "勾庄佳苑13幢1单元",
+          people: "杨淑芬",
+        },
+      ],
       // 弹窗显示
       dialogShow: false,
       // 设备状态统计数据
@@ -1011,6 +1122,7 @@ export default {
         item: ["2323", "223", "767", "2323", "223", "767"],
         list: ["2323", "223", "767", "2323", "223", "767"],
       },
+      newDayList: [],
       // 新的日历数据
       dayList: [
         { type: "1" },
@@ -1070,10 +1182,15 @@ export default {
       dragData: {},
       // 设备建设圆环图数据
       pieData: [
-        { value: 34, name: "摄像头" },
-        { value: 56, name: "果壳箱" },
-        { value: 11, name: "智慧烟感" },
-        { value: 23, name: "智慧井盖" },
+        { value: 66, name: "监控补盲" },
+        { value: 32, name: "架空层监控" },
+        { value: 8, name: "智能双舱一体机" },
+        { value: 53, name: "人脸识别摄像头" },
+        { value: 66, name: "电梯监控" },
+        { value: 32, name: "周界监控" },
+        { value: 25, name: "智慧井盖" },
+        { value: 2, name: "智慧果壳箱" },
+        { value: 2436, name: "智慧烟感" },
       ],
       // 车辆进出数据（滚动显示）
       carList: [
@@ -1081,156 +1198,133 @@ export default {
           carIndex: "01",
           inOrOut: true,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: false,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: true,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: true,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: false,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: true,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: true,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: false,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
         {
           carIndex: "01",
           inOrOut: false,
           plateNo: "浙A FBH05",
-          crossTimeStr: "17:12:42",
+          crossTime: "17:12:42",
         },
       ],
       // 人员进出数据（滚动显示）
       peopleList: [
         {
-          plateNo: "asdad",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "asd",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "adsd",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "adsad",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "asdad",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "adsad",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "adsa",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "sdasd",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "qweqw",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "wqeqw",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "qwqwe",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
         {
-          plateNo: "qweqwe",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
-        },
-        {
-          plateNo: "qweqwe",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
-        },
-        {
-          plateNo: "qwsd",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
-        },
-        {
-          plateNo: "wewe",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
-        },
-        {
-          plateNo: "erwer2",
-          entranceName: "34343",
-          crossTimeStr: "q3242",
-          vehicleOutValue: "232323",
+          personName: "asdad",
+          doorName: "34343",
+          receiveTime: "q3242",
+          inAndOutType: 0,
         },
       ],
+      newCoverList: [],
       // 智慧井盖数据
       data: {
         time: ["2:00", "3:00", "4:00", "5:00", "6:00"],
@@ -1249,11 +1343,9 @@ export default {
         out: [23, 16, 27, 34, 56],
       },
       // 车辆进入趋势数据
-      carLineData:{
+      carLineData: {
         line: ["2:00", "3:00", "4:00", "5:00", "6:00"],
-        list: [
-          { name: "", num: [34, 23, 23, 22, 35] },
-        ],
+        list: [{ name: "", num: [34, 23, 23, 22, 35] }],
       },
       //高空抛物或电梯电瓶车数据（统计图）
       lineData: {
@@ -1269,6 +1361,7 @@ export default {
       nowTime: "",
       nowWeek: "",
       nowYear: "",
+      camreaTime: "",
       // 是否为全屏模式
       isfullScreen: true,
     };
@@ -1291,8 +1384,116 @@ export default {
   mounted() {
     // 调用获取日期方法，显示顶部日期
     this.nowTimes();
+    this.getTrash();
+    this.getCover();
+    this.getpieDevice();
+    this.getcountDevice();
+    this.getcountCar();
+    this.getcountPerson();
+    this.getTrashDetail();
+    this.getCoverDetail();
   },
   methods: {
+    // 垃圾桶首页统计
+    getTrash() {
+      this.$request.countWS().then((res) => {
+        if (res.data.status == 200) {
+          this.newDayList = res.data.data;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 垃圾桶详情
+    getTrashDetail() {
+      this.$request.shakeDetail().then((res) => {
+        if (res.data.status == 200) {
+          this.equipmentList = res.data.data.deviceList;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 井盖详情
+    getCoverDetail() {
+      this.$request.coverDetail().then((res) => {
+        if (res.data.status == 200) {
+          this.mentList = res.data.data.deviceList;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 井盖首页统计
+    getCover() {
+      this.$request.countCover().then((res) => {
+        if (res.data.status == 200) {
+          this.newCoverList = res.data.data;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 设备建设
+    getcountDevice() {
+      this.$request.countDevice().then((res) => {
+        if (res.data.status == 200) {
+          // this.pieData = res.data.data;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 设备运行状态
+    getpieDevice() {
+      this.objectDataStatic = false;
+      this.$request.pieDevice().then((res) => {
+        if (res.data.status == 200) {
+          this.objectData = {
+            item: res.data.data.deviceUseList,
+            list: res.data.data.deviceUses,
+          };
+          this.objectDataStatic = true;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 车辆
+    getcountCar() {
+      this.objectDataStatic = false;
+      this.$request.countCar().then((res) => {
+        if (res.data.status == 200) {
+          for (var i = 0; i < res.data.data.list.length; i++) {
+            res.data.data.list[i].carIndex = i;
+            res.data.data.list[i].crossTime = res.data.data.list[
+              i
+            ].crossTime.slice(11, 18);
+          }
+          this.carList = res.data.data.list;
+          console.log(this.carList);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 人员
+    getcountPerson() {
+      this.objectDataStatic = false;
+      this.$request.countPerson().then((res) => {
+        if (res.data.status == 200) {
+          for (var i = 0; i < res.data.data.list.length; i++) {
+            res.data.data.list[i].carIndex = i;
+            res.data.data.list[i].crossTime = res.data.data.list[
+              i
+            ].receiveTime.slice(11, 18);
+          }
+          this.peopleList = res.data.data.list;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
     getPosi(lng, lat, address) {
       console.log(lng);
       console.log(lat);
@@ -1386,6 +1587,7 @@ export default {
       this.blocknum = new Date(year + "," + month + "," + "01").getDay();
       let week = weeks[wk];
       this.nowTime = hh + ":" + mm + ":" + ss;
+      this.camreaTime = hh + ":" + mm;
       this.nowDate = month + "-" + date;
       this.nowYear = mouths[parseInt(month, 10) - 1] + "月";
       this.nowWeek = week;
@@ -1440,9 +1642,9 @@ export default {
 .dialog {
   position: absolute;
   top: 0;
-  width: 100vw;
+  width: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+  z-index: 99;
   .dialog-content {
     position: absolute;
     left: 0;
@@ -1453,7 +1655,8 @@ export default {
     margin: auto;
     width: 80%;
     height: 828px;
-    background: url("https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210706122534.png") no-repeat;
+    background: url("https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210706122534.png")
+      no-repeat;
     background-size: 100% 100%;
     .dialog-title {
       text-align: center;
@@ -1508,11 +1711,24 @@ export default {
             z-index: 999;
             background: #14417d;
             padding: 10px;
+            overflow: auto;
             .pedestrian-people {
               height: 30px;
               line-height: 40px;
               border-top: 1px solid #56e4ff;
               text-align: left;
+              .peopel-code {
+                width: 20%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                word-break: keep-all;
+                cursor:pointer;
+              }
+              // .peopel-code:hover {
+              //   text-overflow: clip;
+              //   white-space: nowrap;
+              //   overflow: visible;
+              // }
             }
           }
         }
@@ -1571,8 +1787,8 @@ export default {
               line-height: 50px;
               height: 40px;
             }
-            .car-static{
-               padding: 10px 20px;
+            .car-static {
+              padding: 10px 20px;
             }
           }
         }
@@ -1682,7 +1898,8 @@ export default {
   background: #000836;
 }
 .header {
-  background: url("https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210706125830.png") no-repeat;
+  background: url("https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210706125830.png")
+    no-repeat;
   // width: 100%;
   height: 74px;
   // text-align: center;
@@ -1856,8 +2073,8 @@ export default {
         display: flex;
         justify-content: space-around;
         .info-item {
-          margin-top: 30px;
-          width: 49%;
+          margin-top: 15px;
+          width: 33%;
           justify-content: space-around;
           display: inline-flex;
           .block {
@@ -1871,7 +2088,7 @@ export default {
           .text {
             color: #fff;
             font-size: 12px;
-            margin-left: 5px;
+            // margin-left: 3px;
           }
         }
       }
@@ -2088,4 +2305,7 @@ export default {
     vertical-align: top;
   }
 }
+// /deep/.el-tooltip__popper.is-dark{
+//   z-index: 999999 !important;
+// }
 </style>

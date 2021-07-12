@@ -3,8 +3,8 @@
     <el-aside id="asideNav">
       <div class="logo-name">
         <!-- <p >XU</p> -->
-        <div style="text-align:center" v-if="$store.getters.logoShow">
-           <img class="smail-img" src="@/assets/company.png" alt="" />
+        <div style="text-align: center" v-if="$store.getters.logoShow">
+          <img class="smail-img" src="@/assets/company.png" alt="" />
         </div>
 
         <div v-else>
@@ -12,6 +12,7 @@
           <span>勾庄佳苑智慧物业</span>
         </div>
       </div>
+       <!-- 自动跳转 :router="$store.getters.uniquerouter" -->
       <el-menu
         :default-active="$route.path"
         class="el-menu-vertical"
@@ -20,7 +21,7 @@
         background-color="#03152A"
         text-color="rgba(255,255,255,.7)"
         active-text-color="#ffffff"
-        :router="$store.getters.uniquerouter"
+       
         :unique-opened="$store.getters.uniquerouter"
         :collapse-transition="true"
       >
@@ -61,32 +62,47 @@ export default {
   watch: {
     // 监听浏览器直接输入路由，将此路由添加到tabnavBox
     "$route.path": function (val) {
-      this.selectmenu(val);
+      if (val == "/commerViews") {
+        console.log("23453");
+      } else {
+        this.selectmenu(val);
+      }
     },
   },
   methods: {
     selectmenu(key) {
-      let router = this.$store.getters.routers;
-      let name = "";
-      let navTitle = function (path, routerARR) {
-        for (let i = 0; i < routerARR.length; i++) {
-          if (routerARR[i].children.length > 0 || routerARR[i].path === path) {
+      if (key == "/commerViews") {
+        const routeLink = this.$router.resolve({
+          path: key,
+        });
+        window.open(routeLink.href, "_blank");
+      } else {
+        let router = this.$store.getters.routers;
+        let name = "";
+        let navTitle = function (path, routerARR) {
+          for (let i = 0; i < routerARR.length; i++) {
             if (
-              routerARR[i].path === path &&
-              routerARR[i].children.length < 1
+              routerARR[i].children.length > 0 ||
+              routerARR[i].path === path
             ) {
-              name = routerARR[i].name;
-              break;
+              if (
+                routerARR[i].path === path &&
+                routerARR[i].children.length < 1
+              ) {
+                name = routerARR[i].name;
+                break;
+              }
+              navTitle(path, routerARR[i].children);
             }
-            navTitle(path, routerARR[i].children);
           }
-        }
-        return name;
-      };
-      this.$store.dispatch("addTab", {
-        title: navTitle(key, router),
-        path: key,
-      });
+          return name;
+        };
+        this.$store.dispatch("addTab", {
+          title: navTitle(key, router),
+          path: key,
+        });
+        this.$router.push({ path:key})
+      }
     },
   },
 };
@@ -125,7 +141,7 @@ $right: right;
     @extend %w100;
     font-weight: 300;
     z-index: 999;
-   
+
     span {
       height: 50px;
       line-height: 50px;
@@ -139,8 +155,8 @@ $right: right;
       height: 25px;
       display: inline-block;
       margin-left: 10px;
-       vertical-align: middle;
-       margin-top: -4px;
+      vertical-align: middle;
+      margin-top: -4px;
     }
     .smail-img {
       width: 25px;
