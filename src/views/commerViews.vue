@@ -176,18 +176,10 @@
               :key="index"
               class="info-item"
             >
-              <span style="background: #39a0fc" class="block"></span>
+              <span :style="{ background: item.color }" class="block"></span>
               <span class="text">{{ item.name }}</span>
               <span class="text">{{ item.value }}</span>
             </div>
-            <!-- <div class="info-item">
-              <span style="background: #fbd437" class="block"></span
-              ><span class="text">果壳箱</span><span class="text">121</span>
-            </div>
-            <div class="info-item">
-              <span style="background: #a53ff5" class="block"></span
-              ><span class="text">智慧井盖</span><span class="text">20</span>
-            </div> -->
           </div>
         </div>
         <!-- 警报 -->
@@ -345,7 +337,7 @@
         <div class="camera baimg">
           <div class="title">
             <span>周界监控</span>
-            <!-- <i class="iconfont icon-more"></i> -->
+            <i class="iconfont icon-more" @click="showDialog('ambitus')"></i>
           </div>
           <div class="camera-static">
             <div class="camera-info">
@@ -789,21 +781,25 @@
         </div>
         <!-- 高空抛物和电梯电瓶车 -->
         <div
-          v-if="dialogStyle == 'hightoss' || dialogStyle == 'electromobile'"
+          v-if="
+            dialogStyle == 'hightoss' ||
+            dialogStyle == 'electromobile' ||
+            dialogStyle == 'ambitus'
+          "
           class="dialog-body"
         >
           <div class="body-top">
             <div class="top-static">
-              累计上报数<span></span><span>1</span><span>3</span>个
+              累计上报数<span></span><span></span><span>0</span>个
             </div>
             <div class="top-static">
-              累计立案数<span></span><span>1</span><span>3</span>次
+              累计立案数<span></span><span></span><span>0</span>次
             </div>
             <div class="top-static">
-              累计处理数<span></span><span>1</span><span>3</span>次
+              累计处理数<span></span><span></span><span>0</span>次
             </div>
             <div class="top-static">
-              累计结案数<span></span><span>1</span><span>3</span>次
+              累计结案数<span></span><span></span><span>0</span>次
             </div>
           </div>
           <div class="body-bottom">
@@ -812,93 +808,31 @@
                 {{
                   dialogStyle == "hightoss"
                     ? "高空抛物案卷处理"
+                    : dialogStyle == "ambitus"
+                    ? "监控案卷处理"
                     : "电梯电瓶车案卷处理"
                 }}
               </p>
               <div class="camera-statics">
-                <div class="camera-info">
+                <div
+                  v-for="(item, index) in dialogStyle == 'hightoss'
+                    ? cameraHeightList
+                    : dialogStyle == 'ambitus'
+                    ? cameraSideList
+                    : cameraElevatorList"
+                  :key="index"
+                  class="camera-info"
+                >
                   <p class="discrip">
-                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
+                    {{ item.camera }}<span>{{ nowDate }} {{ camreaTime }}</span>
                   </p>
                   <div class="camera-img">
                     <img
-                      v-if="dialogStyle == 'hightoss'"
-                      src="../../src/assets/high1.png"
+                      :src="item.src"
                       alt=""
                     />
-                    <img v-else src="../../src/assets/elevator1.png" alt="" />
                   </div>
-                  <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
-                </div>
-                <div class="camera-info">
-                  <p class="discrip">
-                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
-                  </p>
-                  <div class="camera-img">
-                    <img
-                      v-if="dialogStyle == 'hightoss'"
-                      src="../../src/assets/high2.png"
-                      alt=""
-                    />
-                    <img v-else src="../../src/assets/elevator2.png" alt="" />
-                  </div>
-                  <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
-                </div>
-                <div class="camera-info">
-                  <p class="discrip">
-                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
-                  </p>
-                  <div class="camera-img">
-                    <img
-                      v-if="dialogStyle == 'hightoss'"
-                      src="../../src/assets/high3.png"
-                      alt=""
-                    />
-                    <img v-else src="../../src/assets/elevator3.png" alt="" />
-                  </div>
-                  <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
-                </div>
-                <div class="camera-info">
-                  <p class="discrip">
-                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
-                  </p>
-                  <div class="camera-img">
-                    <img
-                      v-if="dialogStyle == 'hightoss'"
-                      src="../../src/assets/high4.png"
-                      alt=""
-                    />
-                    <img v-else src="../../src/assets/elevator4.png" alt="" />
-                  </div>
-                  <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
-                </div>
-                <div class="camera-info">
-                  <p class="discrip">
-                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
-                  </p>
-                  <div class="camera-img">
-                    <img
-                      v-if="dialogStyle == 'hightoss'"
-                      src="../../src/assets/high5.png"
-                      alt=""
-                    />
-                    <img v-else src="../../src/assets/elevator5.png" alt="" />
-                  </div>
-                  <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
-                </div>
-                <div class="camera-info">
-                  <p class="discrip">
-                    摄像头001 <span>{{ nowDate }} {{ camreaTime }}</span>
-                  </p>
-                  <div class="camera-img">
-                    <img
-                      v-if="dialogStyle == 'hightoss'"
-                      src="../../src/assets/high6.png"
-                      alt=""
-                    />
-                    <img v-else src="../../src/assets/elevator6.png" alt="" />
-                  </div>
-                  <p class="discrip-info">地址：勾庄佳苑06幢二单元2号电梯</p>
+                  <p class="discrip-info">地址：{{ item.discrip }}</p>
                 </div>
               </div>
             </div>
@@ -921,52 +855,63 @@
         <div v-if="dialogStyle == 'car'" class="dialog-body">
           <div v-if="dialogStyle == 'car'" class="body-top">
             <div class="top-static">
-              车辆进入数量<span></span><span>1</span><span>3</span>
+              车辆进入数量<span></span><span></span><span>0</span>
             </div>
             <div class="top-static">
-              车辆外出数量<span></span><span>1</span><span>3</span>
+              车辆外出数量<span></span><span></span><span>0</span>
             </div>
             <div class="top-static">
-              可疑车辆<span></span><span>1</span><span>3</span>
+              可疑车辆<span></span><span></span><span>0</span>
             </div>
           </div>
           <div class="body-bottom">
-            <div style="width: 55%" class="body-lefthightoss">
+            <div style="width: 55%;overflow:auto" class="body-lefthightoss">
               <p class="thightoss-title">车辆出行记录</p>
               <div class="equipment-lists">
                 <div class="pedestrian-otherpeoples" style="padding: 3px 1px">
                   <div style="width: 15%">车牌号</div>
-                  <div style="width: 15%">是否是住户车辆</div>
-                  <div style="width: 10%">是否异常</div>
+                  <div style="width: 15%">位置</div>
+                  <div style="width: 10%">放行结果</div>
                   <div style="width: 10%">出入</div>
-                  <div style="width: 10%">车牌地区</div>
+                  <div style="width: 10%">车辆类型</div>
                   <div style="width: 10%">时间</div>
                 </div>
-                <ul class="item">
-                  <li v-for="(item, index) in carStaticList" :key="index">
+                <ul  class="item">
+                  <li v-for="(item, index) in carList" :key="index">
                     <div class="pedestrian-people">
                       <div style="width: 15%">
-                        {{ item.carNumber }}
+                        {{ item.plateNo }}
                       </div>
                       <div style="width: 15%">
-                        {{ item.isUserCar ? "是" : "否" }}
+                        {{ item.entranceName }}
                       </div>
                       <div
                         :style="{
                           width: '10%',
-                          color: item.isNormal ? '#56E4FF' : '#ECF529',
+                          color:
+                            item.releaseResult == 0
+                              ? '#F56C6C'
+                              : item.releaseResult == 1
+                              ? '#67C23A'
+                              : '#909399',
                         }"
                       >
-                        {{ item.isNormal ? "是" : "否" }}
+                        {{
+                          item.releaseResult == 0
+                            ? "未放行"
+                            : item.releaseResult == 1
+                            ? "正常放行"
+                            : "离线放行"
+                        }}
                       </div>
                       <div style="width: 10%">
-                        {{ item.inOrOut == "in" ? "进" : "出" }}
+                        {{ item.vehicleOut == 0 ? "进" : "出" }}
                       </div>
                       <div style="width: 10%">
-                        {{ item.carLocation }}
+                        {{ item.vehicleType == 0?'其他车':item.vehicleType == 1?'小型车':item.vehicleType == 2?'大型车':'摩托车' }}
                       </div>
                       <div style="width: 10%">
-                        {{ item.time }}
+                        {{ item.crossTime }}
                       </div>
                     </div>
                   </li>
@@ -1035,6 +980,102 @@ export default {
   },
   data() {
     return {
+      cameraHeightList: [
+        {
+          src: require("../../src/assets/high1.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/high2.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/high3.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/high4.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/high5.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/high6.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+      ],
+      cameraElevatorList: [
+        {
+          src: require("../../src/assets/elevator1.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/elevator2.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/elevator3.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/elevator4.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/elevator5.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/elevator6.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+      ],
+      cameraSideList: [
+        {
+          src: require("../../src/assets/side1.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/side2.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/side3.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/side4.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/side5.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+        {
+          src: require("../../src/assets/side6.png"),
+          camera: "摄像头001",
+          discrip: "勾庄佳苑06幢二单元2号电梯",
+        },
+      ],
       objectDataStatic: false,
       dialogTitle: "",
       dialogStyle: "",
@@ -1182,15 +1223,15 @@ export default {
       dragData: {},
       // 设备建设圆环图数据
       pieData: [
-        { value: 66, name: "监控补盲" },
-        { value: 32, name: "架空层监控" },
-        { value: 8, name: "智能双舱一体机" },
-        { value: 53, name: "人脸识别摄像头" },
-        { value: 66, name: "电梯监控" },
-        { value: 32, name: "周界监控" },
-        { value: 25, name: "智慧井盖" },
-        { value: 2, name: "智慧果壳箱" },
-        { value: 2436, name: "智慧烟感" },
+        { value: 66, name: "监控补盲", color: "#2ec7c9" },
+        { value: 32, name: "架空层监控", color: "#b6a2de" },
+        { value: 8, name: "智能双舱一体机", color: "#5ab1ef" },
+        { value: 53, name: "人脸识别摄像头", color: "#ffb980" },
+        { value: 66, name: "电梯监控", color: "#d87a80" },
+        { value: 32, name: "周界监控", color: "#8d98b3" },
+        { value: 25, name: "智慧井盖", color: "#e5cf0d" },
+        { value: 2, name: "智慧果壳箱", color: "#588dd5" },
+        { value: 2436, name: "智慧烟感", color: "#f5994e" },
       ],
       // 车辆进出数据（滚动显示）
       carList: [
@@ -1615,6 +1656,8 @@ export default {
         this.dialogTitle = "电梯电瓶车数据分析";
       } else if (str == "car") {
         this.dialogTitle = "车辆进出数据分析";
+      } else if (str == "ambitus") {
+        this.dialogTitle = "周界监控数据分析";
       }
       this.dialogShow = true;
       this.dialogStyle = str;
@@ -1722,7 +1765,7 @@ export default {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 word-break: keep-all;
-                cursor:pointer;
+                cursor: pointer;
               }
               // .peopel-code:hover {
               //   text-overflow: clip;
@@ -1829,9 +1872,10 @@ export default {
             width: 100%;
             display: inline-flex;
             flex-wrap: wrap;
-            margin-top: 30px;
+            margin-top: 15px;
             justify-content: space-around;
             .camera-info {
+              margin-top: 15px;
               width: 30%;
               // margin-left: 40px;
               // float: left;
