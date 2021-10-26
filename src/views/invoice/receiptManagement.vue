@@ -137,7 +137,7 @@ export default {
       if (this.params.times) {
         this.params.startTime = this.params.times[0];
         this.params.endTime = this.params.times[1];
-        this.params.times = undefined;
+        // this.params.times = undefined;
       } else {
         this.params.startTime = undefined;
         this.params.endTime = undefined;

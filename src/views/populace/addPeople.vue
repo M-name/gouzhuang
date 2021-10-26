@@ -647,6 +647,7 @@ export default {
         ],
         certificateCode: [
           { required: true, message: "证件编码不能为空", trigger: "change" },
+           this.$rules.enNum(undefined, "change"),
         ],
         nationId: [
           { required: true, message: "名族不能为空", trigger: "change" },

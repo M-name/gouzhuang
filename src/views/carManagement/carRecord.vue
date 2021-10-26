@@ -128,7 +128,7 @@
         <el-form-item label="车主类型:" prop="carOwnerTypeId">
           <el-radio-group @change="carOwnerReset" v-model="form.carOwnerTypeId">
             <el-radio
-              v-for="(item, index) in dicList.rentPersonEnum"
+              v-for="(item, index) in dicList.carOwnerEnum"
               :label="item.type"
               :key="index"
               >{{ item.value }}</el-radio
@@ -367,6 +367,7 @@ export default {
         { prop: "entryStatusStr", label: "录入状态" },
         { prop: "printStatusStr", label: "打印状态" },
         { prop: "createTime", label: "登记时间" },
+        { prop: "remark", label: "备注" },
         { prop: "handleBy", label: "办理人员" },
       ],
       // 表格参数
@@ -441,7 +442,7 @@ export default {
   watch: {
     "form.carOwnerTypeId": {
       handler(newName, oldName) {
-        if (newName == 50) {
+        if (newName == 52) {
           this.isOutPeople = true;
         } else {
           this.isOutPeople = false;
@@ -740,7 +741,7 @@ export default {
         entryStatus: 0,
         printStatus: 0,
         remark: undefined,
-        carOwnerTypeId: 51,
+        carOwnerTypeId: 53,
         carOwner: undefined,
         userCode: undefined,
         ownerMobile: undefined,
@@ -790,7 +791,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.parkingDelCar(id).then(() => {
+          that.$request.parkingDelCar(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");

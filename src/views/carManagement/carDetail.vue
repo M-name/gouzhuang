@@ -31,7 +31,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="进出记录">
+        <el-tab-pane label="过户记录">
           <div class="operation">
             <CommonTable
               :total="transferTotal"
@@ -111,11 +111,11 @@ export default {
       transferTotal: 0,
       loading: false,
       transferLoading: false,
-      params: {
-        page: 1,
-        pageSize: 20,
-        parkingCode: undefined,
-      },
+      // params: {
+      //   page: 1,
+      //   pageSize: 20,
+      //   parkingCode: undefined,
+      // },
       transferParams: {
         page: 1,
         pageSize: 20,
@@ -127,33 +127,36 @@ export default {
     if (this.$route.params.code) {
       localStorage.setItem("carDetailCode", this.$route.params.code);
       this.carId = this.$route.params.code;
+      this.transferParams.parkingCode = this.$route.params.code;
     } else {
       this.carId = localStorage.getItem("carDetailCode");
+      this.transferParams.parkingCode = localStorage.getItem("carDetailCode");
     }
     this.$request
       .parkingFindCar(localStorage.getItem("carDetailCode"))
       .then((res) => {
         this.userDetail = res.data.data;
       });
+      this.transferGetList();
   },
   created() {
   },
   methods: {
     //获取出租列表
-    getList() {
-      this.loading = true;
-      this.$request
-        .parkingRentList(this.params)
-        .then((res) => {
-          this.tableData = res.data.data.rows;
-          this.total = res.data.data.records;
-          this.params.page = res.data.data.page;
-          this.loading = false;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    // getList() {
+    //   this.loading = true;
+    //   this.$request
+    //     .parkingRentList(this.params)
+    //     .then((res) => {
+    //       this.tableData = res.data.data.rows;
+    //       this.total = res.data.data.records;
+    //       this.params.page = res.data.data.page;
+    //       this.loading = false;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
     //获取过户列表
     transferGetList() {
       this.transferLoading = true;
@@ -170,34 +173,34 @@ export default {
         });
     },
     //获取用户详情
-    getUser() {
-      this.$request
-        .parkingFind(this.carId)
-        .then((res) => {
-          this.userInfo = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    // getUser() {
+    //   this.$request
+    //     .parkingFind(this.carId)
+    //     .then((res) => {
+    //       this.userInfo = res.data.data;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
 
     // 删除
-    handleDelete(row) {
-      let that = this;
-      this.$confirm("是否确认删除该用户?", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(function () {
-          that.$request.deptDelDict(row.id).then(() => {
-            that.getList();
-            that.msgSuccess("删除成功");
-          });
-        })
+    // handleDelete(row) {
+    //   let that = this;
+    //   this.$confirm("是否确认删除该用户?", "警告", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning",
+    //   })
+    //     .then(function () {
+    //       that.$request.deptDelDict(row.id).then(() => {
+    //         that.getList();
+    //         that.msgSuccess("删除成功");
+    //       });
+    //     })
 
-        .catch(function () {});
-    },
+    //     .catch(function () {});
+    // },
   },
 };
 </script>

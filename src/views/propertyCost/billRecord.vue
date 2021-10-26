@@ -573,12 +573,13 @@ export default {
       } else {
         this.params.buildingList = [];
       }
+      this.params.page = 1;
       this.createChoose();
     },
     // 车位区域树状图选择
     chooseTreeCar(val, arr) {
       console.log(arr);
-      console.log(arr.checkedNode);
+      console.log(arr.checkedNodes);
       if (arr.checkedNodes.length > 0) {
         arr.checkedNodes.forEach((item) => {
           this.params.zoneName.push(item.parking);
@@ -586,6 +587,7 @@ export default {
       } else {
         this.params.zoneName = [];
       }
+      this.params.page = 1;
       this.createChoose();
     },
 
@@ -987,7 +989,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.orderDelete(row.id).then(() => {
+          that.$request.orderDelete(row.id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");

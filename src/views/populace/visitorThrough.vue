@@ -233,7 +233,6 @@ export default {
       this.form.visitUser = event;
       console.log(this.form);
       this.$request.visitUpdate({ id: event.id }).then((res) => {
-        console.log(res.data.status);
         if (res.data.status === 200) {
           this.$request.findByVisitCode(this.code).then((res) => {
             this.form = res.data.data;
@@ -254,6 +253,7 @@ export default {
         if (res.data.status == 200) {
           this.open = false;
           this.msgSuccess("放行成功");
+          this.getList();
         } else {
           this.$message.error(res.data.msg);
         }
@@ -270,6 +270,7 @@ export default {
         if (res.data.status == 200) {
           this.msgSuccess("取消成功");
           this.open = false;
+          this.getList();
         } else {
           this.$message.error(res.data.msg);
         }
@@ -360,7 +361,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.deptDelDict(row.id).then(() => {
+          that.$request.deptDelDict(row.id).then((res) => {
             if (res.data.status === 200) {
               that.getList();
               that.msgSuccess("删除成功");

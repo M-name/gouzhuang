@@ -46,16 +46,17 @@
           <!-- <img style="width: 100px" :src="form.suggestImageCodes" alt="" /> -->
           <!-- <span>{{form.suggestImageCodes}}</span> -->
         </el-form-item>
-        <el-form-item v-if="!isCheak" label="处理描述" prop="suggestContent">
+
+        <el-form-item label="问题描述" prop="suggestConten">
+          <span>{{ form.suggestContent }}</span>
+        </el-form-item>
+        <el-form-item v-if="!isCheak" label="处理描述" prop="feedbackContent">
           <el-input
             type="textarea"
             autosize
-            v-model="form.suggestContent"
+            v-model="form.feedbackContent"
             placeholder="请输入处理描述"
           />
-        </el-form-item>
-        <el-form-item v-if="isCheak" label="处理描述" prop="suggestConten">
-          <span>{{ form.suggestContent }}</span>
         </el-form-item>
       </el-form>
       <div v-if="!isCheak" slot="footer" class="dialog-footer">
@@ -78,7 +79,7 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        suggestContent: [
+        feedbackContent: [
           { required: true, message: "处理描述不能为空", trigger: "change" },
         ],
       },
@@ -195,6 +196,7 @@ export default {
         createTime: undefined,
         suggestImageCodes: undefined,
         suggestContent: undefined,
+        feedbackContent: undefined,
       };
     },
     /** 搜索按钮操作 */
@@ -246,7 +248,7 @@ export default {
       const id = row.suggestCode;
       this.$request.suggestFindOne(id).then((res) => {
         if (res.data.status == 200) {
-          this.form = res.data.data;
+          this.form = { feedbackContent: undefined, ...res.data.data };
           this.open = true;
           this.title = "查看";
           this.isCheak = true;
@@ -265,6 +267,7 @@ export default {
           this.open = true;
           this.isCheak = false;
           this.title = "处理";
+          console.log(this.form);
         } else {
           this.$message.error(res.data.msg);
         }

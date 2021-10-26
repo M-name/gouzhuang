@@ -23,7 +23,7 @@ export default {
      },
      // 批量取消
      userUpdateCancel(params) {
-          return axios.post('/visit/updateCancel',params)
+          return axios.get('/visit/updateCancel?ids='+params)
      },
      // 获取枚举
      userGetEnum(params) {

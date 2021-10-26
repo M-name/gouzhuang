@@ -179,6 +179,7 @@ export default {
       this.params = {
         dictName: "",
         page: 1,
+        pageSize: 20,
         parentCode: this.code,
       };
       this.getList();

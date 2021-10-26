@@ -4,7 +4,7 @@
       <el-input
         size="small"
         style="display: inline-block; width: 270px"
-        placeholder="请输入字典名"
+        placeholder="请输入区域名称"
         prefix-icon="el-icon-search"
         v-model="params.areaName"
       >
@@ -287,7 +287,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.delCounty(row.id).then(() => {
+          that.$request.delCounty(row.id).then((res) => {
            if (res.data.status === 200) {
               that.getList();
               that.msgSuccess("删除成功");

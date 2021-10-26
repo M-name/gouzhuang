@@ -129,7 +129,7 @@
             v-model="ownerShipForm.currUserName"
             placeholder="请输入所有人姓名"
           />
-          <el-button class="btn-buka" type="primary" @click="choosePeople"
+          <el-button v-show="!isCheak" class="btn-buka" type="primary" @click="choosePeople"
             >选择</el-button
           >
         </el-form-item>
@@ -854,6 +854,7 @@ export default {
     // 过户
     ownerShip() {
       this.ownerShipReset();
+      this.isCheak = false;
       this.isAddress = false;
       this.ownerShipOpen = true;
       this.title = "车位过户";
@@ -992,8 +993,6 @@ export default {
       const id = row.id;
       this.$request.parkingFindTransfer(id).then((res) => {
         this.ownerShipForm = res.data.data;
-     //    this.isAddress = true;
-     //    this.isOutPeople = false;
         this.isCheak = true;
         this.ownerShipOpen = true;
         this.title = "过户查看";
@@ -1060,7 +1059,7 @@ export default {
   line-height: 50px;
 }
 .elinput {
-  width: 75%;
+  width: 75% !important;
 }
 .btn-buka {
   width: 20%;
@@ -1071,6 +1070,6 @@ export default {
   width: 100% !important;
 }
 .el-form-item__content .el-input {
-  width: 100% !important;
+  width: 100% ;
 }
 </style>

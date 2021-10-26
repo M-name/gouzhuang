@@ -537,7 +537,13 @@ export default {
         this.params.roomNo = "";
         this.roomList = [];
       }
-      this.getRoom(num);
+      if(num == 1 && this.params.blockNo == "") {
+        this.getRoom(0);
+      }else{
+        this.getRoom(num);
+      }
+      
+      
       this.getList();
     },
     // 条数的监听

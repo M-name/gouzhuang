@@ -225,13 +225,13 @@ export default {
         }
         })
     },
-
     // 删除
     handleDelete(row) {
       let that = this;
       let list = [];
-      if (row) {
-        list.push(row.id);
+      if (row.newsCode) {
+        console.log(row,'row')
+        list.push(row.newsCode);
       }
       const id = list.length > 0 ? list : this.ids;
       this.$confirm("是否确认删除该记录?", "警告", {
@@ -240,7 +240,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.deleteNews(id).then(() => {
+          that.$request.deleteBatch(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");

@@ -235,6 +235,7 @@ export default {
         { prop: "deviceStatusValue", label: "设备状态" },
         { prop: "createTime", label: "安装日期" },
         { prop: "supplier", label: "厂家名称" },
+        { prop: "remark", label: "备注" },
         { prop: "deviceUseStatusValue", label: "使用状态" },
       ],
       alarmColumn: [
@@ -300,6 +301,9 @@ export default {
         ],
         latitude: [
           { required: true, message: "安装纬度不能为空", trigger: "change" },
+        ],
+        supplier: [
+          { required: true, message: "厂家名称不能为空", trigger: "change" },
         ],
         
         deviceUseStatus: [

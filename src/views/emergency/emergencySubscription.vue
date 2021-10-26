@@ -170,7 +170,7 @@ export default {
           options: [],
         },
         {
-          prop: "alarmSubCode",
+          prop: "alarmTypeCode",
           label: "告警子类型",
           type: "select",
           options: [],
@@ -259,7 +259,7 @@ export default {
       // 查询或请求参数
       params: {
         alarmMainCode: undefined,
-        alarmSubCode: undefined,
+        alarmTypeCode: undefined,
         userName: undefined,
         page: 1,
         pageSize: 20,
@@ -270,10 +270,10 @@ export default {
     "params.alarmMainCode": {
       handler(newName, oldName) {
         if (newName) {
-          this.params.alarmSubCode = undefined;
+          this.params.alarmTypeCode = undefined;
           this.$request.alarmTypeDictFindSubCode(newName).then((res) => {
             this.commonSearchList.forEach((item) => {
-              if (item.type == "select" && item.prop == "alarmSubCode") {
+              if (item.type == "select" && item.prop == "alarmTypeCode") {
                 item.options = [];
                 res.data.data.map((res) => {
                   item.options.push({
@@ -376,7 +376,7 @@ export default {
     resetQuery() {
       this.params = {
         alarmMainCode: undefined,
-        alarmSubCode: undefined,
+        alarmTypeCode: undefined,
         userName: undefined,
         page: 1,
         pageSize: 20,
@@ -424,7 +424,7 @@ export default {
     reset() {
       this.form = {
         alarmMainCode: undefined,
-        alarmSubCode: undefined,
+        alarmTypeCode: undefined,
         updateBy: undefined,
         notifyChannelIds: [],
         userName: undefined,
@@ -468,7 +468,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.alarmTypeDictDelete(id).then(() => {
+          that.$request.alarmTypeSubscribeDelete(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");

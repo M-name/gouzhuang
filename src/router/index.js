@@ -102,6 +102,7 @@ let routeName = en.routeName;
 let addRouter = [];
 let router = [];
 if (JSON.parse(localStorage.getItem("userInfo"))) {
+  console.log(localStorage.getItem("userInfo"))
   let role = JSON.parse(localStorage.getItem("userInfo")).roleDTO.list;
   router = [
     // 房屋管理

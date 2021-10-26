@@ -22,7 +22,6 @@
           <el-col :span="12">
             <el-form-item label="门卡类型：" prop="accessTypeIds">
               <el-checkbox-group
-                @change="checkedChange"
                 v-model="form.accessTypeIds"
               >
                 <el-checkbox
@@ -409,7 +408,7 @@
             </el-form-item>
           </el-col>
           <el-col
-            v-if="placeForm.isLongTerm == 0"
+            v-if="placeForm.isLongTerm == '0'"
             :span="12"
           >
             <el-form-item
@@ -426,7 +425,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col v-else :span="12">
+          <el-col  v-else :span="12">
             <el-form-item label="居住证件有效期：" prop="" label-width="140px">
               <el-date-picker
                 v-model="placeForm.certificateExpireTime"
@@ -508,7 +507,7 @@ export default {
         value: "code",
         label: "name",
         lazy: true,
-        lazyLoad(node, resolve) {
+        lazyLoad:(node, resolve) => {
           if (node.data) {
             node.add = "";
           }
@@ -522,6 +521,7 @@ export default {
           } else if (level == 3) {
             node.add = that.build + "," + that.unit + "," + node.value;
           }
+          console.log(level,node.add)
           that.$request
             .houseListAll({
               type: level,
@@ -549,7 +549,7 @@ export default {
       activeName: "first",
       // 基本信息表单参数
       form: {
-        accessTypeIds: [],
+        accessTypeIds: [0],
         isOverseas: undefined,
         userSex: undefined,
         cardCode: undefined,
@@ -619,7 +619,7 @@ export default {
       // 基本信息校验
       peopleRules: {
         accessTypeIds: [
-          { required: true, message: "门卡类型为空", trigger: "change" },
+          { required: true, message: "门卡类型为空", trigger: "blur" },
         ],
         isOverseas: [
           {
@@ -648,6 +648,7 @@ export default {
         ],
         certificateCode: [
           { required: true, message: "证件编码不能为空", trigger: "change" },
+           this.$rules.enNum(undefined, "change"),
         ],
         nationId: [
           { required: true, message: "名族不能为空", trigger: "change" },
@@ -698,6 +699,7 @@ export default {
      if (this.$route.params.code) {
       localStorage.setItem("editPeople", JSON.stringify(this.$route.params));
       this.editPeople = this.$route.params;
+      console.log(this.editPeople)
     } else {
       this.editPeople = JSON.parse(localStorage.getItem("editPeople"));
     }
@@ -778,9 +780,16 @@ export default {
                   });
                 }
               }
-              var arr = res.data.data.accessTypeIds.split(",");
+             if(res.data.data.accessTypeIds) {
+                var arr = res.data.data.accessTypeIds.split(",");
               res.data.data.accessTypeIds = arr.map(Number);
-              res.data.data.areaCode = res.data.data.areaCode.split(",");
+             }else{
+               res.data.data.accessTypeIds = [];
+             }
+             if(res.data.data.areaCode) {
+               res.data.data.areaCode = res.data.data.areaCode.split(",");
+             }
+              
               this.form = res.data.data;
             } else {
               this.$message.error(res.data.msg);
@@ -875,12 +884,7 @@ export default {
         router: this.$router,
       });
     },
-    checkedChange(val) {
-      var arr = val;
-      var str = arr.toString();
-      var dd = str.split(",");
-      console.log(arr, str, dd.map(Number));
-    },
+    
     // 基本信息修改的提交
     edit() {
       let that = this;
@@ -951,7 +955,13 @@ export default {
         this.$message.warning("请先填写基本信息");
         return;
       }
+      if (!this.placeForm.certificateExpireTime && this.placeForm.isLongTerm == '0') {
+        console.log('1345')
+        this.$message.warning("居住证不为长期有效时居住证件有效期不能为空！");
+        return;
+      }
       this.$refs["placeForm"].validate((valid) => {
+        console.log(valid)
         if (valid) {
           this.placeForm.userCode = this.form.userCode;
           this.placeForm.buildingCode = this.placeForm.buildingCode.toString();

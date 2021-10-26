@@ -13,7 +13,7 @@
         <div class="theuser">
           <div>住户编码：{{ userInfo.userCode }}</div>
           <div>证件类型：{{ userInfo.certificateTypeIdStr }}</div>
-          <div>证件号码：{{ userInfo.certificateTypeId }}</div>
+          <div>证件号码：{{ userInfo.certificateCode }}</div>
           <div>性别：{{ userInfo.userSexStr }}</div>
           <div>手机号：{{ userInfo.mobile }}</div>
           <div>联系人电话：{{ userInfo.contactMethod }}</div>
@@ -207,7 +207,7 @@ export default {
             res.data.data.certificateImageCodes =
               res.data.data.certificateImageCodes.split(",");
           }
-
+          console.log(res.data.data,'res.data.data')
           this.userInfo = res.data.data;
         })
     },

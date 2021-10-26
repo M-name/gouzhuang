@@ -1241,6 +1241,24 @@ export default {
           plateNo: "浙A FBH05",
           crossTime: "17:12:42",
         },
+         {
+          carIndex: "01",
+          inOrOut: true,
+          plateNo: "浙A FBH05",
+          crossTime: "17:12:42",
+        },
+         {
+          carIndex: "01",
+          inOrOut: true,
+          plateNo: "浙A FBH05",
+          crossTime: "17:12:42",
+        },
+         {
+          carIndex: "01",
+          inOrOut: true,
+          plateNo: "浙A FBH05",
+          crossTime: "17:12:42",
+        },
         {
           carIndex: "01",
           inOrOut: false,

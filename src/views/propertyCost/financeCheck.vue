@@ -260,7 +260,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.orderDelete(row.id).then(() => {
+          that.$request.orderDelete(row.id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");
@@ -292,7 +292,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.orderReviewBatch(id).then(() => {
+          that.$request.orderReviewBatch(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("复核成功");
@@ -313,7 +313,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.orderReviewAll().then(() => {
+          that.$request.orderReviewAll().then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("复核成功");
@@ -334,7 +334,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.orderPublishAll().then(() => {
+          that.$request.orderPublishAll().then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("发布成功");
@@ -366,7 +366,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.orderPublishBatch(id).then(() => {
+          that.$request.orderPublishBatch(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("发布成功");

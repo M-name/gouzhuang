@@ -100,6 +100,7 @@ export default {
         paymentStatus: 0,
         userName: undefined,
         buildingCode: undefined,
+        orderYear: undefined,
         mobile: undefined,
         certificateCode: undefined,
         parkingCode: undefined,
@@ -157,6 +158,7 @@ export default {
       ],
       // 搜索配置
       commonSearchList: [
+        { prop: "orderYear", label: "账单年度" },
         { prop: "userName", label: "住户姓名" },
         { prop: "buildingCode", label: "房屋编码" },
         { prop: "mobile", label: "手机号" },
@@ -225,6 +227,7 @@ export default {
         paymentStatus: 0,
         userName: undefined,
         buildingCode: undefined,
+        orderYear: undefined,
         mobile: undefined,
         certificateCode: undefined,
         parkingCode: undefined,
@@ -240,7 +243,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.orderDelete(row.id).then(() => {
+          that.$request.orderDelete(row.id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");
@@ -281,12 +284,14 @@ export default {
     },
     // 一键提交复核
     submitAll() {
+      let that = this;
       this.$confirm("是否确认提交所有账单?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(function () {
+          console.log('4567')
           that.$request.orderSubmitAll().then((res) => {
             if (res.data.status == 200) {
               that.$message.success("提交成功");

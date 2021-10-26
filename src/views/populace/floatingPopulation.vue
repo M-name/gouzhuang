@@ -137,7 +137,8 @@ export default {
         { prop: "buildingCode", label: "房间编码" },
         { prop: "userName", label: "住户姓名" },
         { prop: "certificateCode", label: "证件编号" },
-        { prop: "mobile", label: "电话号码" },
+        { prop: "mobile", label: "住户电话" },
+        { prop: "contactMethod", label: "联系人电话" },
         {
           prop: "liveStatus",
           label: "居住状态",
@@ -174,6 +175,7 @@ export default {
         userName: undefined,
         certificateCode: undefined,
         mobile: undefined,
+        contactMethod:undefined,
         liveStatus: undefined,
       },
     };
@@ -278,6 +280,7 @@ export default {
         userName: undefined,
         certificateCode: undefined,
         mobile: undefined,
+        contactMethod:undefined,
         liveStatus: undefined,
       };
       this.handleQuery();

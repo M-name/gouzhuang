@@ -375,7 +375,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.houseDelDict(row.id).then(() => {
+          that.$request.houseDelDict(row.id).then((res) => {
             if (res.data.status === 200) {
               that.getList();
               that.msgSuccess("删除成功");

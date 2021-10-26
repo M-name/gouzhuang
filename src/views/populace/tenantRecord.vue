@@ -184,7 +184,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.buildingUnbind(row.id).then(() => {
+          that.$request.buildingUnbind(row.id).then((res) => {
             if (res.data.status === 200) {
               that.getList();
               that.msgSuccess("解除成功");

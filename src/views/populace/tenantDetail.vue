@@ -653,6 +653,7 @@ export default {
         ],
         certificateCode: [
           { required: true, message: "证件编码不能为空", trigger: "change" },
+           this.$rules.enNum(undefined, "change"),
         ],
         nationId: [
           { required: true, message: "名族不能为空", trigger: "change" },
@@ -674,6 +675,8 @@ export default {
           this.$rules.mobile("请输入正确手机号", "change"),
         ],
         mobile: { required: false, validator: isPhone, trigger: "blur" },
+        
+        
       },
     };
   },
@@ -715,13 +718,13 @@ export default {
         this.infoUploadImgList = [];
         this.liveFileImg = [];
         this.liveUploadImgList = [];
-        if (res.data.data.certificateImageCodes) {
+        if (res.data.data.certificateImageCodes && res.data.data.certificateImageCodesUrl) {
           const codeLists = res.data.data.certificateImageCodes.split(",");
           const urlLists = res.data.data.certificateImageCodesUrl.split(",");
           for (var i = 0; i < codeLists.length; i++) {
-            that.liveUploadImgList.push({
+            this.liveUploadImgList.push({
               code: codeLists[i],
-              url: urlLisst[i],
+              url: urlList[i],
             });
             this.liveFileImg.push({
               uid: codeLists[i],
@@ -737,7 +740,8 @@ export default {
           );
           res.data.data.certificateExpireTime = arr;
         }
-        res.data.data.buildingCode = res.data.data.buildingCode.split("-");
+        if(res.data.data.buildingCode) {
+          res.data.data.buildingCode = res.data.data.buildingCode.split("-");
         this.address =
           res.data.data.buildingCode[0] +
           "幢/" +
@@ -747,6 +751,8 @@ export default {
           "层/" +
           res.data.data.buildingCode[3] +
           "室";
+        }
+        
 
         if (res.data.data.faceImageCode) {
           this.faceFileImg.push({
@@ -766,7 +772,7 @@ export default {
               uid: codeList[i],
               url: urlList[i],
             });
-            that.infoUploadImgList.push({
+            this.infoUploadImgList.push({
               code: codeList[i],
               url: urlList[i],
             });

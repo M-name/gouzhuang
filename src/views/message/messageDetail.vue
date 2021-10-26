@@ -324,7 +324,7 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="住户选择" width="800px" :visible.sync="chooseShow">
+    <el-dialog title="住户选择" width="900px" :visible.sync="chooseShow">
       <div style="margin-top: -20px">
         <CommonSearch
           @resetQuery="chooseResetQuery"
@@ -768,9 +768,10 @@ export default {
   methods: {
     // 选中的模板
     treeCheck(list, item) {
-      console.log(list, item.checkedKeys);
+      console.log(item.checkedKeys);
       this.checkedKeys = item.checkedKeys;
       this.form.sendChannelIds = item.checkedKeys;
+      console.log(this.form.sendChannelIds,'check')
     },
     handleNodeClick(data) {
       this.chooseId = data.id;
@@ -820,6 +821,7 @@ export default {
     },
     // 新增的提交
     submitForm() {
+      let that = this;
       if (this.form.plainContentType == 1) {
         if (this.$refs.wangeditor.editorContent == "") {
           this.$message.error("内容不能为空");
@@ -837,10 +839,11 @@ export default {
           }
         }
       });
-      if (this.form.sendChannelIds.length <= 0) {
+      console.log(that.form.sendChannelIds,'length')
+      if (this.form.sendChannelIds.length <= 0 && !this.sendMsg) {
         this.$message.error("请选择至少一个发送渠道");
       }
-      let that = this;
+      
       this.$refs["form"].validate((valid) => {
         if (valid) {
           this.form.msgTypeCode = this.form.msgTypeCode[1];
@@ -869,6 +872,7 @@ export default {
                 this.$refs.form.resetFields();
               } else {
                 this.$message.error(res.data.msg);
+                this.open = false;
               }
             });
           } else {

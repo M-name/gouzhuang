@@ -540,7 +540,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.alarmDelete(id).then(() => {
+          that.$request.alarmDelete(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");

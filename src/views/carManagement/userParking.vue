@@ -658,6 +658,7 @@ export default {
         ],
         mobile: [
           { required: true, message: "手机号不能为空", trigger: "change" },
+          this.$rules.mobile(undefined, "blur"),
         ],
         userName: [
           { required: true, message: "姓名不能为空", trigger: "change" },
@@ -687,6 +688,7 @@ export default {
         ],
         mobile: [
           { required: true, message: "手机号不能为空", trigger: "change" },
+          this.$rules.mobile(undefined, "blur"),
         ],
         userName: [
           { required: true, message: "姓名不能为空", trigger: "change" },
@@ -713,6 +715,7 @@ export default {
         ],
         currMobile: [
           { required: true, message: "手机号不能为空", trigger: "change" },
+          this.$rules.mobile(undefined, "blur"),
         ],
         currUserName: [
           { required: true, message: "姓名不能为空", trigger: "change" },

@@ -95,7 +95,7 @@ export default {
         { prop: "msgTypeCodeStr", label: "消息子类" },
         { prop: "msgTitle", label: "消息标题" },
         { prop: "isUseTemplateStr", label: "是否使用模板" },
-        { prop: "templateCode", label: "模板编码" },
+        { prop: "batchCode", label: "消息编码" },
         { prop: "isBatchSendStr", label: "是否批量发送" },
         { prop: "batchCode", label: "发送批次号" },
         { prop: "currBatchCode", label: "发送编码" },

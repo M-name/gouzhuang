@@ -22,8 +22,8 @@
         @selection-change="handleSelectionChange"
       />
     </div>
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form ref="form" :model="form" label-width="120px">
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
+      <el-form ref="form" :model="form" label-width="150px">
         <el-row :gutter="20">
           <el-col :span="12"
             ><el-form-item label="姓名:">
@@ -33,6 +33,90 @@
           <el-col :span="12"
             ><el-form-item label="手机号:">
               <span>{{ form.mobile }}</span>
+            </el-form-item></el-col
+          >
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12"
+            ><el-form-item label="证件类型:">
+              <span>{{ form.certificateTypeStr }}</span>
+            </el-form-item></el-col
+          >
+          <el-col :span="12"
+            ><el-form-item label="证件号码:">
+              <span>{{ form.certificateNo }}</span>
+            </el-form-item></el-col
+          >
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12"
+            ><el-form-item label="住户性别:">
+              <span>{{ form.sexStr }}</span>
+            </el-form-item></el-col
+          >
+          <el-col :span="12"
+            ><el-form-item label="出生日期:">
+              <span>{{ form.birthday }}</span>
+            </el-form-item></el-col
+          >
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12"
+            ><el-form-item label="姓名:">
+              <span>{{ form.userName }}</span>
+            </el-form-item></el-col
+          >
+          <el-col :span="12"
+            ><el-form-item label="楼栋门牌号:">
+              <span>{{ form.userAddr }}</span>
+            </el-form-item></el-col
+          >
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12"
+            ><el-form-item label="单位（学校）名称:">
+              <span>{{ form.enterpriseName }}</span>
+            </el-form-item></el-col
+          >
+          <el-col :span="12"
+            ><el-form-item label="身体状况:">
+              <span>{{ form.physicalStatusStr }}</span>
+            </el-form-item></el-col
+          >
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12"
+            ><el-form-item label="不适症状:">
+              <span>{{ form.uncomfortableStatus }}</span>
+            </el-form-item></el-col
+          >
+          <el-col :span="12"
+            ><el-form-item label="摸排信息:">
+              <span>{{ form.healthCodeStr }}</span>
+            </el-form-item></el-col
+          >
+        </el-row>
+          <el-row :gutter="20">
+          <el-col :span="12"
+            ><el-form-item label="杭州健康码:">
+              <span>{{ form.uncomfortableStatus }}</span>
+            </el-form-item></el-col
+          >
+          <el-col :span="12"
+            ><el-form-item label="摸排信息:">
+              <span>{{ form.personTypeStr }}</span>
+            </el-form-item></el-col
+          >
+        </el-row>
+          <el-row :gutter="20">
+          <el-col :span="12"
+            ><el-form-item label="人员类型:">
+              <span>{{ form.uncomfortableStatus }}</span>
+            </el-form-item></el-col
+          >
+          <el-col :span="12"
+            ><el-form-item label="居住类型:">
+              <span>{{ form.liveTyppeStr }}</span>
             </el-form-item></el-col
           >
         </el-row>
@@ -87,7 +171,7 @@ export default {
         { prop: "inspectStatusStr", label: "摸排信息" },
         { prop: "healthCodeStr", label: "杭州健康码" },
         { prop: "personTypeStr", label: "人员类型" },
-        { prop: "liveTypeStr", label: "居住类型" },
+        { prop: "liveTyppeStr", label: "居住类型" },
       ],
       // 表格参数
       tableData: [],

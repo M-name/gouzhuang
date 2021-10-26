@@ -76,7 +76,7 @@ export default {
       column: [
         { prop: "msgParentCodeStr", label: "消息大类" },
         { prop: "msgTypeCodeStr", label: "消息子类" },
-        { prop: "templateCode", label: "模板编码" },
+        { prop: "batchCode", label: "消息编码" },
         { prop: "msgTitle", label: "消息标题" },
         { prop: "sendChannelIdStr", label: "发送渠道" },
         { prop: "sendTime", label: "发送时间" },

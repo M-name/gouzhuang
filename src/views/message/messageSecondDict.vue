@@ -295,7 +295,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.msgDictDelSecond(row.id).then(() => {
+          that.$request.msgDictDelSecond(row.id).then((res) => {
             if (res.data.status === 200) {
               that.getList();
               that.msgSuccess("删除成功");

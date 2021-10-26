@@ -637,7 +637,7 @@ export default {
     // 新增的提交
     playerSubmitForm() {
       if (this.$refs.playerWangeditor.editorContent == "") {
-        this.$message.error("内容不能为空");
+        this.$message.error("选手详情不能为空");
         return;
       } else {
         this.playerForm.candidateContent =

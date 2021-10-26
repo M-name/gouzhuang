@@ -699,7 +699,7 @@ export default {
     },
     // 修改页数的监听
     handleCurrentChange(val) {
-      this.s.page = val;
+      this.params.page = val;
       this.getList();
     },
 

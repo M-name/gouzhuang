@@ -66,10 +66,11 @@ export default {
         { prop: "visitorName", label: "访客姓名 " },
         { prop: "visitorMobile", label: "访客手机号" },
         { prop: "userName", label: "邀请住户" },
+        { prop: "mobile", label: " 住户手机号" },
         { prop: "purposeType", label: "来访目的" },
         { prop: "buildingCode", label: "到访房屋 " },
-        { prop: "expireTime", label: "来访有效期" },
         { prop: "reserveTime", label: "实际到访时间" },
+        { prop: "expireTime", label: "来访有效期" },
         {
           prop: "visitStatusValue",
           label: "到访状态",
@@ -140,7 +141,7 @@ export default {
       if (this.params.times) {
         this.params.startTime = this.params.times[0];
         this.params.endTime = this.params.times[1];
-        this.params.times = undefined;
+        // this.params.times = undefined;
       } else {
         this.params.startTime = undefined;
         this.params.endTime = undefined;
@@ -167,19 +168,17 @@ export default {
     //获取列表
     getList() {
       this.loading = true;
-      this.$request
-        .visitFindPageLog(this.params)
-        .then((res) => {
-          if (res.data.status === 200) {
-            this.tableData = res.data.data.rows;
-            this.total = res.data.data.records;
-            this.params.page = res.data.data.page;
-            this.loading = false;
-          } else {
-            this.loading = false;
-            this.$message.error(res.data.msg);
-          }
-        })
+      this.$request.visitFindPageLog(this.params).then((res) => {
+        if (res.data.status === 200) {
+          this.tableData = res.data.data.rows;
+          this.total = res.data.data.records;
+          this.params.page = res.data.data.page;
+          this.loading = false;
+        } else {
+          this.loading = false;
+          this.$message.error(res.data.msg);
+        }
+      });
     },
 
     // 删除

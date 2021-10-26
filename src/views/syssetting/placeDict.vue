@@ -4,7 +4,7 @@
       <el-input
         size="small"
         style="display: inline-block; width: 270px"
-        placeholder="请输入字典名"
+        placeholder="请输入区域名称"
         prefix-icon="el-icon-search"
         v-model="params.areaName"
       >

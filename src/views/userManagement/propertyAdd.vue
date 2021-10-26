@@ -20,7 +20,7 @@
               >新增</el-button
             >
           </el-col>
-          <el-col :span="1.5">
+          <!-- <el-col :span="1.5">
             <el-button
               type="success"
               icon="el-icon-edit"
@@ -29,7 +29,7 @@
               @click="handleUpdate"
               >修改</el-button
             >
-          </el-col>
+          </el-col> -->
         </el-row>
       </div>
       <CommonTable
@@ -531,7 +531,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.deptDelDict(id).then(() => {
+          that.$request.deptDelDict(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("删除成功");

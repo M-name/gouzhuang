@@ -48,7 +48,7 @@
           / 出租房间数：{{ userInfo.rentRoomNum ? userInfo.rentRoomNum : 0 }}
         </p>
         <p v-if="userInfo.checkTime" class="neirong">
-          上次排查：{{ userInfo.checkTime }}/赵子龙
+          上次排查：{{ userInfo.checkTime }}/{{userInfo.checkBy.split(',')[0]}}
         </p>
       </div>
     </div>

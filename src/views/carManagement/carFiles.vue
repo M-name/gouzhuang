@@ -196,7 +196,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          that.$request.parkingDel(id).then(() => {
+          that.$request.parkingDel(id).then((res) => {
             if (res.data.status === 200) {
               that.getList();
               that.msgSuccess("删除成功");
