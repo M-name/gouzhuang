@@ -41,7 +41,7 @@
       width="700px"
       append-to-body
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+      <el-form ref="form" :model="form"  label-width="110px">
         <el-form-item label="姓名:" prop="userName">
           <el-input
             :disabled="isShow"
@@ -203,21 +203,21 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-        userName: [
-          { required: true, message: "姓名不能为空", trigger: "change" },
-        ],
-        mobile: [
-          { required: true, message: "手机号不能为空", trigger: "change" },
-          this.$rules.mobile("请输入正确的手机号", "change"),
-        ],
-        buildingCode: [
-          { required: true, message: "房号不能为空", trigger: "change" },
-        ],
-        repairType: [
-          { required: true, message: "维修事项不能为空", trigger: "change" },
-        ],
-      },
+      // rules: {
+      //   userName: [
+      //     { required: true, message: "姓名不能为空", trigger: "change" },
+      //   ],
+      //   mobile: [
+      //     { required: true, message: "手机号不能为空", trigger: "change" },
+      //     this.$rules.mobile("请输入正确的手机号", "change"),
+      //   ],
+      //   buildingCode: [
+      //     { required: true, message: "房号不能为空", trigger: "change" },
+      //   ],
+      //   repairType: [
+      //     { required: true, message: "维修事项不能为空", trigger: "change" },
+      //   ],
+      // },
       roleStatus: [],
       // 查询或请求参数
       params: {

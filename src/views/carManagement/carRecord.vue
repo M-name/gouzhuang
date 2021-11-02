@@ -694,7 +694,13 @@ export default {
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
+            let str = [];
           if (this.form.createTime) {
+            for (var i = 0; i < this.uploadImgList.length; i++) {
+              str.push(this.uploadImgList[i].code);
+              console.log(this.uploadImgList[i].code);
+            }
+            this.form.certificateImageCode = str.toString();
             this.$request.parkingUpdateCar(this.form).then((res) => {
               if (res.data.status === 200) {
                 this.msgSuccess("修改成功");
@@ -706,7 +712,6 @@ export default {
               }
             });
           } else {
-            let str = [];
             for (var i = 0; i < this.uploadImgList.length; i++) {
               str.push(this.uploadImgList[i].code);
               console.log(this.uploadImgList[i].code);

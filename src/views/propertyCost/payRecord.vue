@@ -49,8 +49,9 @@
         <el-form-item label="接收退款用户：">
           <p>{{ form.refundTo }}</p>
         </el-form-item>
-        <el-form-item label="退款金额：">
-          <p>{{ form.refundAmount }}</p>
+        <el-form-item label="退款金额：" prop="refundAmount">
+          <!-- <p>{{ form.refundAmount }}</p> -->
+          <el-input v-model="form.refundAmount" placeholder="请输入退款金额" />
         </el-form-item>
         <el-form-item label="退款原因：" prop="refundReason">
           <el-input v-model="form.refundReason" placeholder="请输入退款原因" />
@@ -195,6 +196,10 @@ export default {
             trigger: "change",
           },
         ],
+        refundAmount: [
+          { required: true, message: "退款金额不能为空", trigger: "change" },
+          this.$rules.plusNumber(undefined, "change"),
+        ],
       },
       // 表格参数
       tableData: [],
@@ -202,6 +207,7 @@ export default {
       total: 0,
       ids: [],
       dicList: [],
+      backAmount:'',
       // 查询或请求参数
       params: {
         page: 1,
@@ -264,6 +270,10 @@ export default {
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
+          if(this.form.refundAmount > this.backAmount) {
+            this.$message.warning('退款金额不能大于支付金额');
+            return
+          }
           this.$request.createRefund(this.form).then((res) => {
             if (res.data.status === 200) {
               this.msgSuccess("退款成功");
@@ -369,6 +379,7 @@ export default {
     refund(row) {
       this.reset();
       this.open = true;
+      this.backAmount = row.amountPaid;
       this.form.uniformOrderCode = row.uniformOrderCode;
       this.form.refundTo = row.payer;
       this.form.refundAmount = row.amountPaid;

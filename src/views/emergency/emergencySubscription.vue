@@ -64,7 +64,7 @@
                 type="text"
                 class="delet"
                 icon="el-icon-delete"
-                @click="handleDelete(scope.$index, scope.row)"
+                @click="handleDelete(scope.row)"
                 >删除</el-button
               >
             </template>
@@ -187,12 +187,12 @@ export default {
         //   icon: "el-icon-edit",
         //   handler: (row) => this.handleUpdate(row),
         // },
-        {
-          label: "删除",
-          style: { color: "#F56C6C" },
-          icon: "el-icon-delete",
-          handler: (row) => this.handleDelete(row),
-        },
+        // {
+        //   label: "删除",
+        //   style: { color: "#F56C6C" },
+        //   icon: "el-icon-delete",
+        //   handler: (row) => this.handleDelete(row),
+        // },
       ],
       // 表格参数
       tableOptions: {
@@ -468,6 +468,7 @@ export default {
         type: "warning",
       })
         .then(function () {
+          console.log(id,'id')
           that.$request.alarmTypeSubscribeDelete(id).then((res) => {
             if (res.data.status == 200) {
               that.getList();

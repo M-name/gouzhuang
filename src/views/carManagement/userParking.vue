@@ -470,7 +470,8 @@
             :with-credentials="true"
             accept="image/png, image/gif, image/jpg, image/jpeg"
             :on-preview="getLocalImg"
-            :file-list="fileImg"
+            :file-list="bothImg"
+            :on-remove="removeImg"
           >
             <i slot="default" class="el-icon-plus"></i>
           </el-upload>
@@ -517,6 +518,7 @@ export default {
       header: {
         "Content-Type": "multipart/form-data",
       },
+      bothImg: [],
       fileImg: [],
       rentOutFileImg: [],
       ownerShipFileImg: [],
@@ -880,9 +882,9 @@ export default {
             } else {
               this.isAddress = false;
             }
-          }else {
-          this.$message.error(res.data.msg);
-        }
+          } else {
+            this.$message.error(res.data.msg);
+          }
         });
     },
     //上传图片
@@ -891,15 +893,10 @@ export default {
       // 文件对象
       form.append("file", param.file);
       this.$request.upload(form).then((res) => {
-        const url = res.data.data.split(",")[1];
-        const obj = { url };
-        this.fileImg.push(obj);
-        if (this.form.certificateImageCodes != undefined) {
-          this.form.certificateImageCodes =
-            this.form.certificateImageCodes + "," + res.data.data.split(",")[0];
-        } else {
-          this.form.certificateImageCodes = res.data.data.split(",")[0];
-        }
+        this.bothImg.push({
+            uid: res.data.data.split(",")[0],
+            url: res.data.data.split(",")[1],
+          });
       });
     },
     uploadFile(param) {
@@ -941,6 +938,14 @@ export default {
       let url = event.url;
       this.dialogImageUrl = url;
       this.dialogVisible = true;
+    },
+    // 删除上传图片
+    removeImg(file, fileList) {
+      this.bothImg.forEach((item, index) => {
+        if (item.url == file.url) {
+          this.bothImg.splice(index, 1);
+        }
+      });
     },
     // 导出excel
     Export() {
@@ -984,8 +989,19 @@ export default {
       this.reset();
       const id = row.parkingCode;
       this.parkingCode = row.parkingCode;
+      this.bothImg = [];
       this.$request.parkingFind(id).then((res) => {
         if (res.data.status == 200) {
+          if (res.data.data.certificateImageCodesUrl) {
+            var fileImg = res.data.data.certificateImageCodesUrl.split(",");
+            var imgCode = res.data.data.certificateImageCodes.split(",");
+            fileImg.forEach((res,index) => {
+              this.bothImg.push({
+                uid: imgCode[index],
+                url: res
+              });
+            });
+          }
           this.form = res.data.data;
           this.open = true;
           if (
@@ -1080,8 +1096,13 @@ export default {
       console.log(this.form);
       this.$refs["form"].validate((valid) => {
         if (valid) {
+            let str = [];
           this.form.parkingCode = this.parkingCode;
           if (this.form.createTime) {
+             for (var i = 0; i < this.bothImg.length; i++) {
+              str.push(this.bothImg[i].uid);
+            }
+            this.form.certificateImageCodes = str.toString();
             this.$request.parkingUpdate(this.form).then((res) => {
               if (res.data.status === 200) {
                 this.msgSuccess("修改成功");
@@ -1093,6 +1114,10 @@ export default {
               }
             });
           } else {
+            for (var i = 0; i < this.bothImg.length; i++) {
+              str.push(this.bothImg[i].uid);
+            }
+            this.form.certificateImageCodes = str.toString();
             this.$request.parkingCreate(this.form).then((res) => {
               if (res.data.status === 200) {
                 this.msgSuccess("关联成功");
@@ -1132,7 +1157,6 @@ export default {
         if (valid) {
           this.ownerShipForm.parkingCode = this.parkingCode;
           this.ownerShipForm.preUserCode = this.preUserCode;
-          console.log(this.ownerShipForm.preUserCode, this.preUserCode);
           this.$request
             .parkingCreateTransfer(this.ownerShipForm)
             .then((res) => {

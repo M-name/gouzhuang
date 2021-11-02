@@ -955,13 +955,11 @@ export default {
         this.$message.warning("请先填写基本信息");
         return;
       }
-      if (!this.placeForm.certificateExpireTime && this.placeForm.isLongTerm == '0') {
-        console.log('1345')
-        this.$message.warning("居住证不为长期有效时居住证件有效期不能为空！");
-        return;
-      }
+      // if (!this.placeForm.certificateExpireTime && this.placeForm.isLongTerm == '0') {
+      //   this.$message.warning("居住证不为长期有效时居住证件有效期不能为空！");
+      //   return;
+      // }
       this.$refs["placeForm"].validate((valid) => {
-        console.log(valid)
         if (valid) {
           this.placeForm.userCode = this.form.userCode;
           this.placeForm.buildingCode = this.placeForm.buildingCode.toString();
@@ -979,6 +977,7 @@ export default {
             }
             this.placeForm.certificateImageCodes = str.toString();
           }
+          console.log(this.placeForm,'submit')
           this.$request.createOrUpdate(this.placeForm).then((res) => {
             if (res.data.status === 200) {
               this.msgSuccess("提交成功");

@@ -9,6 +9,19 @@
       />
     </div>
     <div class="operation">
+      <div class="button">
+        <el-row :gutter="10" class="operations-row">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              icon="el-icon-circle-plus-outline"
+              size="mini"
+              @click="addList"
+              >新增</el-button
+            >
+          </el-col>
+        </el-row>
+      </div>
       <CommonTable
         :total="total"
         :loading="loading"
@@ -21,6 +34,99 @@
         :operations="tableOperations"
       />
     </div>
+    <el-dialog
+      :title="title"
+      :before-close="addCancel"
+      :visible.sync="addOpen"
+      width="700px"
+      append-to-body
+    >
+      <el-form
+        ref="addForm"
+        :model="addForm"
+        :rules="addRules"
+        label-width="110px"
+      >
+        <el-form-item label="姓名:">
+          <el-input
+            :disabled="isShow"
+            v-model="addForm.userName"
+            placeholder="请输入姓名"
+          />
+        </el-form-item>
+        <el-form-item label="手机号:">
+          <el-input
+            :disabled="isShow"
+            v-model="addForm.mobile"
+            placeholder="请输入手机号"
+          />
+        </el-form-item>
+        <el-form-item label="房号:">
+          <el-input
+            :disabled="isShow"
+            v-model="addForm.buildingCode"
+            placeholder="请输入房号"
+          />
+        </el-form-item>
+        <el-form-item label="维修事项:" prop="repairType">
+          <el-select
+            :disabled="isShow"
+            v-model="addForm.repairType"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in dictLists.repairEnum"
+              :key="item.type"
+              :label="item.value"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="上传图片:">
+          <el-upload
+            :disabled="isShow"
+            ref="upload"
+            action="uploadUrl"
+            list-type="picture-card"
+            :http-request="uploadSectionFile"
+            :headers="header"
+            :with-credentials="true"
+            accept="image/png, image/gif, image/jpg, image/jpeg"
+            :on-preview="getLocalImg"
+            :on-remove="getLocalImgs"
+            :file-list="fileImg"
+          >
+            <i slot="default" class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="维修描述:">
+          <el-input
+            :disabled="isShow"
+            v-model="addForm.repairDesc"
+            placeholder="请输入维修描述"
+          />
+        </el-form-item>
+        <el-form-item label="备注:" prop="remark">
+          <el-input
+            :disabled="isShow"
+            type="textarea"
+            autosize
+            v-model="addForm.remark"
+            placeholder="请输入备注"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="addSubmitForm">{{
+          isShow ? "受理" : "提交"
+        }}</el-button>
+        <el-button @click="addCancel">取 消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog width="600px" :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
+    </el-dialog>
     <el-dialog
       :title="title"
       :before-close="cancel"
@@ -80,12 +186,26 @@ export default {
           { required: true, message: "完成时间未选择", trigger: "change" },
         ],
       },
+      addRules: {
+        repairType: [
+          { required: true, message: "维修事项不能为空", trigger: "change" },
+        ],
+      },
+      fileImg: [],
+      uploadImgList: [],
+      header: {
+        "Content-Type": "multipart/form-data",
+      },
+      dialogImageUrl: "",
+      dialogVisible: false,
+      dictLists: [],
       // 表单参数
       form: {},
       // 工作人员列表
       staffList: [],
       // 是否显示弹出层
       open: false,
+      addOpen: false,
       // 弹出层标题
       title: "",
       //加载状态
@@ -102,18 +222,32 @@ export default {
           label: "查看",
           icon: "el-icon-tickets",
           handler: (row) => this.handleUpdate(row),
+          isShow: (row) => {
+            return row.repaireStatus != 10;
+          },
+        },
+        {
+          label: "受理",
+          icon: "iconfont icon-accept",
+          handler: (row) => this.handleAcceptance(row),
+          isShow: (row) => {
+            return row.repaireStatus == 10;
+          },
         },
         {
           label: "完成",
           icon: "el-icon-tickets",
           handler: (row) => this.handleFinish(row),
+          isShow: (row) => {
+            return row.repaireStatus != 10;
+          },
         },
         {
           label: "派单",
           icon: "iconfont icon-assign",
           handler: (row) => this.handlePayout(row),
           isShow: (row) => {
-            return row.repaireStatus < 30;
+            return row.repaireStatus < 30 && row.repaireStatus != 10;
           },
         },
       ],
@@ -150,7 +284,9 @@ export default {
           prop: "userName",
           label: "联系方式",
           render: (h, scope) => {
-            return h("div", [scope.row.userName + "/ " + scope.row.mobile]);
+            if (scope.row.userName || scope.row.mobile) {
+              return h("div", [scope.row.userName + "/ " + scope.row.mobile]);
+            }
           },
         },
         {
@@ -167,6 +303,9 @@ export default {
       tableData: [],
       // 总条数
       total: 0,
+      isShow: false,
+      // 表单参数
+      addForm: {},
       roleStatus: [],
       // 查询或请求参数
       params: {
@@ -200,6 +339,7 @@ export default {
     this.$request.findRepairAlleuems().then((res) => {
       let role = [];
       let lists = res.data.data;
+      this.dictLists = res.data.data;
       for (var i = 0; i < lists.repaireProgressEnum.length; i++) {
         let arr = {};
         arr.value = lists.repaireProgressEnum[i].type;
@@ -216,7 +356,96 @@ export default {
     this.getList();
   },
   methods: {
+    // 表单重置
+    addReset() {
+      this.addForm = {
+        userName: undefined,
+        mobile: undefined,
+        buildingCode: undefined,
+        repairType: undefined,
+        repairDesc: undefined,
+        remark: undefined,
+        repaireImageCodes: undefined,
+      };
+    },
+    // 取消按钮
+    addCancel() {
+      this.addOpen = false;
+      this.addReset();
+      this.$refs.addForm.resetFields();
+      this.$refs.upload.clearFiles();
+      this.fileImg = [];
+      this.uploadImgList = [];
+    },
     // 新增的提交
+    addSubmitForm() {
+      console.log(this.addForm);
+      this.$refs["addForm"].validate((valid) => {
+        if (valid) {
+          const that = this;
+          let str = [];
+          for (var i = 0; i < this.uploadImgList.length; i++) {
+            str.push(this.uploadImgList[i].code);
+          }
+          this.addForm.repaireImageCodes = str.toString();
+          if (this.addForm.createTime) {
+            this.$request.repairUpdateRepair(this.addForm).then((res) => {
+              if (res.data.status === 200) {
+                this.msgSuccess("受理成功");
+                this.addOpen = false;
+                this.getList();
+                this.$refs.addForm.resetFields();
+                this.$refs.upload.clearFiles();
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            });
+          } else {
+            this.$request.saveRepair(this.addForm).then((res) => {
+              if (res.data.status === 200) {
+                this.msgSuccess("新增成功");
+                this.addOpen = false;
+                this.getList();
+                this.$refs.addForm.resetFields();
+                this.$refs.upload.clearFiles();
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            });
+          }
+        }
+      });
+    },
+    // 受理按钮
+    handleAcceptance(row) {
+      this.reset();
+      let that = this;
+      this.isShow = true;
+      const id = row.repaireCode;
+      this.$request.selectOrderDetails(id).then((res) => {
+        if (res.data.status == 200) {
+          this.addForm = res.data.data;
+          if (res.data.data.repaireImageList) {
+            const codeList = res.data.data.repaireImageCodes.split(",");
+            for (var i = 0; i < res.data.data.repaireImageList.length; i++) {
+              that.uploadImgList.push({
+                code: codeList[i],
+                url: res.data.data.repaireImageList[i],
+              });
+              that.fileImg.push({
+                uid: i,
+                url: res.data.data.repaireImageList[i],
+              });
+            }
+          }
+          this.addOpen = true;
+          this.title = "受理报修";
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 完成的提交
     submitForm() {
       let that = this;
       this.$refs["form"].validate((valid) => {
@@ -234,6 +463,37 @@ export default {
           });
         }
       });
+    },
+    // 删除上传图片
+    getLocalImgs(file, fileList) {
+      this.uploadImgList.forEach((item, index) => {
+        if (item.url == file.url) {
+          this.uploadImgList.splice(index, 1);
+        }
+      });
+      console.log(this.uploadImgList);
+    },
+    //上传图片
+    uploadSectionFile(param) {
+      var form = new FormData();
+      // 文件对象
+      form.append("file", param.file);
+      this.$request.upload(form).then((res) => {
+        const url = res.data.data.split(",")[1];
+        const obj = { url };
+        this.fileImg.push(obj);
+        this.uploadImgList.push({
+          code: res.data.data.split(",")[0],
+          url: res.data.data.split(",")[1],
+        });
+        console.log(this.fileImg);
+      });
+    },
+    //显示图片
+    getLocalImg(event) {
+      let url = event.url;
+      this.dialogImageUrl = url;
+      this.dialogVisible = true;
     },
     // 表单重置
     reset() {
@@ -279,6 +539,13 @@ export default {
       };
       this.handleQuery();
     },
+    // 新增按钮
+    addList() {
+      this.reset();
+      this.addOpen = true;
+      this.title = "新增报修";
+      this.isShow = false;
+    },
     // 完成按钮
     handleFinish(row) {
       this.reset();
@@ -317,7 +584,7 @@ export default {
           this.params.page = res.data.data.page;
           this.loading = false;
         } else {
-          that.$message.error(res.data.msg);
+          this.$message.error(res.data.msg);
           this.loading = false;
         }
       });

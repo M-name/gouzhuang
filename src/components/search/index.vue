@@ -76,7 +76,15 @@
           type="date"
          :placeholder="item.label"
         ></el-date-picker>
-
+        <el-date-picker
+        v-if="item.type === 'yearPicker'"
+          size="small"
+          style="width: 270px; "
+          value-format="yyyy"
+          v-model="params[item.prop]"
+          type="year"
+         :placeholder="item.label"
+        ></el-date-picker>
         <el-date-picker
           v-if="item.type === 'datePicker'"
           v-model="params[item.prop]"

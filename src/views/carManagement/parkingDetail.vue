@@ -207,6 +207,7 @@
             accept="image/png, image/gif, image/jpg, image/jpeg"
             :on-preview="getLocalImg"
             :file-list="ownerShipFileImg"
+            :on-remove="removeOwnerShipImg"
           >
             <i slot="default" class="el-icon-plus"></i>
           </el-upload>
@@ -342,6 +343,7 @@
             accept="image/png, image/gif, image/jpg, image/jpeg"
             :on-preview="getLocalImg"
             :file-list="rentOutFileImg"
+            :on-remove="removeRentOutImg"
           >
             <i slot="default" class="el-icon-plus"></i>
           </el-upload>
@@ -765,15 +767,10 @@ export default {
       // 文件对象
       form.append("file", param.file);
       this.$request.upload(form).then((res) => {
-        const url = res.data.data.split(",")[1];
-        const obj = { url };
-        this.rentOutFileImg.push(obj);
-        if (this.rentOutForm.rentImageCodes != undefined) {
-          this.rentOutForm.rentImageCodes =
-            this.rentOutForm.rentImageCodes + "," + res.data.data.split(",")[0];
-        } else {
-          this.rentOutForm.rentImageCodes = res.data.data.split(",")[0];
-        }
+        this.rentOutFileImg.push({
+            uid: res.data.data.split(",")[0],
+            url: res.data.data.split(",")[1],
+          });
       });
     },
     ownerShipUploadFile(param) {
@@ -781,17 +778,10 @@ export default {
       // 文件对象
       form.append("file", param.file);
       this.$request.upload(form).then((res) => {
-        const url = res.data.data.split(",")[1];
-        const obj = { url };
-        this.ownerShipFileImg.push(obj);
-        if (this.ownerShipForm.transferImageCodes != undefined) {
-          this.ownerShipForm.transferImageCodes =
-            this.ownerShipForm.transferImageCodes +
-            "," +
-            res.data.data.split(",")[0];
-        } else {
-          this.ownerShipForm.transferImageCodes = res.data.data.split(",")[0];
-        }
+        this.ownerShipFileImg.push({
+            uid: res.data.data.split(",")[0],
+            url: res.data.data.split(",")[1],
+          });
       });
     },
     //显示图片
@@ -800,11 +790,31 @@ export default {
       this.dialogImageUrl = url;
       this.dialogVisible = true;
     },
+    // 删除上传图片
+    removeRentOutImg(file, fileList) {
+      this.rentOutFileImg.forEach((item, index) => {
+        if (item.url == file.url) {
+          this.rentOutFileImg.splice(index, 1);
+        }
+      });
+    },
+    removeOwnerShipImg(file, fileList) {
+      this.ownerShipFileImg.forEach((item, index) => {
+        if (item.url == file.url) {
+          this.ownerShipFileImg.splice(index, 1);
+        }
+      });
+    },
     // 出租
     rentOutSubmitForm() {
       this.$refs["rentOutForm"].validate((valid) => {
         if (valid) {
           this.rentOutForm.parkingCode = this.params.parkingCode;
+          let str = [];
+           for (var i = 0; i < this.rentOutFileImg.length; i++) {
+              str.push(this.rentOutFileImg[i].uid);
+            }
+            this.rentOutForm.rentImageCodes = str.toString();
           if (this.rentOutForm.createTime) {
             this.$request.parkingUpdateRent(this.rentOutForm).then((res) => {
               if (res.data.status === 200) {
@@ -833,12 +843,19 @@ export default {
       this.$refs["ownerShipForm"].validate((valid) => {
         if (valid) {
           this.ownerShipForm.parkingCode = this.params.parkingCode;
+          let str = [];
+           for (var i = 0; i < this.ownerShipFileImg.length; i++) {
+              str.push(this.ownerShipFileImg[i].uid);
+            }
+            this.ownerShipForm.transferImageCodes = str.toString();
           this.$request.parkingCreateTransfer(this.ownerShipForm).then((res) => {
             if (res.data.status === 200) {
               this.msgSuccess("新增成功");
-              this.rentOutOpen = false;
-              this.getList();
+              this.ownerShipOpen = false;
+              this.transferGetList();
               this.$refs.ownerShipForm.resetFields();
+            }else{
+              this.$message.error(res.data.msg)
             }
           });
         }
@@ -850,6 +867,7 @@ export default {
       this.isAddress = false;
       this.rentOutOpen = true;
       this.title = "车位出租";
+      this.rentOutFileImg = [];
     },
     // 过户
     ownerShip() {
@@ -858,6 +876,7 @@ export default {
       this.isAddress = false;
       this.ownerShipOpen = true;
       this.title = "车位过户";
+      this.ownerShipFileImg = [];
     },
     // 选择所有人按钮操作
     choose(row) {
@@ -960,6 +979,19 @@ export default {
     handleUpdate(row) {
       const id = row.id;
       this.$request.parkingFindRent(id).then((res) => {
+        this.rentOutFileImg = [];
+        if (res.data.data.rentImageCodesUrl) {
+            var fileImg = res.data.data.rentImageCodesUrl.split(",");
+            var imgCode = res.data.data.rentImageCodes.split(",");
+            fileImg.forEach((res,index) => {
+              if(res.length > 0) {
+                this.rentOutFileImg.push({
+                uid: imgCode[index],
+                url: res
+              });
+              }
+            });
+          }
         this.rentOutForm = res.data.data;
         if (res.data.data.userAddr && res.data.data.parkingBelongTypeId != 48) {
           this.isAddress = true;
@@ -992,6 +1024,20 @@ export default {
     handleCheak(row) {
       const id = row.id;
       this.$request.parkingFindTransfer(id).then((res) => {
+        this.ownerShipFileImg = [];
+        if (res.data.data.transferImageCodesUrl) {
+            var fileImg = res.data.data.transferImageCodesUrl.split(",");
+            var imgCode = res.data.data.transferImageCodes.split(",");
+            fileImg.forEach((res,index) => {
+              if(res.length > 0) {
+                this.ownerShipFileImg.push({
+                uid: imgCode[index],
+                url: res
+              });
+              }
+            });
+          }
+          console.log(this.ownerShipFileImg,'img---')
         this.ownerShipForm = res.data.data;
         this.isCheak = true;
         this.ownerShipOpen = true;

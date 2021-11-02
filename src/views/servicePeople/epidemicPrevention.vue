@@ -62,8 +62,8 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12"
-            ><el-form-item label="姓名:">
-              <span>{{ form.userName }}</span>
+            ><el-form-item label="居住类型:">
+              <span>{{ form.liveTyppeStr }}</span>
             </el-form-item></el-col
           >
           <el-col :span="12"
@@ -92,31 +92,19 @@
           >
           <el-col :span="12"
             ><el-form-item label="摸排信息:">
-              <span>{{ form.healthCodeStr }}</span>
+              <span>{{ form.inspectStatusStr }}</span>
             </el-form-item></el-col
           >
         </el-row>
           <el-row :gutter="20">
           <el-col :span="12"
             ><el-form-item label="杭州健康码:">
-              <span>{{ form.uncomfortableStatus }}</span>
+              <span>{{ form.healthCodeStr }}</span>
             </el-form-item></el-col
           >
-          <el-col :span="12"
-            ><el-form-item label="摸排信息:">
-              <span>{{ form.personTypeStr }}</span>
-            </el-form-item></el-col
-          >
-        </el-row>
-          <el-row :gutter="20">
           <el-col :span="12"
             ><el-form-item label="人员类型:">
-              <span>{{ form.uncomfortableStatus }}</span>
-            </el-form-item></el-col
-          >
-          <el-col :span="12"
-            ><el-form-item label="居住类型:">
-              <span>{{ form.liveTyppeStr }}</span>
+              <span>{{ form.personTypeStr }}</span>
             </el-form-item></el-col
           >
         </el-row>

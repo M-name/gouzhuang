@@ -53,6 +53,54 @@
         </div>
       </div>
     </div>
+    <div class="cost-form">
+      <div class="cost-statistic">
+        <img src="@/assets/zhuzhaituoguanfei.png" alt="" />
+        <div>
+          <p>住宅托管费缴纳情况</p>
+          <span>总户数: {{ infoList.residencePayTotal }}</span>
+          <span>已缴户数: {{ infoList.residencePayCount }}</span>
+          <span>未缴户数: {{ infoList.residencePayNot }}</span>
+          <span>缴纳率: {{ infoList.residencePayRate }}%</span>
+        </div>
+      </div>
+      <div class="cost-statistic">
+        <div class="cost-statistics">
+          <img src="@/assets/nenghaofei.png" alt="" />
+          <div>
+            <p>房屋能耗费缴纳情况</p>
+            <span>总户数: {{ infoList.energyConsumptionPayTotal }}</span>
+            <span>已缴户数: {{ infoList.energyConsumptionPayCount }}</span>
+            <span>未缴户数: {{ infoList.energyConsumptionPayNot }}</span>
+            <span>缴纳率: {{ infoList.energyConsumptionPayRate }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="cost-statistic">
+        <div class="cost-statistics">
+          <img src="@/assets/cheweiguanlifei.png" alt="" />
+          <div>
+            <p>车位管理费缴纳情况</p>
+            <span>总户数: {{ infoList.parkingManagementPayTotal }}</span>
+            <span>已缴户数: {{ infoList.parkingManagementPayCount }}</span>
+            <span>未缴户数: {{ infoList.parkingManagementPayNot }}</span>
+            <span>缴纳率: {{ infoList.parkingManagementPayRate }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="cost-statistic">
+        <div class="cost-statistics">
+          <img src="@/assets/cheweichuzufei.png" alt="" />
+          <div>
+            <p>车位租赁费缴纳情况</p>
+            <span>总户数: {{ infoList.carRentalPayTotal }}</span>
+            <span>已缴户数: {{ infoList.carRentalPayCount }}</span>
+            <span>未缴户数: {{ infoList.carRentalPayNot }}</span>
+            <span>缴纳率: {{ infoList.carRentalPayRate }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="static">
       <i class="el-icon-menu" style="font-size: 16px; color: #409eff"></i>
       <span class="info">费用统计</span>
@@ -81,12 +129,11 @@ export default {
     return {
       params: {
         time: undefined,
+        orderYear: new Date().getFullYear(),
       },
       infoList: {},
       // 公用搜索组件内容
-      commonSearchList: [
-        { prop: "time", label: "收费日期", type: "picker" },
-      ],
+      commonSearchList: [{ prop: "time", label: "收费日期", type: "picker" }],
     };
   },
   created() {
@@ -263,6 +310,7 @@ export default {
     resetQuery() {
       this.params = {
         time: undefined,
+        orderYear: new Date().getFullYear(),
       };
       this.handleQuery();
     },
@@ -297,6 +345,32 @@ export default {
         font-size: 25px;
         font-weight: 400;
         color: #333333;
+        margin-top: 8px;
+      }
+    }
+  }
+  .cost-statistic {
+    img {
+      width:70px;
+      height: 70px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    div {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 22px;
+      p {
+        font-size: 15px;
+        font-weight: 400;
+        color: #333;
+        margin-top: 3px;
+      }
+      span {
+        display: block;
+        font-size: 14px;
+        font-weight: 400;
+        color: #999;
         margin-top: 8px;
       }
     }
