@@ -31,7 +31,7 @@ export default {
      },
      // 查询某一个用户房屋档案
      userHouseFind(params) {
-          return axios.get("/user/building/find" + '/' + params)
+          return axios.get("/user/building/find?id="+ params)
      },
      // 解除绑定
      buildingUnbind(params) {
@@ -104,5 +104,21 @@ export default {
      // 修改租客登记状态
      detailsProcessStatus(params) {
           return axios.get("/user/details/processStatus", { params })
+     },
+     // 查询档案列表
+     detailsList(params) {
+          return axios.post("/user/details/list", params)
+     },
+     // 批量修改用户档案
+     detailsUpdateBatch(params) {
+          return axios.post("/user/details/updateBatch", params)
+     },
+     // 查询用户列表
+     detailsLogList(params) {
+          return axios.post("/user/details/logList", params)
+     },
+     // 删除
+     detailsDelete(params) {
+          return axios.delete("/user/details/delete?userCode="+params)
      },
 }

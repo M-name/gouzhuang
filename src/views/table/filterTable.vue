@@ -119,7 +119,11 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="addSubmitForm">{{
-          isShow ? "受理" : "提交"
+          isShow && btnName == "accept"
+            ? "受理"
+            : isShow && btnName == "back"
+            ? "退回"
+            : "提交"
         }}</el-button>
         <el-button @click="addCancel">取 消</el-button>
       </div>
@@ -127,7 +131,7 @@
     <el-dialog width="600px" :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
-    <el-dialog
+    <!-- <el-dialog
       :title="title"
       :before-close="cancel"
       :visible.sync="open"
@@ -169,7 +173,7 @@
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -229,17 +233,17 @@ export default {
         {
           label: "受理",
           icon: "iconfont icon-accept",
-          handler: (row) => this.handleAcceptance(row),
+          handler: (row) => this.handleAcceptance(row, "accept"),
           isShow: (row) => {
             return row.repaireStatus == 10;
           },
         },
         {
-          label: "完成",
+          label: "退回",
           icon: "el-icon-tickets",
-          handler: (row) => this.handleFinish(row),
+          handler: (row) => this.handleAcceptance(row, "back"),
           isShow: (row) => {
-            return row.repaireStatus != 10;
+            return row.repaireStatus == 10;
           },
         },
         {
@@ -251,6 +255,7 @@ export default {
           },
         },
       ],
+      btnName: "back",
       // 公用搜索组件内容
       commonSearchList: [
         { prop: "buildingCode", label: "房屋编码 " },
@@ -285,7 +290,7 @@ export default {
           label: "联系方式",
           render: (h, scope) => {
             if (scope.row.userName || scope.row.mobile) {
-              return h("div", [scope.row.userName + "/ " + scope.row.mobile]);
+              return h("div", [(scope.row.userName?scope.row.userName:'') + "/ " + (scope.row.mobile?scope.row.mobile:'')]);
             }
           },
         },
@@ -328,7 +333,7 @@ export default {
         arr.label = Object.keys(list)[i];
         for (var j = 0; j < list[Object.keys(list)[i]].length; j++) {
           arr.options.push({
-            value: list[Object.keys(list)[i]][j].userCode,
+            value: list[Object.keys(list)[i]][j].managerCode,
             label: list[Object.keys(list)[i]][j].realName,
           });
         }
@@ -379,7 +384,6 @@ export default {
     },
     // 新增的提交
     addSubmitForm() {
-      console.log(this.addForm);
       this.$refs["addForm"].validate((valid) => {
         if (valid) {
           const that = this;
@@ -388,10 +392,22 @@ export default {
             str.push(this.uploadImgList[i].code);
           }
           this.addForm.repaireImageCodes = str.toString();
-          if (this.addForm.createTime) {
+          if (this.addForm.createTime && this.btnName == 'accept') {
             this.$request.repairUpdateRepair(this.addForm).then((res) => {
               if (res.data.status === 200) {
                 this.msgSuccess("受理成功");
+                this.addOpen = false;
+                this.getList();
+                this.$refs.addForm.resetFields();
+                this.$refs.upload.clearFiles();
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            });
+          } else if (this.addForm.createTime && this.btnName == 'back') {
+            this.$request.cancelRepair(this.addForm).then((res) => {
+              if (res.data.status === 200) {
+                this.msgSuccess("退回成功");
                 this.addOpen = false;
                 this.getList();
                 this.$refs.addForm.resetFields();
@@ -417,7 +433,8 @@ export default {
       });
     },
     // 受理按钮
-    handleAcceptance(row) {
+    handleAcceptance(row, name) {
+      this.btnName = name;
       this.reset();
       let that = this;
       this.isShow = true;
@@ -439,31 +456,31 @@ export default {
             }
           }
           this.addOpen = true;
-          this.title = "受理报修";
+          this.title = name == "back" ? "退回报修" : "受理报修";
         } else {
           this.$message.error(res.data.msg);
         }
       });
     },
     // 完成的提交
-    submitForm() {
-      let that = this;
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          that.$request.repairProcessed(this.form).then((res) => {
-            if (res.data.status == 200) {
-              that.$message.success("提交成功");
-              this.open = false;
-              this.getList();
-              this.$refs.form.resetFields();
-            } else {
-              this.open = false;
-              that.$message.error(res.data.msg);
-            }
-          });
-        }
-      });
-    },
+    // submitForm() {
+    //   let that = this;
+    //   this.$refs["form"].validate((valid) => {
+    //     if (valid) {
+    //       that.$request.repairProcessed(this.form).then((res) => {
+    //         if (res.data.status == 200) {
+    //           that.$message.success("提交成功");
+    //           this.open = false;
+    //           this.getList();
+    //           this.$refs.form.resetFields();
+    //         } else {
+    //           this.open = false;
+    //           that.$message.error(res.data.msg);
+    //         }
+    //       });
+    //     }
+    //   });
+    // },
     // 删除上传图片
     getLocalImgs(file, fileList) {
       this.uploadImgList.forEach((item, index) => {
@@ -505,11 +522,11 @@ export default {
       };
     },
     // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-      this.$refs.form.resetFields();
-    },
+    // cancel() {
+    //   this.open = false;
+    //   this.reset();
+    //   this.$refs.form.resetFields();
+    // },
     // 回显数据字典
     selectDictLabel(datas, value) {
       var actions = [];
@@ -547,12 +564,12 @@ export default {
       this.isShow = false;
     },
     // 完成按钮
-    handleFinish(row) {
-      this.reset();
-      this.open = true;
-      this.title = "订单完成";
-      this.form.repaireCode = row.repaireCode;
-    },
+    // handleFinish(row) {
+    //   this.reset();
+    //   this.open = true;
+    //   this.title = "订单完成";
+    //   this.form.repaireCode = row.repaireCode;
+    // },
     // 查看按钮
     handleUpdate(row) {
       this.$router.push({

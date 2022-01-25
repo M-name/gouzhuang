@@ -215,64 +215,118 @@ export default {
      },
      // 导出缴费账单表
      orderDownloadExcel(params) {
-     axios
-       .post("/order/downloadExcel",
-          params,
-          { responseType: 'blob' }
-       )
-       .then(res => {
-         var blob = new Blob([res.data], {
-           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-         })
-         // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
-         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-           window.navigator.msSaveOrOpenBlob(blob, res.fileName)
-         } else {
-           var downloadElement = document.createElement('a')
-           var href = window.URL.createObjectURL(blob) // 创建下载的链接
-           downloadElement.href = href
-           downloadElement.download = '缴费账单表' // 下载后文件名
-           document.body.appendChild(downloadElement)
-           downloadElement.click() // 点击下载
-           document.body.removeChild(downloadElement) // 下载完成移除元素
-           window.URL.revokeObjectURL(href) // 释放掉blob对象
-         }
-       })
-     // return axios.get(downloadExcel, data, 'blob')
-   },
-    // 导出费用支付记录报表
-    orderPaymentDownloadExcel(params) {
-     axios
-       .post("/orderPayment/downloadExcel",
-          params,
-          { responseType: 'blob' }
-       )
-       .then(res => {
-         var blob = new Blob([res.data], {
-           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-         })
-         // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
-         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-           window.navigator.msSaveOrOpenBlob(blob, res.fileName)
-         } else {
-           var downloadElement = document.createElement('a')
-           var href = window.URL.createObjectURL(blob) // 创建下载的链接
-           downloadElement.href = href
-           downloadElement.download = '费用支付记录表' // 下载后文件名
-           document.body.appendChild(downloadElement)
-           downloadElement.click() // 点击下载
-           document.body.removeChild(downloadElement) // 下载完成移除元素
-           window.URL.revokeObjectURL(href) // 释放掉blob对象
-         }
-       })
-     // return axios.get(downloadExcel, data, 'blob')
-   },
-   //导入账单
-   orderUploadExcel(params) {
-     return axios.post('/order/uploadExcel', params)
-},
-// 统计分析
-orderPaymentStatistics(params) {
-     return axios.post('/orderPayment/statistics', params)
-},
+          axios
+               .post("/order/downloadExcel",
+                    params,
+                    { responseType: 'blob' }
+               )
+               .then(res => {
+                    var blob = new Blob([res.data], {
+                         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    })
+                    // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                         window.navigator.msSaveOrOpenBlob(blob, res.fileName)
+                    } else {
+                         var downloadElement = document.createElement('a')
+                         var href = window.URL.createObjectURL(blob) // 创建下载的链接
+                         downloadElement.href = href
+                         downloadElement.download = '缴费账单表' // 下载后文件名
+                         document.body.appendChild(downloadElement)
+                         downloadElement.click() // 点击下载
+                         document.body.removeChild(downloadElement) // 下载完成移除元素
+                         window.URL.revokeObjectURL(href) // 释放掉blob对象
+                    }
+               })
+          // return axios.get(downloadExcel, data, 'blob')
+     },
+     // 导出费用支付记录报表
+     orderPaymentDownloadExcel(params) {
+          axios
+               .post("/orderPayment/downloadExcel",
+                    params,
+                    { responseType: 'blob' }
+               )
+               .then(res => {
+                    var blob = new Blob([res.data], {
+                         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    })
+                    // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                         window.navigator.msSaveOrOpenBlob(blob, res.fileName)
+                    } else {
+                         var downloadElement = document.createElement('a')
+                         var href = window.URL.createObjectURL(blob) // 创建下载的链接
+                         downloadElement.href = href
+                         downloadElement.download = '费用支付记录表' // 下载后文件名
+                         document.body.appendChild(downloadElement)
+                         downloadElement.click() // 点击下载
+                         document.body.removeChild(downloadElement) // 下载完成移除元素
+                         window.URL.revokeObjectURL(href) // 释放掉blob对象
+                    }
+               })
+          // return axios.get(downloadExcel, data, 'blob')
+     },
+     //导入账单
+     orderUploadExcel(params) {
+          return axios.post('/order/uploadExcel', params)
+     },
+     // 统计分析
+     orderPaymentStatistics(params) {
+          return axios.post('/orderPayment/statistics', params)
+     },
+     // 导出租客登记管理表
+     downloadzkExcel(data) {
+          axios
+               .get("/user/details/downloadExcel", {
+                    params: data,
+                    responseType: 'blob'
+               })
+               .then(res => {
+                    var blob = new Blob([res.data], {
+                         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    })
+                    // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                         window.navigator.msSaveOrOpenBlob(blob, res.fileName)
+                    } else {
+                         var downloadElement = document.createElement('a')
+                         var href = window.URL.createObjectURL(blob) // 创建下载的链接
+                         downloadElement.href = href
+                         downloadElement.download = '租客登记管理表' // 下载后文件名
+                         document.body.appendChild(downloadElement)
+                         downloadElement.click() // 点击下载
+                         document.body.removeChild(downloadElement) // 下载完成移除元素
+                         window.URL.revokeObjectURL(href) // 释放掉blob对象
+                    }
+               })
+          // return axios.get(downloadExcel, data, 'blob')
+     },
+     // 导出流动人口管理表
+     downloadldExcel(data) {
+          axios
+               .get("/user/details/downloadExcel2", {
+                    params: data,
+                    responseType: 'blob'
+               })
+               .then(res => {
+                    var blob = new Blob([res.data], {
+                         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    })
+                    // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                         window.navigator.msSaveOrOpenBlob(blob, res.fileName)
+                    } else {
+                         var downloadElement = document.createElement('a')
+                         var href = window.URL.createObjectURL(blob) // 创建下载的链接
+                         downloadElement.href = href
+                         downloadElement.download = '流动人口管理表' // 下载后文件名
+                         document.body.appendChild(downloadElement)
+                         downloadElement.click() // 点击下载
+                         document.body.removeChild(downloadElement) // 下载完成移除元素
+                         window.URL.revokeObjectURL(href) // 释放掉blob对象
+                    }
+               })
+          // return axios.get(downloadExcel, data, 'blob')
+     },
 }

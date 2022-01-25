@@ -445,21 +445,21 @@ export default {
         userName: [
           { required: true, message: "姓名不能为空", trigger: "change" },
         ],
-        certificateTypeId: [
-          { required: true, message: "证件类型不能为空", trigger: "change" },
-        ],
-        certificateNo: [
-          { required: true, message: "证件号码不能为空", trigger: "change" },
-        ],
-        tenantAddr: [
-          { required: true, message: "地址不能为空", trigger: "change" },
-        ],
-        rentBeginTime: [
-          { required: true, message: "起始时间不能为空", trigger: "change" },
-        ],
-        rentEndTime: [
-          { required: true, message: "截止时间不能为空", trigger: "change" },
-        ],
+        // certificateTypeId: [
+        //   { required: true, message: "证件类型不能为空", trigger: "change" },
+        // ],
+        // certificateNo: [
+        //   { required: true, message: "证件号码不能为空", trigger: "change" },
+        // ],
+        // tenantAddr: [
+        //   { required: true, message: "地址不能为空", trigger: "change" },
+        // ],
+        // rentBeginTime: [
+        //   { required: true, message: "起始时间不能为空", trigger: "change" },
+        // ],
+        // rentEndTime: [
+        //   { required: true, message: "截止时间不能为空", trigger: "change" },
+        // ],
       },
       ownerShipRules: {
         currTypeId: [
@@ -557,11 +557,12 @@ export default {
         { prop: "certificateTypeIdStr", label: "租用人证件类型" },
         { prop: "certificateNo", label: "租用人证件号码 " },
         { prop: "rentEndTime", label: "租用周期",
-        render: (h, scope) => {
-            return h("div", [
-              scope.row.rentBeginTime.slice(0, 10) + "~" + scope.row.rentEndTime.slice(0, 10),
-            ]);
-          }, },
+        // render: (h, scope) => {
+        //     return h("div", [
+        //       scope.row.rentBeginTime.slice(0, 10) + "~" + scope.row.rentEndTime.slice(0, 10),
+        //     ]);
+        //   }, 
+          },
         { prop: "createTime", label: "登记时间" },
       ],
       transferColumn: [
@@ -926,6 +927,7 @@ export default {
       this.$request
         .parkingRentList(this.params)
         .then((res) => {
+          console.log(res.data.data.rows)
           this.tableData = res.data.data.rows;
           this.total = res.data.data.records;
           this.params.page = res.data.data.page;

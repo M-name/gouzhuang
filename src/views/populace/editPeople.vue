@@ -5,10 +5,7 @@
     </div>
     <div class="left">
       <span class="title">基本信息</span>
-      <el-button
-        class="people-submit"
-        type="primary"
-        @click="edit"
+      <el-button class="people-submit" type="primary" @click="edit"
         >修改</el-button
       >
       <el-divider content-position="right"></el-divider>
@@ -16,14 +13,12 @@
         ref="form"
         :model="form"
         :rules="peopleRules"
-        label-width="120px"
+        label-width="140px"
       >
         <el-row>
           <el-col :span="12">
             <el-form-item label="门卡类型：" prop="accessTypeIds">
-              <el-checkbox-group
-                v-model="form.accessTypeIds"
-              >
+              <el-checkbox-group v-model="form.accessTypeIds">
                 <el-checkbox
                   v-for="(item, index) in dicLists.accessTypeEnum"
                   :label="item.type"
@@ -199,7 +194,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="手机号：" prop="mobile">
+            <el-form-item label="手机号：（生成小程序账号）" prop="mobile">
               <el-input v-model="form.mobile" placeholder="请输入手机号" />
             </el-form-item>
           </el-col>
@@ -261,15 +256,19 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="人脸对比状态：" prop="faceAuthStatus" label-width="140px">
-              <el-radio-group v-model="form.faceAuthStatus">
-                    <el-radio
-                      v-for="(item, index) in dicLists.faceComparisoneEnum"
-                      :label="item.type"
-                      :key="index"
-                      >{{ item.value }}</el-radio
-                    >
-                  </el-radio-group>
+            <el-form-item
+              label="人脸开通状态："
+              prop="faceAuthStatus"
+            >
+              <el-select v-model="form.faceAuthStatus" placeholder="请选择">
+                <el-option
+                  v-for="item in dicLists.faceComparisoneEnum"
+                  :key="item.type"
+                  :label="item.value"
+                  :value="item.type"
+                >
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -407,10 +406,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col
-            v-if="placeForm.isLongTerm == '0'"
-            :span="12"
-          >
+          <el-col v-if="placeForm.isLongTerm == '0'" :span="12">
             <el-form-item
               label="居住证件有效期："
               prop="certificateExpireTime"
@@ -425,7 +421,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col  v-else :span="12">
+          <el-col v-else :span="12">
             <el-form-item label="居住证件有效期：" prop="" label-width="140px">
               <el-date-picker
                 v-model="placeForm.certificateExpireTime"
@@ -480,7 +476,7 @@ export default {
     let that = this;
     return {
       //上一级传过来的usercode
-      editPeople:{},
+      editPeople: {},
       dialogImageUrl: "",
       dialogVisible: false,
       faceFileImg: [],
@@ -507,7 +503,7 @@ export default {
         value: "code",
         label: "name",
         lazy: true,
-        lazyLoad:(node, resolve) => {
+        lazyLoad: (node, resolve) => {
           if (node.data) {
             node.add = "";
           }
@@ -521,7 +517,7 @@ export default {
           } else if (level == 3) {
             node.add = that.build + "," + that.unit + "," + node.value;
           }
-          console.log(level,node.add)
+          console.log(level, node.add);
           that.$request
             .houseListAll({
               type: level,
@@ -648,7 +644,7 @@ export default {
         ],
         certificateCode: [
           { required: true, message: "证件编码不能为空", trigger: "change" },
-           this.$rules.enNum(undefined, "change"),
+          this.$rules.enNum(undefined, "change"),
         ],
         nationId: [
           { required: true, message: "名族不能为空", trigger: "change" },
@@ -696,105 +692,104 @@ export default {
     });
   },
   mounted() {
-     if (this.$route.params.code) {
+    if (this.$route.params.code) {
       localStorage.setItem("editPeople", JSON.stringify(this.$route.params));
       this.editPeople = this.$route.params;
-      console.log(this.editPeople)
+      console.log(this.editPeople);
     } else {
       this.editPeople = JSON.parse(localStorage.getItem("editPeople"));
     }
     let that = this;
     //请求房屋信息
-    this.$request.userHouseFind(this.editPeople.id).then(res =>{
+    this.$request
+      .userHouseFind(this.editPeople.id ? this.editPeople.id : "")
+      .then((res) => {
         if (res.data.status === 200) {
-               this.liveFileImg = [];
-              this.liveUploadImgList = [];
-              if (res.data.data.certificateImageCodes) {
-                const codeList = res.data.data.certificateImageCodes.split(",");
-                const urlList =
-                  res.data.data.certificateImageCodesUrl.split(",");
-                for (var i = 0; i < codeList.length; i++) {
-                  that.liveUploadImgList.push({
-                    code: codeList[i],
-                    url: urlList[i],
-                  });
-                  this.liveFileImg.push({
-                    uid: codeList[i],
-                    url: urlList[i],
-                  });
-                }
-              }
-              let arr = [];
-              if(res.data.data.certificateStartTime){
-                arr.push(
-                res.data.data.certificateStartTime,
-                res.data.data.certificateExpireTime
-              );
-              res.data.data.certificateExpireTime = arr;
-              }
-              res.data.data.buildingCode =
-                res.data.data.buildingCode.split("-");
-              this.address =
-                res.data.data.buildingCode[0] +
-                "幢/" +
-                res.data.data.buildingCode[1] +
-                "单元/" +
-                res.data.data.buildingCode[2] +
-                "层/" +
-                res.data.data.buildingCode[3] +
-                "室";
-              this.placeForm = res.data.data;
-            } else {
-              this.$message.error(res.data.msg);
+          this.liveFileImg = [];
+          this.liveUploadImgList = [];
+          if (res.data.data.certificateImageCodes) {
+            const codeList = res.data.data.certificateImageCodes.split(",");
+            const urlList = res.data.data.certificateImageCodesUrl.split(",");
+            for (var i = 0; i < codeList.length; i++) {
+              that.liveUploadImgList.push({
+                code: codeList[i],
+                url: urlList[i],
+              });
+              this.liveFileImg.push({
+                uid: codeList[i],
+                url: urlList[i],
+              });
             }
-    })
+          }
+          let arr = [];
+          if (res.data.data.certificateStartTime) {
+            arr.push(
+              res.data.data.certificateStartTime,
+              res.data.data.certificateExpireTime
+            );
+            res.data.data.certificateExpireTime = arr;
+          }
+          res.data.data.buildingCode = res.data.data.buildingCode.split("-");
+          this.address =
+            res.data.data.buildingCode[0] +
+            "幢/" +
+            res.data.data.buildingCode[1] +
+            "单元/" +
+            res.data.data.buildingCode[2] +
+            "层/" +
+            res.data.data.buildingCode[3] +
+            "室";
+          this.placeForm = res.data.data;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     //请求住户信息
-    this.$request.peopleFind(this.editPeople.code).then(res =>{
-        if (res.data.status === 200) {
-              this.faceFileImg = [];
-              this.faceUploadImgList = [];
-              this.infoFileImg = [];
-              this.infoUploadImgList = [];
-              if (res.data.data.faceImageCode) {
-                this.faceFileImg.push({
-                  uid: 1,
-                  url: res.data.data.faceImageCodeUrl,
-                });
-                this.faceUploadImgList.push({
-                  code: res.data.data.faceImageCode,
-                  url: res.data.data.faceImageCodeUrl,
-                });
-              }
-              if (res.data.data.certificateImageCodes) {
-                const codeList = res.data.data.certificateImageCodes.split(",");
-                const urlList =
-                  res.data.data.certificateImageCodesUrl.split(",");
-                for (var i = 0; i < codeList.length; i++) {
-                  this.infoFileImg.push({
-                    uid: codeList[i],
-                    url:urlList[i],
-                  });
-                  that.infoUploadImgList.push({
-                    code: codeList[i],
-                    url: urlList[i],
-                  });
-                }
-              }
-             if(res.data.data.accessTypeIds) {
-                var arr = res.data.data.accessTypeIds.split(",");
-              res.data.data.accessTypeIds = arr.map(Number);
-             }else{
-               res.data.data.accessTypeIds = [];
-             }
-             if(res.data.data.areaCode) {
-               res.data.data.areaCode = res.data.data.areaCode.split(",");
-             }
-              
-              this.form = res.data.data;
-            } else {
-              this.$message.error(res.data.msg);
-            }
-    })
+    this.$request.peopleFind(this.editPeople.code).then((res) => {
+      if (res.data.status === 200) {
+        this.faceFileImg = [];
+        this.faceUploadImgList = [];
+        this.infoFileImg = [];
+        this.infoUploadImgList = [];
+        if (res.data.data.faceImageCode) {
+          this.faceFileImg.push({
+            uid: 1,
+            url: res.data.data.faceImageCodeUrl,
+          });
+          this.faceUploadImgList.push({
+            code: res.data.data.faceImageCode,
+            url: res.data.data.faceImageCodeUrl,
+          });
+        }
+        if (res.data.data.certificateImageCodes) {
+          const codeList = res.data.data.certificateImageCodes.split(",");
+          const urlList = res.data.data.certificateImageCodesUrl.split(",");
+          for (var i = 0; i < codeList.length; i++) {
+            this.infoFileImg.push({
+              uid: codeList[i],
+              url: urlList[i],
+            });
+            that.infoUploadImgList.push({
+              code: codeList[i],
+              url: urlList[i],
+            });
+          }
+        }
+        if (res.data.data.accessTypeIds) {
+          var arr = res.data.data.accessTypeIds.split(",");
+          res.data.data.accessTypeIds = arr.map(Number);
+        } else {
+          res.data.data.accessTypeIds = [];
+        }
+        if (res.data.data.areaCode) {
+          res.data.data.areaCode = res.data.data.areaCode.split(",");
+        }
+
+        this.form = res.data.data;
+      } else {
+        this.$message.error(res.data.msg);
+      }
+    });
   },
   methods: {
     // 删除上传图片
@@ -884,7 +879,7 @@ export default {
         router: this.$router,
       });
     },
-    
+
     // 基本信息修改的提交
     edit() {
       let that = this;
@@ -928,7 +923,7 @@ export default {
                 for (var i = 0; i < codeList.length; i++) {
                   this.infoFileImg.push({
                     uid: codeList[i],
-                    url:urlList[i],
+                    url: urlList[i],
                   });
                   that.infoUploadImgList.push({
                     code: codeList[i],
@@ -977,11 +972,11 @@ export default {
             }
             this.placeForm.certificateImageCodes = str.toString();
           }
-          console.log(this.placeForm,'submit')
+          console.log(this.placeForm, "submit");
           this.$request.createOrUpdate(this.placeForm).then((res) => {
             if (res.data.status === 200) {
               this.msgSuccess("提交成功");
-               this.liveFileImg = [];
+              this.liveFileImg = [];
               this.liveUploadImgList = [];
               if (res.data.data.certificateImageCodes) {
                 const codeList = res.data.data.certificateImageCodes.split(",");

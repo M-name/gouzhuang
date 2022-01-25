@@ -20,7 +20,7 @@
         ref="form"
         :model="form"
         :rules="peopleRules"
-        label-width="120px"
+        label-width="140px"
       >
         <el-row>
           <el-col :span="12">
@@ -266,15 +266,16 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="人脸对比状态：" prop="faceAuthStatus" label-width="140px">
-              <el-radio-group v-model="form.faceAuthStatus">
-                    <el-radio
-                      v-for="(item, index) in dicLists.faceComparisoneEnum"
-                      :label="item.type"
-                      :key="index"
-                      >{{ item.value }}</el-radio
-                    >
-                  </el-radio-group>
+            <el-form-item label="人脸开通状态：" prop="faceAuthStatus">
+              <el-select v-model="form.faceAuthStatus" placeholder="请选择">
+                <el-option
+                  v-for="item in dicLists.faceComparisoneEnum"
+                  :key="item.type"
+                  :label="item.value"
+                  :value="item.type"
+                >
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -319,7 +320,7 @@
           </el-col>
         </el-row>
       </el-form>
-      <span class="title">居住信息</span>
+      <!-- <span class="title">居住信息</span>
       <el-button class="people-submit" type="primary" @click="liveSubmitForm"
         >保存</el-button
       >
@@ -456,12 +457,12 @@
             <i slot="default" class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
-      </el-form>
-      <span class="title">租客登记处理</span>
+      </el-form> -->
+      <!-- <span class="title">租客登记处理</span>
       <div style="display: inline-block; float: right; margin-bottom: 50px">
         <el-button type="danger" @click="disposeFinish(2)">取消处理</el-button>
         <el-button type="primary" @click="disposeFinish(1)">处理完成</el-button>
-      </div>
+      </div> -->
       <div class="dialog-footer"></div>
     </div>
     <el-dialog width="600px" :visible.sync="dialogVisible">
@@ -653,7 +654,7 @@ export default {
         ],
         certificateCode: [
           { required: true, message: "证件编码不能为空", trigger: "change" },
-           this.$rules.enNum(undefined, "change"),
+          this.$rules.enNum(undefined, "change"),
         ],
         nationId: [
           { required: true, message: "名族不能为空", trigger: "change" },
@@ -675,8 +676,6 @@ export default {
           this.$rules.mobile("请输入正确手机号", "change"),
         ],
         mobile: { required: false, validator: isPhone, trigger: "blur" },
-        
-        
       },
     };
   },
@@ -718,7 +717,10 @@ export default {
         this.infoUploadImgList = [];
         this.liveFileImg = [];
         this.liveUploadImgList = [];
-        if (res.data.data.certificateImageCodes && res.data.data.certificateImageCodesUrl) {
+        if (
+          res.data.data.certificateImageCodes &&
+          res.data.data.certificateImageCodesUrl
+        ) {
           const codeLists = res.data.data.certificateImageCodes.split(",");
           const urlLists = res.data.data.certificateImageCodesUrl.split(",");
           for (var i = 0; i < codeLists.length; i++) {
@@ -740,19 +742,18 @@ export default {
           );
           res.data.data.certificateExpireTime = arr;
         }
-        if(res.data.data.buildingCode) {
+        if (res.data.data.buildingCode) {
           res.data.data.buildingCode = res.data.data.buildingCode.split("-");
-        this.address =
-          res.data.data.buildingCode[0] +
-          "幢/" +
-          res.data.data.buildingCode[1] +
-          "单元/" +
-          res.data.data.buildingCode[2] +
-          "层/" +
-          res.data.data.buildingCode[3] +
-          "室";
+          this.address =
+            res.data.data.buildingCode[0] +
+            "幢/" +
+            res.data.data.buildingCode[1] +
+            "单元/" +
+            res.data.data.buildingCode[2] +
+            "层/" +
+            res.data.data.buildingCode[3] +
+            "室";
         }
-        
 
         if (res.data.data.faceImageCode) {
           this.faceFileImg.push({
@@ -797,20 +798,25 @@ export default {
     // 修改租客处理状态
     disposeFinish(num) {
       let that = this;
-        this.$confirm("是否确认"+(num === 2?"取消处理":"处理完成")+"该记录?", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(function () {
-          that.$request.detailsProcessStatus({id:that.tenatPeople.id,processStatus:num}).then((res) => {
+      this.$confirm(
+        "是否确认" + (num === 2 ? "取消处理" : "处理完成") + "该记录?",
+        "警告",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).then(function () {
+        that.$request
+          .detailsProcessStatus({ id: that.tenatPeople.id, processStatus: num })
+          .then((res) => {
             if (res.data.status == 200) {
               that.$message.success("提交成功");
             } else {
               that.$message.error(res.data.msg);
             }
           });
-        })
+      });
     },
     // 删除上传图片
     getLocalImgs(file, fileList) {

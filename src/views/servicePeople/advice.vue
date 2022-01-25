@@ -39,8 +39,8 @@
         <el-form-item label="图片:" prop="suggestImageCodes">
           <el-image
             style="width: 100px; height: 100px"
-            :src="form.suggestImageCodes"
-            :preview-src-list="[form.suggestImageCodes]"
+            :src="form.suggestImageCodesStr"
+            :preview-src-list="[form.suggestImageCodesStr]"
           >
           </el-image>
           <!-- <img style="width: 100px" :src="form.suggestImageCodes" alt="" /> -->
@@ -50,12 +50,13 @@
         <el-form-item label="问题描述" prop="suggestConten">
           <span>{{ form.suggestContent }}</span>
         </el-form-item>
-        <el-form-item v-if="!isCheak" label="处理描述" prop="feedbackContent">
+        <el-form-item  label="处理描述" prop="feedbackContent">
           <el-input
             type="textarea"
             autosize
+            :disabled="isCheak"
             v-model="form.feedbackContent"
-            placeholder="请输入处理描述"
+            :placeholder="isCheak?form.suggesDetail.feedbackContent:'请输入处理描述'"
           />
         </el-form-item>
       </el-form>
@@ -97,11 +98,17 @@ export default {
           label: "查看",
           icon: "el-icon-tickets",
           handler: (row) => this.handleEdit(row),
+          isShow: (row) => {
+            return row.suggestStatus != 0;
+          },
         },
         {
           label: "处理",
           icon: "iconfont icon-accept",
           handler: (row) => this.handleUpdate(row),
+          isShow: (row) => {
+            return row.suggestStatus == 0;
+          },
         },
       ],
       // 公用搜索组件内容
@@ -138,7 +145,7 @@ export default {
         },
         { prop: "suggestTitle", label: "问题" },
         { prop: "createTime", label: "提交日期" },
-        { prop: "suggestImageCodes", label: "图片", type: "image" },
+        { prop: "suggestImageCodesStr", label: "图片", type: "image" },
         {
           prop: "suggestStatus",
           label: "处理状态 ",
@@ -244,11 +251,12 @@ export default {
     },
     // 查看
     handleEdit(row) {
-      this.reset();
+      // this.reset();
       const id = row.suggestCode;
       this.$request.suggestFindOne(id).then((res) => {
         if (res.data.status == 200) {
-          this.form = { feedbackContent: undefined, ...res.data.data };
+          this.form =res.data.data;
+          console.log(this.form.suggesDetail.feedbackContent)
           this.open = true;
           this.title = "查看";
           this.isCheak = true;
@@ -293,7 +301,7 @@ export default {
     // 修改取消
     cancel() {
       this.open = false;
-      this.reset();
+      // this.reset();
       this.$refs.form.resetFields();
     },
   },

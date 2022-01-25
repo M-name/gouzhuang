@@ -30,7 +30,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="处理状态:">
-            <span>{{ form.repaireStatu }}</span>
+            <span>{{ selectDictLabel(roleStatus, form.repaireStatus) }}</span>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -45,14 +45,14 @@
       </el-form-item>
 
       <el-form-item v-if="form.repaireImageList" label-width="0px">
-         <el-image
-            v-for="item in form.repaireImageList"
-            style="width: 100px; height: 100px; margin-right: 10px"
-            :key="item"
-            :src="item"
-            :preview-src-list="form.repaireImageList"
-          >
-          </el-image>
+        <el-image
+          v-for="item in form.repaireImageList"
+          style="width: 100px; height: 100px; margin-right: 10px"
+          :key="item"
+          :src="item"
+          :preview-src-list="form.repaireImageList"
+        >
+        </el-image>
       </el-form-item>
     </el-form>
     <div style="margin-top: 30px">
@@ -111,49 +111,64 @@
         </el-tab-pane>
         <el-tab-pane v-if="type == 2" label="报修评价" name="third">
           <el-form v-if="form.repaireAppraise">
-             <el-form-item label="评价时间：">
-             <p>{{form.repaireAppraise.appraiseTime}}</p>
+            <el-form-item label="评价时间：">
+              <p>{{ form.repaireAppraise.appraiseTime }}</p>
             </el-form-item>
             <el-form-item label="报修整体评价：">
-              <div style="display:inline-block">
-                <el-rate v-model="form.repaireAppraise.appraiseScore" disabled  text-color="#ff9900">
-              </el-rate>
+              <div style="display: inline-block">
+                <el-rate
+                  v-model="form.repaireAppraise.appraiseScore"
+                  disabled
+                  text-color="#ff9900"
+                >
+                </el-rate>
               </div>
             </el-form-item>
             <el-form-item label="报修服务评价：">
-              <div style="display:inline-block">
-                <el-rate v-model="form.repaireAppraise.timelyScore" disabled  text-color="#ff9900">
-              </el-rate>
+              <div style="display: inline-block">
+                <el-rate
+                  v-model="form.repaireAppraise.timelyScore"
+                  disabled
+                  text-color="#ff9900"
+                >
+                </el-rate>
               </div>
             </el-form-item>
             <el-form-item label="服务态度：">
-              <div style="display:inline-block">
-                <el-rate v-model="form.repaireAppraise.attitudeScore" disabled  text-color="#ff9900">
-              </el-rate>
+              <div style="display: inline-block">
+                <el-rate
+                  v-model="form.repaireAppraise.attitudeScore"
+                  disabled
+                  text-color="#ff9900"
+                >
+                </el-rate>
               </div>
             </el-form-item>
             <el-form-item label="处理效果：">
-              <div style="display:inline-block">
-                <el-rate v-model="form.repaireAppraise.effectScore" disabled  text-color="#ff9900">
-              </el-rate>
+              <div style="display: inline-block">
+                <el-rate
+                  v-model="form.repaireAppraise.effectScore"
+                  disabled
+                  text-color="#ff9900"
+                >
+                </el-rate>
               </div>
             </el-form-item>
             <el-form-item label="评价详情：">
-             <p>{{form.repaireAppraise.appariseDesc}}</p>
+              <p>{{ form.repaireAppraise.appariseDesc }}</p>
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane v-if="type == 2" label="回访评价" name="fourth"
-          >
+        <el-tab-pane v-if="type == 2" label="回访评价" name="fourth">
           <el-form v-if="form.repaireRevisit">
-             <el-form-item label="回访时间：">
-             <p>{{form.repaireRevisit.revisitTime}}</p>
+            <el-form-item label="回访时间：">
+              <p>{{ form.repaireRevisit.revisitTime }}</p>
             </el-form-item>
             <el-form-item label="回访评价：">
-               <p>{{form.repaireRevisit.revisitContent}}</p>
+              <p>{{ form.repaireRevisit.revisitContent }}</p>
             </el-form-item>
             <el-form-item label="回访人：">
-               <p>{{form.repaireRevisit.createBy}}</p>
+              <p>{{ form.repaireRevisit.createBy }}</p>
             </el-form-item>
           </el-form></el-tab-pane
         >
@@ -187,7 +202,23 @@ export default {
       activeName: "first",
       // 父级code
       parentCode: undefined,
+      // 字典值列表
+      roleStatus: [],
     };
+  },
+  created() {
+    this.$request.findRepairAlleuems().then((res) => {
+      let role = [];
+      let lists = res.data.data;
+      this.dictLists = res.data.data;
+      for (var i = 0; i < lists.repaireProgressEnum.length; i++) {
+        let arr = {};
+        arr.value = lists.repaireProgressEnum[i].type;
+        arr.label = lists.repaireProgressEnum[i].value;
+        role.push(arr);
+      }
+      this.roleStatus = role;
+    });
   },
   mounted() {
     // 父级传递的参数处理
@@ -242,6 +273,17 @@ export default {
         fullPath: this.$route.fullPath,
         router: this.$router,
       });
+    },
+    // 回显数据字典
+    selectDictLabel(datas, value) {
+      var actions = [];
+      Object.keys(datas).map((key) => {
+        if (datas[key].value == "" + value) {
+          actions.push(datas[key].label);
+          return false;
+        }
+      });
+      return actions.join("");
     },
     // 提交
     submit(tabItem) {

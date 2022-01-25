@@ -149,6 +149,14 @@ if (JSON.parse(localStorage.getItem("userInfo"))) {
       menuCode: 'M2',
       children: [
         {
+          path: "/tenantRecord",
+          iconCls: "el-icon-tickets", // 实口档案管理
+          name: routeName.tenantRecord,
+          menuCode: 'M2-6',
+          component: TenantRecord,
+          children: []
+        },
+        {
           path: "/populace",
           iconCls: "el-icon-tickets", // 一人一档
           name: routeName.builtInIcon,
@@ -186,14 +194,6 @@ if (JSON.parse(localStorage.getItem("userInfo"))) {
           name: routeName.visitorEcord,
           menuCode: 'M2-3',
           component: VisitorEcord,
-          children: []
-        },
-        {
-          path: "/tenantRecord",
-          iconCls: "el-icon-tickets", // 租客信息管理
-          name: routeName.tenantRecord,
-          menuCode: 'M2-6',
-          component: TenantRecord,
           children: []
         },
         {

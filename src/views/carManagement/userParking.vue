@@ -695,21 +695,21 @@ export default {
         userName: [
           { required: true, message: "姓名不能为空", trigger: "change" },
         ],
-        certificateTypeId: [
-          { required: true, message: "证件类型不能为空", trigger: "change" },
-        ],
-        certificateNo: [
-          { required: true, message: "证件号码不能为空", trigger: "change" },
-        ],
-        tenantAddr: [
-          { required: true, message: "地址不能为空", trigger: "change" },
-        ],
-        rentBeginTime: [
-          { required: true, message: "起始时间不能为空", trigger: "change" },
-        ],
-        rentEndTime: [
-          { required: true, message: "截止时间不能为空", trigger: "change" },
-        ],
+        // certificateTypeId: [
+        //   { required: true, message: "证件类型不能为空", trigger: "change" },
+        // ],
+        // certificateNo: [
+        //   { required: true, message: "证件号码不能为空", trigger: "change" },
+        // ],
+        // tenantAddr: [
+        //   { required: true, message: "地址不能为空", trigger: "change" },
+        // ],
+        // rentBeginTime: [
+        //   { required: true, message: "起始时间不能为空", trigger: "change" },
+        // ],
+        // rentEndTime: [
+        //   { required: true, message: "截止时间不能为空", trigger: "change" },
+        // ],
       },
       ownerShipRules: {
         currTypeId: [

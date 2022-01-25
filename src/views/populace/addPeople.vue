@@ -20,7 +20,7 @@
         ref="form"
         :model="form"
         :rules="peopleRules"
-        label-width="120px"
+        label-width="140px"
       >
         <el-row>
           <el-col :span="12">
@@ -266,15 +266,20 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="人脸对比状态：" prop="faceAuthStatus" label-width="140px">
-              <el-radio-group v-model="form.faceAuthStatus">
-                    <el-radio
-                      v-for="(item, index) in dicLists.faceComparisoneEnum"
-                      :label="item.type"
-                      :key="index"
-                      >{{ item.value }}</el-radio
-                    >
-                  </el-radio-group>
+            <el-form-item
+              label="人脸开通状态："
+              prop="faceAuthStatus"
+             
+            >
+              <el-select v-model="form.faceAuthStatus" placeholder="请选择">
+                <el-option
+                  v-for="item in dicLists.faceComparisoneEnum"
+                  :key="item.type"
+                  :label="item.value"
+                  :value="item.type"
+                >
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -548,9 +553,9 @@ export default {
       activeName: "first",
       // 基本信息表单参数
       form: {
-        accessTypeIds: [],
-        isOverseas: undefined,
-        userSex: undefined,
+        accessTypeIds: [0],
+        isOverseas: 0,
+        userSex: 2,
         cardCode: undefined,
         countryId: undefined,
         userName: undefined,
@@ -560,9 +565,9 @@ export default {
         faceAuthStatus: 0,
         certificateCode: undefined,
         nationId: undefined,
-        politicsStatus: undefined,
+        politicsStatus: 29,
         areaCode: undefined,
-        maritalStatus: undefined,
+        maritalStatus: 1,
         areaAddr: undefined,
         mobile: undefined,
         eduLevelId: undefined,
@@ -575,14 +580,14 @@ export default {
       // 居住信息表单参数
       placeForm: {
         buildingCode: undefined,
-        liveTypeId: undefined,
+        liveTypeId: 2,
         liveReasonId: undefined,
         liveStatus: undefined,
         liveCertificateId: undefined,
         certificateImageCodes: undefined,
         certificateStartTime: undefined,
         certificateExpireTime: undefined,
-        isLongTerm: 0,
+        isLongTerm: 1,
         createBy: JSON.parse(localStorage.getItem("userInfo")).userCode,
       },
       // 新闻类型字典值
@@ -647,7 +652,7 @@ export default {
         ],
         certificateCode: [
           { required: true, message: "证件编码不能为空", trigger: "change" },
-           this.$rules.enNum(undefined, "change"),
+          this.$rules.enNum(undefined, "change"),
         ],
         nationId: [
           { required: true, message: "名族不能为空", trigger: "change" },
@@ -882,7 +887,7 @@ export default {
           this.form.accessTypeIds = this.form.accessTypeIds.toString();
           this.form.areaCode = this.form.areaCode.toString();
           this.$request.userUpdate(this.form).then((res) => {
-           if (res.data.status === 200) {
+            if (res.data.status === 200) {
               this.faceFileImg = [];
               this.faceUploadImgList = [];
               this.infoFileImg = [];

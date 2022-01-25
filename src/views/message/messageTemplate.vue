@@ -524,6 +524,7 @@ export default {
     // 新增的提交
     submitForm() {
       let list = [];
+      console.log(this.form)
       try {
         this.checkedKeys.forEach((item, index, array) => {
           if (item == 0) {
@@ -585,6 +586,7 @@ export default {
             that.$message.warning("请选择需要提交的模板");
             return;
           }
+          this.form.msgTypeCode = this.form.msgTypeCode[1];
           if (this.form.createTime) {
             this.$request.msgTemplateUpdate(this.form).then((res) => {
               if (res.data.status === 200) {
@@ -597,7 +599,6 @@ export default {
               }
             });
           } else {
-            this.form.msgTypeCode = this.form.msgTypeCode[1];
             this.$request.msgTemplateCreate(this.form).then((res) => {
               if (res.data.status === 200) {
                 this.msgSuccess("新增成功");

@@ -61,6 +61,10 @@ export default {
   repairUpdateRepair(data) {
     return axios.post("/repair/updateRepair", data)
   },
+  // 退回工单
+  cancelRepair(data) {
+    return axios.post("/repair/cancel", data)
+  },
   // 创建报事
   repairAdd(data) {
     return axios.post("/repair/add", data)

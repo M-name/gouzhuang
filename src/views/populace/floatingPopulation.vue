@@ -9,6 +9,19 @@
       />
     </div>
     <div class="operation">
+      <div class="button">
+        <el-row :gutter="10" class="operations-row">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              icon="el-icon-download"
+              size="mini"
+              @click="exportExcel"
+              >导出Excel</el-button
+            >
+          </el-col>
+        </el-row>
+      </div>
       <CommonTable
         :total="total"
         :loading="loading"
@@ -175,7 +188,7 @@ export default {
         userName: undefined,
         certificateCode: undefined,
         mobile: undefined,
-        contactMethod:undefined,
+        contactMethod: undefined,
         liveStatus: undefined,
       },
     };
@@ -280,7 +293,7 @@ export default {
         userName: undefined,
         certificateCode: undefined,
         mobile: undefined,
-        contactMethod:undefined,
+        contactMethod: undefined,
         liveStatus: undefined,
       };
       this.handleQuery();
@@ -347,6 +360,10 @@ export default {
           this.$message.error(res.data.msg);
         }
       });
+    },
+    // 导出
+    exportExcel() {
+      this.$request.downloadldExcel();
     },
   },
 };

@@ -364,6 +364,7 @@ export default {
         { prop: "identityNo", label: "车主证件编码" },
         { prop: "carOwnerTypeIdStr", label: "车主类型" },
         { prop: "parkingCode", label: "车位编码" },
+        { prop: "parkName", label: "车位所属人" },
         { prop: "entryStatusStr", label: "录入状态" },
         { prop: "printStatusStr", label: "打印状态" },
         { prop: "createTime", label: "登记时间" },
@@ -389,24 +390,24 @@ export default {
         plateNo: [
           { required: true, message: "车牌号不能为空", trigger: "change" },
         ],
-        carColor: [
-          { required: true, message: "车身颜色不能为空", trigger: "change" },
-        ],
-        carModel: [
-          { required: true, message: "车辆类型不能为空", trigger: "change" },
-        ],
-        brandModel: [
-          { required: true, message: "品牌型号不能为空", trigger: "change" },
-        ],
+        // carColor: [
+        //   { required: true, message: "车身颜色不能为空", trigger: "change" },
+        // ],
+        // carModel: [
+        //   { required: true, message: "车辆类型不能为空", trigger: "change" },
+        // ],
+        // brandModel: [
+        //   { required: true, message: "品牌型号不能为空", trigger: "change" },
+        // ],
         parkingCode: [
           { required: true, message: "车位编码不能为空", trigger: "change" },
         ],
-        certificateTypeId: [
-          { required: true, message: "证件类型不能为空", trigger: "change" },
-        ],
-        identityNo: [
-          { required: true, message: "证件编码不能为空", trigger: "change" },
-        ],
+        // certificateTypeId: [
+        //   { required: true, message: "证件类型不能为空", trigger: "change" },
+        // ],
+        // identityNo: [
+        //   { required: true, message: "证件编码不能为空", trigger: "change" },
+        // ],
       },
       ids: [],
       dicList: [],

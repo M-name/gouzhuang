@@ -131,10 +131,12 @@ export default {
     }
     this.$request.findByIdNews(this.parentid).then((res) => {
       res.data.data.newsType = res.data.data.newsType.toString();
-      this.uploadImgList.push({
+      if(res.data.data.newsImagesCodes) {
+        this.uploadImgList.push({
         code: res.data.data.newsImagesCodes,
         url: res.data.data.newsImagesCodesValue,
       });
+      }
       if (res.data.data.newsImagesCodesValue) {
         this.fileImg.push({
           uid: 1,
@@ -174,6 +176,7 @@ export default {
           code: res.data.data.split(",")[0],
           url: res.data.data.split(",")[1],
         });
+        console.log(this.fileImg,'this.fileImg1')
       });
     },
     //显示图片
@@ -189,6 +192,13 @@ export default {
           this.uploadImgList.splice(index, 1);
         }
       });
+      console.log(this.fileImg,'this.fileImg2')
+      this.fileImg.forEach((item, index) => {
+        if (item.url == file.url) {
+          this.fileImg.splice(index, 1);
+        }
+      });
+      console.log(this.fileImg,'this.fileImg3')
     },
     // 取消按钮
     cancel(tabItem) {
@@ -216,7 +226,7 @@ export default {
           let str = [];
           for (var i = 0; i < this.uploadImgList.length; i++) {
             str.push(this.uploadImgList[i].code);
-            console.log(this.uploadImgList[i].code);
+            console.log(this.uploadImgList[i].code,'12112');
           }
           this.form.newsImagesCodes = str.toString();
           if (index == 0) {

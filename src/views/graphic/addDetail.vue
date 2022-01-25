@@ -156,6 +156,7 @@ export default {
       // 文件对象
       form.append("file", param.file);
       this.$request.upload(form).then((res) => {
+        console.log(res,'res----')
         this.form.newsImagesCodes = res.data.data.split(",")[0];
       });
     },
