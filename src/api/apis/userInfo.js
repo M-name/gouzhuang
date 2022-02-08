@@ -95,7 +95,7 @@ export default {
      },
      // 查询租客登记详情
      detailsFindRenter(params) {
-          return axios.get("/user/details/findRenter/" + params)
+          return axios.get("/user/details/find/" + params)
      },
      // 租客新增房屋档案
      buildingCreateRenter(params) {

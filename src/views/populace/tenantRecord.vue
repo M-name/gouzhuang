@@ -146,18 +146,18 @@ export default {
           type: "select",
           options: [],
         },
-        {
-          prop: "liveTypeId",
-          label: "住户类型",
-          type: "select",
-          options: [],
-        },
+        // {
+        //   prop: "liveTypeId",
+        //   label: "住户类型",
+        //   type: "select",
+        //   options: [],
+        // },
       ],
       //表格列
       column: [
         { prop: "userName", label: "用户姓名" },
         { prop: "certificateTypeIdStr", label: "证件类型" },
-        { prop: "liveTypeIdStr", label: "住户类型" },
+        // { prop: "liveTypeIdStr", label: "住户类型" },
         { prop: "certificateCode", label: "证件号码" },
         { prop: "userSexStr", label: "性别" },
         { prop: "contactMethod", label: "联系人电话" },
@@ -293,7 +293,7 @@ export default {
         name: "tenantDetail",
         params: {
           isOrNo: row.is,
-          id: row.id,
+          id: row.userCode,
         },
       });
     },
