@@ -721,7 +721,7 @@ export default {
           res.data.data.certificateImageCodes &&
           res.data.data.certificateImageCodesUrl
         ) {
-          const codeLists = res.data.data.certificateImageCodes.split(",");
+          const codeLists = res.data.data.certificateImageCodes;
           const urlLists = res.data.data.certificateImageCodesUrl.split(",");
           for (var i = 0; i < codeLists.length; i++) {
             this.liveUploadImgList.push({
@@ -785,8 +785,9 @@ export default {
         } else {
           res.data.data.accessTypeIds = [];
         }
-
+        if(res.data.data.areaCode)
         res.data.data.areaCode = res.data.data.areaCode.split(",");
+        else  res.data.data.areaCode = [];
         this.form = res.data.data;
         this.placeForm = res.data.data;
       } else {

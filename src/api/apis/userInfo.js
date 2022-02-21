@@ -17,6 +17,34 @@ export default {
      detailAll(params) {
           return axios.post("/user/details/all", params)
      },
+     // 导出表格
+     detailsDownload(params) {
+          axios
+               .post("/user/details/downloadExcel",
+                    params,
+                    { responseType: 'blob' }
+               )
+               .then(res => {
+                    var blob = new Blob([res.data], {
+                         type: 'text/csv'
+                    })
+                    // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                         window.navigator.msSaveOrOpenBlob(blob, res.fileName)
+                    } else {
+                         var downloadElement = document.createElement('a')
+                         var href = window.URL.createObjectURL(blob) // 创建下载的链接
+                         downloadElement.href = href
+                         // downloadElement.download = '一人一房一档表' // 下载后文件名
+                         downloadElement.setAttribute('download', '一人一房一档表' + '.csv')
+                         document.body.appendChild(downloadElement)
+                         downloadElement.click() // 点击下载
+                         document.body.removeChild(downloadElement) // 下载完成移除元素
+                         window.URL.revokeObjectURL(href) // 释放掉blob对象
+                    }
+               })
+          // return axios.get(downloadExcel, data, 'blob')
+     },
      // 新增用户档案
      userCreate(params) {
           return axios.post("/user/details/create", params)
@@ -31,7 +59,7 @@ export default {
      },
      // 查询某一个用户房屋档案
      userHouseFind(params) {
-          return axios.get("/user/building/find?id="+ params)
+          return axios.get("/user/building/find?id=" + params)
      },
      // 解除绑定
      buildingUnbind(params) {
@@ -43,7 +71,7 @@ export default {
      },
      // 业主、成员、租客信息
      buildingPeopleList(params) {
-          return axios.get("/user/building/peopleList", {params} )
+          return axios.get("/user/building/peopleList", { params })
      },
      // 查询某一个用户档案
      peopleFind(params) {
@@ -119,6 +147,6 @@ export default {
      },
      // 删除
      detailsDelete(params) {
-          return axios.delete("/user/details/delete?userCode="+params)
+          return axios.delete("/user/details/delete?userCode=" + params)
      },
 }

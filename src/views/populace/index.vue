@@ -20,16 +20,15 @@
               >新增</el-button
             >
           </el-col>
-          <!-- <el-col :span="1.5">
+          <el-col :span="1.5">
             <el-button
-              type="danger"
-              icon="el-icon-delete"
+              type="primary"
+              icon="el-icon-download"
               size="mini"
-              :disabled="single"
-              @click="handleDelete"
-              >删除</el-button
+              @click="handleExport"
+              >导出</el-button
             >
-          </el-col> -->
+          </el-col>
         </el-row>
       </div>
       <CommonTable
@@ -190,6 +189,11 @@ export default {
           type: "select",
           options: [],
         },
+        {
+          prop: "times",
+          label: "创建时间段",
+          type: "datePicker",
+        },
       ],
       //表格列
       column: [
@@ -201,6 +205,7 @@ export default {
         { prop: "userSexStr", label: "性别" },
         { prop: "contactMethod", label: "联系人电话" },
         { prop: "mobile", label: "电话" },
+        { prop: "createTime", label: "创建时间" },
         { prop: "faceAuthStatusStr", label: "人脸开通状态" },
         { prop: "liveStatusStr", label: "居住状态" },
       ],
@@ -222,6 +227,9 @@ export default {
         mobile: undefined,
         liveStatus: undefined,
         liveTypeId: undefined,
+        times: undefined,
+        endTime: undefined,
+        beginTime: undefined,
       },
     };
   },
@@ -294,6 +302,13 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.params.page = 1;
+      if (this.params.times) {
+        this.params.beginTime = this.params.times[0];
+        this.params.endTime = this.params.times[1];
+      } else {
+        this.params.beginTime = undefined;
+        this.params.endTime = undefined;
+      }
       this.getList();
     },
     /** 搜索重置按钮操作 */
@@ -309,6 +324,9 @@ export default {
         mobile: undefined,
         liveStatus: undefined,
         liveTypeId: undefined,
+        times: undefined,
+        endTime: undefined,
+        beginTime: undefined,
       };
       this.handleQuery();
     },
@@ -362,7 +380,10 @@ export default {
         }
       });
     },
-
+    // 导出
+    handleExport() {
+      this.$request.detailsDownload(this.params);
+    },
     // 解除绑定
     handleDelete(row) {
       let that = this;
