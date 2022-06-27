@@ -24,7 +24,7 @@ axios.interceptors.request.use(config => {
     config.headers['headerLoginType'] = 0;
     config.headers['headerUserToken'] = JSON.parse(localStorage.getItem("userInfo")).userUniqueToken;
     config.headers['headerUserCode'] = JSON.parse(localStorage.getItem("userInfo")).userCode;
-    config.headers['Access-Control-Allow-Origin'] = '*';
+    config.headers['Access-Control-Allow-Origin'] = 'http://gzjy-iot.weetsoft.com';
     
   }
   return config

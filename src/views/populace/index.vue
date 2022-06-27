@@ -46,6 +46,152 @@
     </div>
     <el-dialog
       :title="title"
+      :before-close="placeCancel"
+      :visible.sync="addOpen"
+      width="1000px"
+      append-to-body
+    >
+      <el-form
+        ref="placeForm"
+        :model="placeForm"
+        :rules="placeRules"
+        label-width="120px"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="居住地址：" prop="buildingCode">
+              <el-cascader
+                v-model="placeForm.buildingCode"
+                :props="codes"
+              ></el-cascader>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="居住类型：" prop="liveTypeId">
+              <el-radio-group v-model="placeForm.liveTypeId">
+                <el-radio
+                  v-for="(item, index) in dicLists.liveTypeEnum"
+                  :label="item.type"
+                  :key="index"
+                  >{{ item.value }}</el-radio
+                >
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="居住事由：" prop="liveReasonId">
+              <el-select v-model="placeForm.liveReasonId" placeholder="请选择">
+                <el-option
+                  v-for="item in dicLists.reasonEnum"
+                  :key="item.type"
+                  :label="item.value"
+                  :value="item.type"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="居住状态：" prop="liveStatus">
+              <el-select v-model="placeForm.liveStatus" placeholder="请选择">
+                <el-option
+                  v-for="item in dicLists.liveStatusEnum"
+                  :key="item.type"
+                  :label="item.value"
+                  :value="item.type"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="居住证件：" prop="liveCertificateId">
+              <el-select
+                v-model="placeForm.liveCertificateId"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in dicLists.liveCertificateEnum"
+                  :key="item.type"
+                  :label="item.value"
+                  :value="item.type"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item
+              label="居住证件是否长期有效："
+              prop="isLongTerm"
+              label-width="200px"
+            >
+              <el-radio-group v-model="placeForm.isLongTerm">
+                <el-radio
+                  v-for="(item, index) in dicLists.yesOrNoEnum"
+                  :label="item.type"
+                  :key="index"
+                  >{{ item.value }}</el-radio
+                >
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="placeForm.isLongTerm == 0" :span="12">
+            <el-form-item
+              label="居住证件有效期："
+              prop="certificateExpireTime"
+              label-width="140px"
+            >
+              <el-date-picker
+                v-model="placeForm.certificateExpireTime"
+                type="daterange"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col v-else :span="12">
+            <el-form-item label="居住证件有效期：" prop="" label-width="140px">
+              <el-date-picker
+                v-model="placeForm.certificateExpireTime"
+                type="daterange"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="居住证件照片：" prop="certificateImageCodes">
+          <el-upload
+            ref="upload"
+            :limit="5"
+            action="uploadUrl"
+            list-type="picture-card"
+            :http-request="liveUploadSectionFile"
+            :headers="header"
+            :with-credentials="true"
+            accept="image/png, image/gif, image/jpg, image/jpeg"
+            :on-preview="getLocalImg"
+            :on-remove="liveGetLocalImgs"
+            :file-list="liveFileImg"
+          >
+            <i slot="default" class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="placeSubmitForm">确 定</el-button>
+        <el-button @click="placeCancel">取 消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :title="title"
       :before-close="cancel"
       :visible.sync="open"
       width="700px"
@@ -107,12 +253,16 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog width="600px" :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
+    </el-dialog>
   </div>
 </template>
 <script>
 export default {
   name: "userControl",
   data() {
+    let that = this;
     return {
       // 弹出层标题
       title: "",
@@ -120,11 +270,85 @@ export default {
       loading: false,
       // 非单个禁用
       single: true,
+      dialogImageUrl: "",
+      dialogVisible: false,
+      liveUploadImgList: [],
+      liveFileImg: [],
+      header: {
+        "Content-Type": "multipart/form-data",
+      },
+      // 房屋信息级联配置
+      codes: {
+        value: "code",
+        label: "name",
+        lazy: true,
+        lazyLoad(node, resolve) {
+          if (node.data) {
+            node.add = "";
+          }
+          const { level } = node; // 获取当前node对象中的level属性
+          if (level == 1) {
+            that.build = node.value;
+            node.add = node.value;
+          } else if (level == 2) {
+            that.unit = node.value;
+            node.add = that.build + "," + node.value;
+          } else if (level == 3) {
+            node.add = that.build + "," + that.unit + "," + node.value;
+          }
+          that.$request
+            .houseListAll({
+              type: level,
+              code: node.add,
+            })
+            .then((res) => {
+              if (res.data.status == 200) {
+                const nodes = res.data.data;
+                if (level > 1) {
+                  nodes.forEach((item) => {
+                    item.leaf = level >= 3; //判断是否为末尾节点，这个地方是0,1,2三级
+                  });
+                }
+                resolve(nodes);
+              } else {
+                that.$message.error(res.msg);
+              }
+            });
+        },
+      },
       // 表格参数
       tableOptions: {
         stripe: false, // 斑马纹
         highlightCurrentRow: true, // 是否支持当前行高亮显示
         multiSelect: false, //多选框
+      },
+      //居住信息校验
+      placeRules: {
+        buildingCode: [
+          { required: true, message: "居住地址不能为空", trigger: "change" },
+        ],
+        liveTypeId: [
+          { required: true, message: "居住类型不能为空", trigger: "change" },
+        ],
+        liveReasonId: [
+          { required: true, message: "居住事由不能为空", trigger: "change" },
+        ],
+        liveStatus: [
+          { required: true, message: "居住状态不能为空", trigger: "change" },
+        ],
+        liveCertificateId: [
+          { required: true, message: "居住证件不能为空", trigger: "change" },
+        ],
+        certificateExpireTime: [
+          { required: true, message: "证件有效期不能为空", trigger: "change" },
+        ],
+        isLongTerm: [
+          {
+            required: true,
+            message: "居住证件是否长期有效未选择",
+            trigger: "change",
+          },
+        ],
       },
       rules: {
         moveOutTime: [
@@ -134,15 +358,36 @@ export default {
           { required: true, message: "搬出原因不能为空", trigger: "change" },
         ],
       },
+      placeForm: {
+        buildingCode: undefined,
+        liveTypeId: 0,
+        liveReasonId: undefined,
+        liveStatus: undefined,
+        liveCertificateId: undefined,
+        certificateImageCodes: undefined,
+        certificateStartTime: undefined,
+        certificateExpireTime: undefined,
+        isLongTerm: 1,
+        createBy: JSON.parse(localStorage.getItem("userInfo")).userCode,
+      },
       dialogDate: {},
       // 是否显示弹出层
       open: false,
+      addOpen: false,
       //表格操作列内容
       tableOperations: [
         {
           label: "修改",
           icon: "el-icon-edit",
           handler: (row) => this.handleUpdate(row),
+        },
+        {
+          label: "绑定",
+          icon: "el-icon-circle-plus-outline",
+          handler: (row) => this.handleAdd(row),
+          // isShow: (row) => {
+          //   return row.liveTypeId == 0 || row.liveTypeId == 1;
+          // },
         },
         {
           label: "查看",
@@ -294,6 +539,35 @@ export default {
       });
       return actions.join("");
     },
+    liveGetLocalImgs(file, fileList) {
+      this.liveUploadImgList.forEach((item, index) => {
+        if (item.url == file.url) {
+          this.liveUploadImgList.splice(index, 1);
+        }
+      });
+      console.log(this.liveUploadImgList);
+    },
+    //显示图片
+    getLocalImg(event) {
+      let url = event.url;
+      this.dialogImageUrl = url;
+      this.dialogVisible = true;
+    },
+    liveUploadSectionFile(param) {
+      var form = new FormData();
+      // 文件对象
+      form.append("file", param.file);
+      this.$request.upload(form).then((res) => {
+        const url = res.data.data.split(",")[1];
+        const obj = { url };
+        this.liveFileImg.push(obj);
+        this.liveUploadImgList.push({
+          code: res.data.data.split(",")[0],
+          url: res.data.data.split(",")[1],
+        });
+        console.log(this.liveUploadImgList);
+      });
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map((item) => item.id);
@@ -343,6 +617,11 @@ export default {
       this.reset();
       this.$refs.form.resetFields();
     },
+    placeCancel() {
+      this.addOpen = false;
+      this.reset();
+      this.$refs.placeForm.resetFields();
+    },
     // 修改按钮
     handleUpdate(row) {
       this.$router.push({
@@ -353,6 +632,11 @@ export default {
           id: row.id,
         },
       });
+    },
+    handleAdd(row) {
+      this.addOpen = true;
+      this.title = "新增居住信息";
+      this.placeForm.userCode = row.userCode;
     },
     // 查看按钮
     handleCheck(row) {
@@ -413,6 +697,53 @@ export default {
         moveOutTime: undefined,
         id: undefined,
       };
+      this.placeForm = {
+        buildingCode: undefined,
+        liveTypeId: 0,
+        liveReasonId: undefined,
+        liveStatus: undefined,
+        liveCertificateId: undefined,
+        certificateImageCodes: undefined,
+        certificateStartTime: undefined,
+        certificateExpireTime: undefined,
+        isLongTerm: 1,
+        createBy: JSON.parse(localStorage.getItem("userInfo")).userCode,
+      };
+    },
+    // 新增住户信息提交
+    placeSubmitForm() {
+      let that = this;
+      this.$refs["placeForm"].validate((valid) => {
+        if (valid) {
+          this.placeForm.buildingCode = this.placeForm.buildingCode.toString();
+          if (this.placeForm.certificateExpireTime) {
+            this.placeForm.certificateStartTime =
+              this.placeForm.certificateExpireTime[0];
+            this.placeForm.certificateExpireTime =
+              this.placeForm.certificateExpireTime[1];
+          }
+          let str = [];
+          if (this.liveUploadImgList.length > 0) {
+            for (var i = 0; i < this.liveUploadImgList.length; i++) {
+              str.push(this.liveUploadImgList[i].code);
+              console.log(this.liveUploadImgList[i].code);
+            }
+            this.placeForm.certificateImageCodes = str.toString();
+          }
+          console.log(this.placeForm)
+          this.$request.createOrUpdate(this.placeForm).then((res) => {
+            if (res.data.status === 200) {
+              this.msgSuccess("提交成功");
+              this.addOpen = false;
+              this.reset();
+              this.$refs.placeForm.resetFields();
+               this.getList();
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          });
+        }
+      });
     },
     // 搬出处理
     submitForm() {

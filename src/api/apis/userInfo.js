@@ -17,31 +17,41 @@ export default {
      detailAll(params) {
           return axios.post("/user/details/all", params)
      },
+     genUrl(encoded, options) {
+       const dataBlob = new Blob([`\ufeff${encoded}`], { type: 'text/plain;charset=utf-8' });//返回的格式
+       return window.URL.createObjectURL(dataBlob);
+     },
      // 导出表格
      detailsDownload(params) {
           axios
                .post("/user/details/downloadExcel",
                     params,
-                    { responseType: 'blob' }
+                    // { responseType: 'blob' }
                )
                .then(res => {
-                    var blob = new Blob([res.data], {
-                         type: 'text/csv'
-                    })
+                  const url = this.genUrl(res.data, {});//{}指的是表头，res.data.data.workhour_csv_data是后台返回来的数据
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = "一人一房一档表.csv";
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    // var blob = new Blob([res.data], {
+                    //      type: 'text/csv'
+                    // })
                     // 针对于IE浏览器的处理, 因部分IE浏览器不支持createObjectURL
-                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                         window.navigator.msSaveOrOpenBlob(blob, res.fileName)
-                    } else {
-                         var downloadElement = document.createElement('a')
-                         var href = window.URL.createObjectURL(blob) // 创建下载的链接
-                         downloadElement.href = href
-                         // downloadElement.download = '一人一房一档表' // 下载后文件名
-                         downloadElement.setAttribute('download', '一人一房一档表' + '.csv')
-                         document.body.appendChild(downloadElement)
-                         downloadElement.click() // 点击下载
-                         document.body.removeChild(downloadElement) // 下载完成移除元素
-                         window.URL.revokeObjectURL(href) // 释放掉blob对象
-                    }
+                    // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    //      window.navigator.msSaveOrOpenBlob(blob, res.fileName)
+                    // } else {
+                    //      var downloadElement = document.createElement('a')
+                    //      var href = window.URL.createObjectURL(blob) // 创建下载的链接
+                    //      downloadElement.href = href
+                    //      // downloadElement.download = '一人一房一档表' // 下载后文件名
+                    //      downloadElement.setAttribute('download', '一人一房一档表' + '.csv')
+                    //      document.body.appendChild(downloadElement)
+                    //      downloadElement.click() // 点击下载
+                    //      document.body.removeChild(downloadElement) // 下载完成移除元素
+                    //      window.URL.revokeObjectURL(href) // 释放掉blob对象
+                    // }
                })
           // return axios.get(downloadExcel, data, 'blob')
      },
