@@ -18,6 +18,10 @@ export default {
      orderPublishBatch(params) {
           return axios.post('/order/publishBatch', params)
      },
+     // 批量发送短信
+     orderPublishBatchAndMsg(params) {
+          return axios.post('/order/publishBatchAndMsg', params)
+     },
      // 返回枚举类
      orderGetEnum(params) {
           return axios.post('/order/getEnum', params)
@@ -212,6 +216,10 @@ export default {
      //  一键发布
      orderPublishAll(params) {
           return axios.post('/order/publishAll', params)
+     },
+     //  一键发送短信
+     orderSendMsg(params) {
+          return axios.post('/order/sendMsg', params)
      },
      // 导出缴费账单表
      orderDownloadExcel(params) {

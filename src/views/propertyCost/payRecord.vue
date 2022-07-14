@@ -51,7 +51,7 @@
         </el-form-item>
         <el-form-item label="退款金额：" prop="refundAmount">
           <!-- <p>{{ form.refundAmount }}</p> -->
-          <el-input v-model="form.refundAmount" placeholder="请输入退款金额" />
+          <el-input disabled v-model="form.refundAmount" placeholder="请输入退款金额" />
         </el-form-item>
         <el-form-item label="退款原因：" prop="refundReason">
           <el-input v-model="form.refundReason" placeholder="请输入退款原因" />

@@ -211,7 +211,17 @@ export default {
         },
       ],
       //表格操作列内容
-      tableOperations: [],
+      tableOperations: [
+        {
+          label: "删除",
+          icon: "el-icon-delete",
+          style: { color: "#F56C6C" },
+          handler: (row) => this.handleDelete(row),
+          isShow: (row) => {
+            return row.paymentStatus == 3;
+          },
+        },
+      ],
       // 公用搜索组件内容
       commonSearchList: [
         { prop: "userName", label: "住户姓名" },

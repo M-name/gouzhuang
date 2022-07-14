@@ -77,11 +77,21 @@
           @click="cheakAgain()"
           >批量复核账单</el-button
         >
+        <el-button
+          :disabled="multiple"
+          size="small"
+          type="primary"
+          @click="sendMessages()"
+          >批量发送短信</el-button
+        >
         <el-button size="small" type="primary" @click="cheakAgainAll()"
           >一键复核账单</el-button
         >
         <el-button size="small" type="primary" @click="releaseAll()"
           >一键发布账单</el-button
+        >
+        <el-button size="small" type="primary" @click="sendMessagesAll()"
+          >一键发送短信</el-button
         >
       </div>
       <CommonTable
@@ -230,7 +240,6 @@ export default {
     handleSelectionChange(selection) {
       this.billList = selection;
       this.multiple = !selection.length;
-      console.log(this.billList);
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -338,6 +347,47 @@ export default {
             if (res.data.status == 200) {
               that.getList();
               that.msgSuccess("发布成功");
+            } else {
+              that.$message.error(res.data.msg);
+            }
+          });
+        })
+
+        .catch(function () {});
+    },
+    // 一键发送短信
+    sendMessagesAll() {
+      let that = this;
+      this.$confirm("是否确认给所有账单发送短信?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(function () {
+        that.$request.orderSendMsg().then((res) => {
+          if (res.data.status == 200) {
+            that.getList();
+            that.msgSuccess("发送成功");
+          } else {
+            that.$message.error(res.data.msg);
+          }
+        });
+      });
+    },
+    // 发送短信
+    sendMessages() {
+      let that = this;
+      let list = [];
+      const id = list.length > 0 ? list : this.billList;
+      this.$confirm("是否确认给所选账单发送短信?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(function () {
+          that.$request.orderPublishBatchAndMsg(id).then((res) => {
+            if (res.data.status == 200) {
+              that.getList();
+              that.msgSuccess("发送成功");
             } else {
               that.$message.error(res.data.msg);
             }
