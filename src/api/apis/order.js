@@ -219,7 +219,7 @@ export default {
      },
      //  一键发送短信
      orderSendMsg(params) {
-          return axios.post('/order/sendMsg', params)
+          return axios.get('/order/sendMsg', {params})
      },
      // 导出缴费账单表
      orderDownloadExcel(params) {

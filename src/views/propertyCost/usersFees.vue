@@ -441,6 +441,28 @@ export default {
           }
         });
     },
+    // 删除
+    // 删除按钮
+    handleDelete(row) {
+      let that = this;
+      this.$confirm("是否确认删除该账单?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(function () {
+          that.$request.orderDelete(row.id).then((res) => {
+            if (res.data.status == 200) {
+              that.getList();
+              that.msgSuccess("删除成功");
+            } else {
+              that.$message.error(res.data.msg);
+            }
+          });
+        })
+
+        .catch(function () {});
+    },
     chooseGetList() {
       this.chooseLoading = true;
       this.$request.detailAll(this.chooseParams).then((res) => {
