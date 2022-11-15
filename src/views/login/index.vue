@@ -1,5 +1,5 @@
 <template>
-  <div id="login" style="background:url(https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/background.png) no-repeat;">
+  <div id="login">
     <div class="loginConbox">
       <div class="loginBox">
         <div class="loginCon">
@@ -141,8 +141,9 @@ export default {
 #login {
   width: 100%;
   height: 100%;
-  
   background-size: 100% 100%;
+  background-image:url('https://2016-0708-1305237326.cos.ap-shanghai.myqcloud.com/background.png');
+  background-repeat: no-repeat;
   .loginBox {
     .iconcolor {
       color: #409eff;

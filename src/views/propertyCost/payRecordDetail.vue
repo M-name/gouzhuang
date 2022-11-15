@@ -20,7 +20,7 @@
         <div class="cost-statistics">
           <img src="@/assets/zhuzhaituoguanfei.png" alt="" />
           <div>
-            <p>住宅托管费</p>
+            <p>物业服务费</p>
             <span>{{ infoList.residence }}</span>
           </div>
         </div>
@@ -57,7 +57,7 @@
       <div class="cost-statistic">
         <img src="@/assets/zhuzhaituoguanfei.png" alt="" />
         <div>
-          <p>住宅托管费缴纳情况</p>
+          <p>物业服务费缴纳情况</p>
           <span>总户数: {{ infoList.residencePayTotal }}</span>
           <span>已缴户数: {{ infoList.residencePayCount }}</span>
           <span>未缴户数: {{ infoList.residencePayNot }}</span>

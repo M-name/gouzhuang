@@ -2,7 +2,7 @@
   <div class="content">
     <div class="tabs">
       <el-tabs v-model="orderParam.feeName" @tab-click="getOrderStatis">
-        <el-tab-pane label="住宅托管费" name="住宅托管费"> </el-tab-pane>
+        <el-tab-pane label="物业服务费" name="物业服务费"> </el-tab-pane>
         <el-tab-pane label="房屋能耗费" name="房屋能耗费"></el-tab-pane>
         <el-tab-pane label="车位管理费" name="车位管理费"></el-tab-pane>
         <el-tab-pane label="车位租赁费" name="车位租赁费"></el-tab-pane>
@@ -196,7 +196,7 @@ export default {
       ],
       // 复核统计所需参数
       orderParam: {
-        feeName: "住宅托管费",
+        feeName: "物业服务费",
       },
       // 复核统计展示
       orderList: {},

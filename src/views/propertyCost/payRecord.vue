@@ -51,7 +51,11 @@
         </el-form-item>
         <el-form-item label="退款金额：" prop="refundAmount">
           <!-- <p>{{ form.refundAmount }}</p> -->
-          <el-input disabled v-model="form.refundAmount" placeholder="请输入退款金额" />
+          <el-input
+            disabled
+            v-model="form.refundAmount"
+            placeholder="请输入退款金额"
+          />
         </el-form-item>
         <el-form-item label="退款原因：" prop="refundReason">
           <el-input v-model="form.refundReason" placeholder="请输入退款原因" />
@@ -121,6 +125,7 @@ export default {
       commonSearchList: [
         { prop: "uniformOrderCode", label: "订单编号" },
         { prop: "subOrderCodes", label: "子订单编号" },
+        { prop: "payer", label: "支付人" },
         {
           prop: "tradeStatus",
           label: "交易状态",
@@ -152,6 +157,7 @@ export default {
         { prop: "uniformOrderCode", label: "统一订单编号" },
         { prop: "tradeNo", label: "流水号" },
         { prop: "paymentDetail", label: "支付描述" },
+        { prop: "payerStr", label: "支付人" },
         {
           prop: "paymentMethod",
           label: "支付方式",
@@ -207,7 +213,7 @@ export default {
       total: 0,
       ids: [],
       dicList: [],
-      backAmount:'',
+      backAmount: "",
       // 查询或请求参数
       params: {
         page: 1,
@@ -220,6 +226,7 @@ export default {
         paymentMethod: undefined,
         tradeStatus: undefined,
         uniformOrderCode: undefined,
+        payer: undefined,
       },
     };
   },
@@ -270,9 +277,9 @@ export default {
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          if(this.form.refundAmount > this.backAmount) {
-            this.$message.warning('退款金额不能大于支付金额');
-            return
+          if (this.form.refundAmount > this.backAmount) {
+            this.$message.warning("退款金额不能大于支付金额");
+            return;
           }
           this.$request.createRefund(this.form).then((res) => {
             if (res.data.status === 200) {
@@ -334,6 +341,7 @@ export default {
         paymentMethod: undefined,
         tradeStatus: undefined,
         uniformOrderCode: undefined,
+        payer: undefined,
       };
       this.handleQuery();
     },
